@@ -10,6 +10,7 @@ public class Terrain {
     private List<Integer> rgb;
     private boolean occupied = false;
     private Animal occupiedBy;
+    protected int biome;
 
     public void addOccupier(Animal Occupier){
         this.occupied = true;
