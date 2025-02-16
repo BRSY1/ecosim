@@ -141,11 +141,12 @@ public class App extends Application {
     }
 
     private void spawn(float probSpawn) {
+        Random random = new Random();
         for (int j = 0; j < 800; j++) {
             for (int i = 0; i < 800; i++) {
                 Terrain terrain = this.gameMap.terrainArray.get(j).get(i);
                 if (terrain.biome != 7 && terrain.biome != 8 && Math.random() < probSpawn) {
-                    animals.add(new Animal(gameMap, 0, 0, 5, gameMap.terrainArray.get(j).get(i), 2));
+                    animals.add(new Animal(gameMap, random.nextInt(10) + 1, 0, 20, gameMap.terrainArray.get(j).get(i), random.nextInt(2) + 1));
                 }
             }
         }
@@ -165,7 +166,7 @@ public class App extends Application {
         };
         gameLoop.start();
     }
- 
+
     private void updateGame() {
         for (Animal animal : animals) {
             animal.animalUpdate();
@@ -177,7 +178,7 @@ public class App extends Application {
         // Log an event (optional)
         eventBox.addEvent("Game tick updated.");
     }
- 
+
     public static void main(String[] args) {
         launch();
     }

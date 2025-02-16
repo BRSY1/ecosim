@@ -138,6 +138,16 @@ public class Animal {
       }
 
     }
-    return Move.UP;
+
+    double num = Math.random();
+    if (num < 0.25) {
+      return Move.UP;
+    } else if (num < 0.5) {
+      return Move.RIGHT;
+    } else if (num < 0.75) {
+      return Move.DOWN;
+    } else {
+      return Move.LEFT;
+    }
   }
 }
