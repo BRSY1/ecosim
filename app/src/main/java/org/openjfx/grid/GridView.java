@@ -1,33 +1,47 @@
 package org.openjfx.grid;
 
-import javafx.scene.layout.GridPane;
-import javafx.scene.control.Button;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 public class GridView {
-    private GridPane gridPane;
+    private Canvas canvas;
 
     public GridView() {
-        gridPane = new GridPane();
-        initializeGrid();
+        int width = 500;
+        int height = 500;
+        canvas = new Canvas(width, height);
+        drawMap();
     }
 
-    private void initializeGrid() {
-        int rows = 5;
-        int cols = 5;
+    private void drawMap() {
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        PixelWriter pw = gc.getPixelWriter();
 
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++) {
-                Button cell = new Button("R" + row + "C" + col);
-                cell.setMinSize(50, 50);
-                gridPane.add(cell, col, row);
+        // Generate random terrain (replace with your logic)
+        for (int y = 0; y < 500; y++) {
+            for (int x = 0; x < 500; x++) {
+                Color color = getTileColor(x, y);
+                pw.setColor(x, y, color);
             }
         }
-
-        gridPane.setHgap(5); // Set spacing
-        gridPane.setVgap(5);
     }
 
-    public GridPane getGridPane() {
-        return gridPane;
+    private Color getTileColor(int x, int y) {
+        // Example: Simple terrain generation based on coordinates
+        if (y < 250) {
+            return Color.GREEN;  // Grass
+        } else if (x < 250) {
+            return Color.BLUE;   // Water
+        } else {
+            return Color.BROWN;  // Dirt
+        }
+    }
+
+    public Pane getGridPane() {
+        return new Pane(canvas);
     }
 }

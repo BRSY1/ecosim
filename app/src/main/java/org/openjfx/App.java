@@ -16,23 +16,27 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
-        var javaVersion = SystemInfo.javaVersion();
-        var javafxVersion = SystemInfo.javafxVersion();
+    var javaVersion = SystemInfo.javaVersion();
+    var javafxVersion = SystemInfo.javafxVersion();
 
-        // Create main layout
-        BorderPane root = new BorderPane();
+    // Create main layout
+    BorderPane root = new BorderPane();
 
-        var label = new Label("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
-        //root.setTop(label);
+    var label = new Label("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
+    // root.setTop(label);
 
-        // Add GridView to the center
-        GridView gridView = new GridView();
-        root.setCenter(gridView.getGridPane());
+    // Create GridView
+    GridView gridView = new GridView();
 
-        var scene = new Scene(root, 640, 480);
-        stage.setScene(scene);
-        stage.show();
-    }
+    // Wrap grid in StackPane to center it
+    StackPane centerPane = new StackPane(gridView.getGridPane());
+    root.setCenter(centerPane);  // Center the StackPane inside BorderPane
+
+    var scene = new Scene(root, 1000, 1000);
+    stage.setScene(scene);
+    stage.show();
+}
+
 
     public static void main(String[] args) {
         launch();
