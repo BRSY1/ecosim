@@ -2,7 +2,7 @@ package org.openjfx.grid;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
+import org.openjfx.Terrain;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
@@ -41,7 +41,6 @@ public class GridView {
         container = new Pane(canvas);
 
         setupEventHandlers();
-        drawMap();
     }
 
     private void setupEventHandlers() {
@@ -132,13 +131,13 @@ public class GridView {
         return Math.max(minTranslateY, Math.min(proposedTranslateY, maxTranslateY));
     }    
 
-    private void drawMap() {
+    public void drawMap(ArrayList<ArrayList<Terrain>> terrainArray) {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         PixelWriter pw = gc.getPixelWriter();
 
         // Example terrain: green for top, blue for left, brown for bottom-right
         int y = 0;
-        for (ArrayList<Terrain> oneDterrains : twoDList){
+        for (ArrayList<Terrain> oneDterrains : terrainArray){
             int x = 0;
             for (Terrain temp : oneDterrains){
                 int index = temp.colour;

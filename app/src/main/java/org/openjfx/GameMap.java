@@ -3,13 +3,13 @@ import java.util.*;
 
 public class GameMap {
    Grid myGrid;
-   List<List<Terrain>> terrainArray;
+   ArrayList<ArrayList<Terrain>> terrainArray;
 
    public GameMap(Grid myGrid){
        this.myGrid = myGrid;
        this.terrainArray = new ArrayList<>();
        for (int y=0; y<myGrid.getHeight(); y++){
-            List<Terrain> innerList = new ArrayList<>();
+            ArrayList<Terrain> innerList = new ArrayList<>();
             for (int x=0; x<myGrid.getWidth(); x++){
                 if ((myGrid.grid[y][x] <= 1.0) && (myGrid.grid[y])[x] > 0.8){innerList.add(new Rock(x, y));}
                 if ((myGrid.grid[y][x] <= 0.8) && (myGrid.grid[y])[x] > 0.6){innerList.add(new Tree(x,y));}
@@ -23,6 +23,10 @@ public class GameMap {
             terrainArray.add(innerList);
         }
 
+   }
+
+   public ArrayList<ArrayList<Terrain>> getTerrainArray() {
+        return terrainArray;
    }
 
     // return the animal's view

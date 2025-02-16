@@ -2,7 +2,7 @@ package org.openjfx;
 import java.util.ArrayList;
 import java.util.List;
 
-class Terrain {
+public class Terrain {
     public int x;
     public int y;
     public int colour;

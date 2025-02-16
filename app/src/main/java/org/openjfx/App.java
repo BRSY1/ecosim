@@ -12,10 +12,16 @@ import org.openjfx.ui.Stats;
 import org.openjfx.ui.EventBox; // Import new EventBox
 import org.openjfx.grid.GridView;
 
+import java.util.*;
+
 public class App extends Application {
 
     @Override
     public void start(Stage stage) {
+        Grid grid = new Grid(600,600, 0.01f);
+        GameMap gameMap = new GameMap(grid);
+        ArrayList<ArrayList<Terrain>> terrainArray = gameMap.getTerrainArray();
+
         // Create main VBox layout
         VBox root = new VBox();
         root.setStyle("-fx-background-color: #202020;");
@@ -31,6 +37,7 @@ public class App extends Application {
         mapContainer.setPrefHeight(300); // Adjustable height for map
         GridView gridView = new GridView(600, 600);
         mapContainer.getChildren().add(gridView.getGridPane());
+        gridView.drawMap(terrainArray);
         VBox.setVgrow(mapContainer, Priority.ALWAYS);
         // ** FIX: Prevent grid from overlapping the header when zooming **
         mapContainer.setClip(new Rectangle(600, 600));
