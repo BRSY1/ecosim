@@ -10,13 +10,13 @@ abstract class Terrain {
     private Animal occupiedBy;
     private List<Animal> validOccupiers = new ArrayList<Animal>();
 
-    Terrain(int xcord, int ycord, List<Animal> eaters, boolean occupied, List<Integer> rgb, Animal occupiedBy){
+    Terrain(int xcord, int ycord, List<Animal> eaters, boolean occupied, List<Integer> rgb){
         this.xcord = xcord;
         this.ycord = ycord;
         this.eaters = eaters;
         this.occupied = occupied;
         this.rgb = rgb;
-        this.occupiedBy = occupiedBy;
+        this.occupiedBy = null;
     }
 
     public void addOccupier(boolean setOccupied, Animal Occupier){
@@ -26,8 +26,8 @@ abstract class Terrain {
         }
     }
 
-    public void remove () {
-
+    public void removeOccupier(Animal Occupier) {
+        if (this.occupiedBy == Occupier){this.occupiedBy = null;}
     }
 
     public boolean isOccupied(){

@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public class Map {
+public class Grid {
     int width;
     int height;
     double scale;
@@ -11,7 +11,7 @@ public class Map {
 
 
     //Constructor to create a new map
-    public Map(int width, int height, double scale) {
+    public Grid(int width, int height, double scale) {
         this.width = width;
         this.height = height;
         this.scale = scale;
@@ -94,7 +94,7 @@ public class Map {
     }
 
     // Display the generated map
-    public void printMap() {
+    public void printGrid() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 System.out.printf("%.2f ", grid[y][x]);
