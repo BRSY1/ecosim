@@ -6,6 +6,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
@@ -22,13 +23,33 @@ public class EventBox {
         eventLog.setEditable(false);
         eventLog.setWrapText(true);
         eventLog.setStyle(
-            "-fx-control-inner-background: #202020; " +
-            "-fx-text-fill: white; " +
-            "-fx-background-insets: 0; " +
-            "-fx-background-color: #202020; " +
-            "-fx-border-width: 0;"
+            "-fx-control-inner-background: #303030; " +  // Dark inner background
+            "-fx-text-fill: white; " +                   // White text color
+            "-fx-highlight-fill: #444; " +               // Darker highlight for selection
+            "-fx-highlight-text-fill: white; " +         // Text color when highlighted
+            "-fx-background-color: #303030; " +          // Main background color
+            "-fx-background-insets: 0, 0, 1, 2; " +      // Remove extra insets (fixes dots)
+            "-fx-background-radius: 5px; " +             // Smooth rounded edges
+            "-fx-border-radius: 5px; " +                 // Rounded border
+            "-fx-border-color: #252525; " +          // Hide default border
+            "-fx-border-width: 2px; " +                    // No visible border
+            "-fx-padding: 10px; " +                      // Inner padding
+            "-fx-font-size: 14px; " +                    // Readable font size
+            "-fx-overflow-x: hidden; " +                 // Hide horizontal scroll
+            "-fx-overflow-y: hidden; " +                 // Hide vertical scroll
+            "-fx-cursor: text; " +                       // Proper cursor for text
+            "-fx-focus-color: transparent; " +           // No blue outline when focused
+            "-fx-faint-focus-color: transparent;"        // Remove faint glow effect
         );
-        eventLog.setPrefHeight(120);
+
+
+        Platform.runLater(() -> {
+            eventLog.lookup(".scroll-bar").setStyle("-fx-opacity: 0; -fx-min-width: 0; -fx-min-height: 0;");
+        });
+
+        eventLog.setPrefHeight(200);
+        eventLog.setWrapText(true); // Enables text wrapping
+
         
 
         // EVENT LOG CONTAINER (Title + Log)

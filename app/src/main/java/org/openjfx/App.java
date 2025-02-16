@@ -96,7 +96,7 @@ public class App extends Application {
         this.eventBox = new EventBox();
         VBox eventBoxContainer = eventBox.getEventBox();
         VBox.setMargin(eventBoxContainer, new Insets(10,10,10,10));
-        eventBoxContainer.setPrefHeight(150);
+        eventBoxContainer.setPrefHeight(250);
 
         // Spacer to push settings icon down
         Region spacer = new Region();
