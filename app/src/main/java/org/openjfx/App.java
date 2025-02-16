@@ -9,6 +9,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import org.openjfx.ui.Header;
+import org.openjfx.ui.InfoBox;
 import org.openjfx.ui.Stats;
 import org.openjfx.ui.EventBox; // Import new EventBox
 import org.openjfx.grid.GridView;
@@ -20,6 +21,7 @@ public class App extends Application {
     private GameMap gameMap;
     private GridView gridView;
     private EventBox eventBox;
+    private InfoBox infoBox;
     private ArrayList<ArrayList<Terrain>> terrainArray;
 
     private ArrayList<Animal> animals = new ArrayList<Animal>();
@@ -72,10 +74,15 @@ public class App extends Application {
         // EVENT BOX (Below Stats)
         this.eventBox = new EventBox();
         VBox eventBoxContainer = eventBox.getEventBox();
-        VBox.setVgrow(eventBoxContainer, Priority.ALWAYS); // Allow event log to expand
- 
+        eventBoxContainer.setPrefHeight(150);
+
+        this.infoBox = new InfoBox();
+        VBox infoBoxContainer = infoBox.getInfoBox();
+        infoBoxContainer.setPrefHeight(500);
+
+        
         // ADD STATS + EVENT LOG TO RIGHT PANEL
-        rightPanel.getChildren().addAll(header, statsBox, eventBoxContainer);
+        rightPanel.getChildren().addAll(header, statsBox, eventBoxContainer, infoBoxContainer);
     
         // ADD COMPONENTS TO MAIN CONTENT (Map on Left, Right Panel on Right)
         mainContent.getChildren().addAll(mapContainer, rightPanel);
