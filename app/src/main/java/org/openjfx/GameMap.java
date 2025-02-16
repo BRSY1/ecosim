@@ -54,4 +54,9 @@ public class GameMap {
 
         return subset;
     }
+
+
+    public Grid getGrid(){
+        return myGrid;
+    }
 }
