@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 public class Shrub extends Terrain implements Food{
     boolean isDead;
-    int framesToRegrow;
 
     public Shrub(int x, int y){
         this.colour = 5;
@@ -21,12 +20,12 @@ public class Shrub extends Terrain implements Food{
         public void getsEaten() {
         this.isDead = true;
         this.framesToRegrow = 8;
-        this.colour = 12;
+        this.colour = 11;
     }
 
     @Override
     public void update() {
-        if(this.framesToRegrow<=1){
+        if(this.framesToRegrow<=0){
             this.isDead = false;
             this.colour = 5;
         }

@@ -10,6 +10,8 @@ public class Animal {
   private GameMap gameMap; // reference to the main map
   private int update = 0;
   private int updateRate;
+  private int foodLevel; // ranges between 1 and 5
+  private int foodLevelDecreaseRate = 20;
 
   Animal(GameMap gameMap, int foodChainLevel, int naturalTerrain, int viewRange, Terrain terrain, int updateRate) {
     this.gameMap = gameMap;
@@ -68,16 +70,31 @@ public class Animal {
       }
   
       terrain.removeOccupier(this);
-      terrain.colour = terrain.underlyingColour;
+      if (terrain.framesToRegrow > 0 && (terrain.biome == 1 || terrain.biome == 5 || terrain.biome == 6)) {
+        terrain.colour = 11;
+      } else {
+        terrain.colour = terrain.underlyingColour;
+      }
   
       this.terrain = newTerrain;
-      terrain.addOccupier(this);
-      terrain.colour = 8;
 
       update = 0;
     } else {
       update++;
     }
+  
+    if (foodLevel < 5 && (terrain.biome == 6 || terrain.biome == 1 || terrain.biome == 5)) {
+      terrain.getsEaten();
+      foodLevel++;
+    }
+
+    if (foodLevelDecreaseRate < 20) {
+      foodLevelDecreaseRate++;
+    } else {
+      foodLevelDecreaseRate = 0;
+    }
+
+    terrain.colour = 8;
   }
 
   private Move move(ArrayList<ArrayList<Terrain>> view) {

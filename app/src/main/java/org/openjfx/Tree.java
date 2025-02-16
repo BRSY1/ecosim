@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Tree extends Terrain implements Food{
-    int framesToRegrow;
     boolean isDead;
 
     public Tree(int x, int y){
@@ -11,7 +10,7 @@ public class Tree extends Terrain implements Food{
         this.y = y;
         this.colour = 6;
         this.isDead = false;
-        this.underlyingColour = 7;
+        this.underlyingColour = this.colour;
         this.biome = 6;
     }
 
@@ -19,12 +18,12 @@ public class Tree extends Terrain implements Food{
     public void getsEaten() {
         this.isDead = true;
         this.framesToRegrow = 10;
-        this.colour = 12;
+        this.colour = 11;
     }
 
     @Override
     public void update() {
-        if(this.framesToRegrow<=1){
+        if(this.framesToRegrow<=0){
             this.isDead = false;
             this.colour = 6;
         }

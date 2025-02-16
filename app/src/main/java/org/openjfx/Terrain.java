@@ -11,6 +11,11 @@ public class Terrain {
     private boolean occupied = false;
     private Animal occupiedBy;
     protected int biome;
+    public int framesToRegrow;
+
+    public void getsEaten() {
+
+    }
 
     public void addOccupier(Animal Occupier){
         this.occupied = true;
