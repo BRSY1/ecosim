@@ -72,42 +72,46 @@ public class GridView {
 
     private void handleScroll(ScrollEvent event) {
         double zoomFactor = 1.05;
-        double oldZoom = zoomLevel;
         double deltaY = event.getDeltaY();
-
+    
         // Determine new zoom level
+        double oldZoom = zoomLevel;
         if (deltaY < 0) {
             zoomLevel /= zoomFactor;
         } else {
             zoomLevel *= zoomFactor;
         }
-
+    
         // Clamp zoom level
         zoomLevel = Math.min(Math.max(zoomLevel, minZoomLevel), maxZoomLevel);
-
-        // Compute scale ratio
-        double scaleChange = zoomLevel / oldZoom;
-
-        // Always zoom toward the **center** of the canvas
-        double centerX = canvas.getWidth() / 2;
-        double centerY = canvas.getHeight() / 2;
-
-        // Adjust translation to keep the center in place
-        translateX = (translateX - centerX) * scaleChange + centerX;
-        translateY = (translateY - centerY) * scaleChange + centerY;
-
+    
+        // Get mouse position relative to the container
+        double mouseX = event.getX();
+        double mouseY = event.getY();
+    
+        // Convert mouse position to a percentage of the current view
+        double mouseXRatio = (mouseX - translateX) / (canvas.getWidth() * oldZoom);
+        double mouseYRatio = (mouseY - translateY) / (canvas.getHeight() * oldZoom);
+    
+        // Adjust translation based on new zoom level to keep the point under the cursor fixed
+        translateX = mouseX - (mouseXRatio * canvas.getWidth() * zoomLevel);
+        translateY = mouseY - (mouseYRatio * canvas.getHeight() * zoomLevel);
+    
         // Clamp translation to prevent white space
         translateX = clampTranslateX(translateX);
         translateY = clampTranslateY(translateY);
-
+    
         // Apply transformations
         canvas.setScaleX(zoomLevel);
         canvas.setScaleY(zoomLevel);
         canvas.setTranslateX(translateX);
         canvas.setTranslateY(translateY);
-
+    
         event.consume();
     }
+    
+    
+    
 
     private double clampTranslateX(double proposedTranslateX) {
         double scaledWidth = width * zoomLevel;
