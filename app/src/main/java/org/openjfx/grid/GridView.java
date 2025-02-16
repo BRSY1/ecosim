@@ -22,12 +22,8 @@ public class GridView {
     private double zoomLevel = 1.0;
     private final double minZoomLevel = 1.0;
     private final double maxZoomLevel = 10.0;
-    private double dragStartX, dragStartY;
     private double translateX = 0, translateY = 0;
-    private Pane container;
-    private double highlightStartX, highlightStartY; // Starting point of the highlight
-    private double highlightEndX, highlightEndY;     // Ending point of the highlight
-    private boolean isHighlighting = false;         // Whether the user is currently highlighting
+    private Pane container;        // Whether the user is currently highlighting
     private InfoBox infoBox;
     private final Map<Color, BiomeInfo> biomeMap = new HashMap<>();
     private ArrayList<Color> colorList = new ArrayList<>(Arrays.asList(
