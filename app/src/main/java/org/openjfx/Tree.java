@@ -8,5 +8,6 @@ public class Tree extends Terrain{
         this.y = y;
         this.colour = 6;
         this.underlyingColour = 7;
+        this.biome = 6;
     }
 }

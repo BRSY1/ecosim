@@ -10,5 +10,6 @@ public class Grass extends Terrain{
         this.underlyingColour = this.colour;
         this.x = x;
         this.y = y;
+        this.biome = 1;
     }
 }

@@ -10,5 +10,6 @@ public class SandLight extends Terrain{
         this.underlyingColour = 3;
         this.x = x;
         this.y = y;
+        this.biome = 4;
     }
 }

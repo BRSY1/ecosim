@@ -10,5 +10,6 @@ public class SandDark extends Terrain{
         this.underlyingColour = 2;
         this.x = x;
         this.y = y;
+        this.biome = 3;
     }
 }
