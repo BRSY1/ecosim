@@ -19,7 +19,10 @@ public class Map {
     }
 
     // return the animal's view
-    public <Terrain> ArrayList<ArrayList<Terrain>> getGridSubset(int centerX, int centerY, int offset) {
+    public <Terrain> ArrayList<ArrayList<Terrain>> getView(Terrain terrain, int offset) {
+        int centerX = terrain.xcord;
+        int centerY = terrain.ycord;
+
         ArrayList<ArrayList<Terrain>> subset = new ArrayList<>();
 
         int numRows = map.size();
