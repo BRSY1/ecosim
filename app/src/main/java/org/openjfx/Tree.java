@@ -17,7 +17,7 @@ public class Tree extends Terrain implements Food{
     public void getsEaten() {
         this.isDead = true;
         this.framesToRegrow = 10;
-        this.colour = 11;
+        this.colour = 12;
     }
 
     @Override

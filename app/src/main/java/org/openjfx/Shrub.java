@@ -20,7 +20,7 @@ public class Shrub extends Terrain implements Food{
         public void getsEaten() {
         this.isDead = true;
         this.framesToRegrow = 8;
-        this.colour = 11;
+        this.colour = 12;
     }
 
     @Override
