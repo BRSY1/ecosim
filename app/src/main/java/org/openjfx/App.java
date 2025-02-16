@@ -18,6 +18,8 @@ public class App extends Application {
     public void start(Stage stage) {
     var javaVersion = SystemInfo.javaVersion();
     var javafxVersion = SystemInfo.javafxVersion();
+    final int width = 1000;
+    final int height = 1000;
 
     // Create main layout
     BorderPane root = new BorderPane();
@@ -26,13 +28,13 @@ public class App extends Application {
     // root.setTop(label);
 
     // Create GridView
-    GridView gridView = new GridView();
+    GridView gridView = new GridView(width, height);
 
     // Wrap grid in StackPane to center it
     StackPane centerPane = new StackPane(gridView.getGridPane());
     root.setCenter(centerPane);  // Center the StackPane inside BorderPane
 
-    var scene = new Scene(root, 1000, 1000);
+    var scene = new Scene(root, width, height);
     stage.setScene(scene);
     stage.show();
 }

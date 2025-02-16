@@ -1,5 +1,6 @@
 package org.openjfx.grid;
 
+import org.openjfx.App;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
@@ -9,11 +10,18 @@ import javafx.scene.paint.Color;
 
 public class GridView {
     private Canvas canvas;
+    private int width;
+    private int height;
 
-    public GridView() {
-        int width = 500;
-        int height = 500;
-        canvas = new Canvas(width, height);
+
+    public GridView(int width, int height) {
+        this.width = width;
+        this.height = height;
+        int canvasWidth = 500;
+        int canvasHeight = 500;
+        canvas = new Canvas(canvasWidth, canvasHeight);
+        canvas.setTranslateX((width - canvasWidth) / 2.0);  // Center horizontally
+        canvas.setTranslateY((height - canvasHeight) / 2.0);  // Center vertically
         drawMap();
     }
 
