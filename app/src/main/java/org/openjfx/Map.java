@@ -86,7 +86,7 @@ public class Map {
             ArrayList<Terrain> rowSubset = new ArrayList<>();
             for (int j = centerY - offset; j <= centerY + offset; j++) {
                 if (i >= 0 && i < numRows && j >= 0 && j < numCols) {
-                    rowSubset.add(map.get(i).get(j));
+                    rowSubset.add((Terrain) map.get(i).get(j));
                 }
             }
             if (!rowSubset.isEmpty()) {
