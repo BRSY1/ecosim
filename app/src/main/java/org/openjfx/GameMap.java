@@ -1,13 +1,11 @@
 package org.openjfx;
-import java.utils.*;
+import java.util.*;
 
 public class GameMap {
    Grid myGrid;
    List<List<Terrain>> terrainArray;
 
-
-
-   public Map(Grid myGrid){
+   public GameMap(Grid myGrid){
        this.myGrid = myGrid;
        this.terrainArray = new ArrayList<>();
        for (int y=0; y<myGrid.getHeight(); y++){
@@ -22,6 +20,7 @@ public class GameMap {
                 if ((myGrid[y][x] <= -0.6) && (myGrid[y])[x] > -0.8){innerList.add(new WaterLight(x, y));}
                 if ((myGrid[y][x] <= -0.8) && (myGrid[y])[x] > -1.0){innerList.add(new WaterDark(x, y));}
             }
+            terrainArray.add(innerList);
         }
 
    }
