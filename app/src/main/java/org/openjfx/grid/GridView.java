@@ -3,6 +3,8 @@ package org.openjfx.grid;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.openjfx.Terrain;
+import org.openjfx.ui.InfoBox;
+import org.openjfx.ui.BiomeInfo;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
@@ -10,6 +12,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.MouseEvent;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GridView {
     private Canvas canvas;
@@ -21,6 +25,8 @@ public class GridView {
     private double dragStartX, dragStartY;
     private double translateX = 0, translateY = 0;
     private Pane container;
+    private InfoBox infoBox;
+    private final Map<Color, BiomeInfo> biomeMap = new HashMap<>();
     private ArrayList<Color> colorList = new ArrayList<>(Arrays.asList(
             Color.DARKBLUE,   // Dark Blue
             Color.BLUE,       // Blue
@@ -42,8 +48,20 @@ public class GridView {
         // Make canvas match the defined width and height
         canvas = new Canvas(width, height);
         container = new Pane(canvas);
-
+        
+        initialiseBiomeData();
         setupEventHandlers();
+    }
+
+    private void initialiseBiomeData() {
+        biomeMap.put(Color.DARKGRAY, new BiomeInfo("Rocky Mountains", "A high-altitude region with rocky peaks.", "images/mountain.jpg"));
+        biomeMap.put(Color.DARKBLUE, new BiomeInfo("Oasis", "A fertile area in a desert, providing water.", "images/oasis.jpg"));
+        biomeMap.put(Color.BLUE, new BiomeInfo("Oasis", "A fertile area in a desert, providing water.", "images/oasis.jpg"));
+        biomeMap.put(Color.rgb(247, 239, 83), new BiomeInfo("Sandy Desert", "An arid biome with vast sand dunes.", "images/desert.jpg"));
+        biomeMap.put(Color.rgb(61, 148, 21), new BiomeInfo("Grasslands", "A vast area of open fields and grass.", "images/grasslands.jpg"));
+        biomeMap.put(Color.GREEN, new BiomeInfo("Grasslands", "A vast area of open fields and grass.", "images/grasslands.jpg"));
+        biomeMap.put(Color.DARKGREEN, new BiomeInfo("Shrubbery", "Densely packed low vegetation.", "images/shrubbery.jpg"));
+        biomeMap.put(Color.FORESTGREEN, new BiomeInfo("Forests", "A biome covered with tall trees and rich wildlife.", "images/forest.jpg"));
     }
 
     private void setupEventHandlers() {
@@ -58,6 +76,17 @@ public class GridView {
     private void handleMousePressed(MouseEvent e) {
         dragStartX = e.getX() - translateX;
         dragStartY = e.getY() - translateY;
+
+        int x = (int) e.getX();
+        int y = (int) e.getY();
+
+        
+        Color clickedColor = getPixelColor(x,y);
+
+        if (biomeMap.containsKey(clickedColor)) {
+            BiomeInfo biome = biomeMap.get(clickedColor);
+            infoBox.displayBiome(biome);
+        }
     }
 
     private void handleMouseDragged(MouseEvent e) {
@@ -112,8 +141,10 @@ public class GridView {
     
         event.consume();
     }
-    
-    
+
+    private Color getPixelColor(int x, int y) {
+        return canvas.snapshot(null, null).getPixelReader().getColor(x, y);
+    }
        
 
     private double clampTranslateX(double proposedTranslateX) {

@@ -3,15 +3,28 @@ package org.openjfx;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.scene.Cursor;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import org.openjfx.ui.Header;
-import org.openjfx.ui.InfoBox;
 import org.openjfx.ui.Stats;
-import org.openjfx.ui.EventBox; // Import new EventBox
+import org.openjfx.pages.SettingsPage; // Import the new SettingsPage class
+
+import org.kordamp.ikonli.javafx.FontIcon;
+import org.kordamp.ikonli.materialdesign2.MaterialDesignC;
+
+import org.openjfx.ui.EventBox;
+import org.openjfx.ui.InfoBox;
+import org.openjfx.pages.SettingsPage; // Import the new SettingsPage class
+
+import org.kordamp.ikonli.javafx.FontIcon;
+import org.kordamp.ikonli.materialdesign2.MaterialDesignC;
+
+import org.openjfx.ui.EventBox;
 import org.openjfx.grid.GridView;
  
 import java.util.*;
@@ -23,8 +36,8 @@ public class App extends Application {
     private EventBox eventBox;
     private InfoBox infoBox;
     private ArrayList<ArrayList<Terrain>> terrainArray;
-
     private ArrayList<Animal> animals = new ArrayList<Animal>();
+    private SettingsPage settingsPage;
 
     @Override
     public void start(Stage stage) {
@@ -74,24 +87,49 @@ public class App extends Application {
         // EVENT BOX (Below Stats)
         this.eventBox = new EventBox();
         VBox eventBoxContainer = eventBox.getEventBox();
-        eventBoxContainer.setPrefHeight(150);
+        eventBoxContainer.setPrefHeight(200);
 
         this.infoBox = new InfoBox();
         VBox infoBoxContainer = infoBox.getInfoBox();
-        infoBoxContainer.setPrefHeight(500);
+        VBox.setMargin(infoBoxContainer, new Insets(10,10,10,10));
+        infoBoxContainer.setPrefHeight(400);
 
+        // Spacer to push settings icon down
+        Region spacer = new Region();
+        VBox.setVgrow(spacer, Priority.ALWAYS);
+
+        // SETTINGS ICON (Bottom-right)
+        FontIcon settingsIcon = new FontIcon(MaterialDesignC.COG);
+        settingsIcon.setIconSize(24);
+        settingsIcon.setIconColor(Color.WHITE);
+        settingsIcon.setCursor(Cursor.HAND); // Change cursor to pointer on hover
         
-        // ADD STATS + EVENT LOG TO RIGHT PANEL
-        rightPanel.getChildren().addAll(header, statsBox, eventBoxContainer, infoBoxContainer);
+        // Create StackPane for Overlay
+        StackPane overlay = new StackPane();
+        settingsPage = new SettingsPage(overlay); // Initialize settings page
+
+        // Make sure overlay takes full screen
+        overlay.setPickOnBounds(false); // Allow clicking outside to close settings
+
+        settingsIcon.setOnMouseClicked(e -> settingsPage.showSettings());
+
+        // Create an HBox for right alignment
+        HBox settingsBox = new HBox(settingsIcon);
+        settingsBox.setPadding(new Insets(10));
+        settingsBox.setAlignment(javafx.geometry.Pos.BOTTOM_RIGHT); // Align to bottom-right
+
+        // ADD COMPONENTS TO RIGHT PANEL IN ORDER
+        rightPanel.getChildren().addAll(header, statsBox, eventBoxContainer, infoBoxContainer, spacer, settingsBox);
     
         // ADD COMPONENTS TO MAIN CONTENT (Map on Left, Right Panel on Right)
         mainContent.getChildren().addAll(mapContainer, rightPanel);
  
-        // ADD HEADER & MAIN CONTENT TO ROOT
+        // ADD MAIN CONTENT TO ROOT
         root.getChildren().addAll(mainContent);
     
-        // SCENE SETUP
-        Scene scene = new Scene(root, 1200, 800);
+        // Wrap everything in a StackPane to allow overlay
+        StackPane rootPane = new StackPane(root, overlay);
+        Scene scene = new Scene(rootPane, 1200, 800);
         stage.setScene(scene);
         stage.setTitle("Ecosim");
         stage.setResizable(true);
@@ -100,9 +138,7 @@ public class App extends Application {
         // Start game loop
         startGameLoop();
     }
- 
- 
- 
+    
     private void startGameLoop() {
         AnimationTimer gameLoop = new AnimationTimer() {
             private long lastUpdate = 0;
