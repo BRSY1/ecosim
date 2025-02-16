@@ -72,13 +72,13 @@ public class App extends Application {
  
         // ADD STATS + EVENT LOG TO RIGHT PANEL
         rightPanel.getChildren().addAll(header, statsBox, eventBoxContainer);
- 
+    
         // ADD COMPONENTS TO MAIN CONTENT (Map on Left, Right Panel on Right)
         mainContent.getChildren().addAll(mapContainer, rightPanel);
  
         // ADD HEADER & MAIN CONTENT TO ROOT
         root.getChildren().addAll(mainContent);
- 
+    
         // SCENE SETUP
         Scene scene = new Scene(root, 1200, 800);
         stage.setScene(scene);
