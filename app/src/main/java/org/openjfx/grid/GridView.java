@@ -29,7 +29,8 @@ public class GridView {
             Color.GREEN,      // Green
             Color.DARKGREEN,
             Color.rgb(0,80,0),
-            Color.DARKGRAY
+            Color.DARKGRAY,
+            Color.rgb(70, 42, 1)
         ));
 
     public GridView(int width, int height) {

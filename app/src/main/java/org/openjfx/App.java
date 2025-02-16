@@ -109,17 +109,20 @@ public class App extends Application {
  
     private void updateGame() {
         // Step 1: Update the game logic (e.g., terrain changes, animals moving, etc.)
-        //gameMap.update();  // Assuming GameMap has an update method
+        gameMap.update();  // Assuming GameMap has an update method
         //grid.update();     // Assuming Grid has an update method
  
         // Step 2: Get the latest terrain array
         ArrayList<ArrayList<Terrain>> terrainArray = gameMap.getTerrainArray();
- 
+
         // Step 3: Redraw the map with updated terrain
         gridView.drawMap(terrainArray);
  
         // Step 4: Log an event (optional)
         eventBox.addEvent("Game tick updated.");
+
+
+
     }
  
     public static void main(String[] args) {

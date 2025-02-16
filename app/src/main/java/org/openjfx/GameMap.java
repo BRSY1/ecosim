@@ -4,10 +4,14 @@ import java.util.*;
 public class GameMap {
    Grid myGrid;
    ArrayList<ArrayList<Terrain>> terrainArray;
+   ArrayList<Food> foodStuffs;
+
 
    public GameMap(Grid myGrid) {
        this.myGrid = myGrid;
+       this.foodStuffs = new ArrayList<>();
        this.terrainArray = new ArrayList<>();
+       
        for (int y=0; y<myGrid.getHeight(); y++){
             ArrayList<Terrain> innerList = new ArrayList<>();
             for (int x=0; x<myGrid.getWidth(); x++){
@@ -20,11 +24,19 @@ public class GameMap {
                 if ((myGrid.grid[y][x] <= -0.25) && (myGrid.grid[y])[x] > -0.4){innerList.add(new WaterLight(x, y));}
                 if ((myGrid.grid[y][x] <= -0.4) && (myGrid.grid[y])[x] > -1.0){innerList.add(new WaterDark(x, y));}
             }
-            terrainArray.add(innerList);
+            terrainArray.add(innerList);}
+        
+       for (int y=0; y<myGrid.getHeight(); y++){
+            for (int x=0; x<myGrid.getWidth(); x++){
+                
+                if(terrainArray.get(y).get(x) instanceof Tree | terrainArray.get(y).get(x) instanceof Shrub | terrainArray.get(y).get(x) instanceof Grass){
+                    foodStuffs.add((Food)terrainArray.get(y).get(x));
+                }
+            }
         }
+    }
 
-   }
-
+   
    public ArrayList<ArrayList<Terrain>> getTerrainArray() {
         return terrainArray;
    }
@@ -58,5 +70,11 @@ public class GameMap {
 
     public Grid getGrid(){
         return myGrid;
+    }
+
+    public void update(){
+       for(Food food : foodStuffs){
+        food.update();
+       } 
     }
 }
