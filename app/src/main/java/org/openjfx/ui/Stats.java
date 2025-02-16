@@ -16,8 +16,8 @@ import java.util.Map;
 
 public class Stats {
     private VBox statsBox; // Holds all labels
-    private Map<Animal, Integer> animalCounts; // Stores animal counts
-    private Map<Animal, Label> animalLabels; // Maps animals to their UI labels
+    private Map<AnimalEnum, Integer> animalCounts; // Stores animal counts
+    private Map<AnimalEnum, Label> animalLabels; // Maps animals to their UI labels
 
     public Stats() {
         statsBox = new VBox(); // Vertical layout with spacing
@@ -42,7 +42,7 @@ public class Stats {
         animalLabels = new HashMap<>();
 
         // Initialize with some default animals (add more as needed)
-        for (Animal animal : Animal.values()) {
+        for (AnimalEnum animal : AnimalEnum.values()) {
             animalCounts.put(animal, 0); // Default count 0
             Label label = new Label(animal.name() + ": 0");
             label.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
@@ -60,7 +60,7 @@ public class Stats {
      * @param animal The animal type to update.
      * @param count  The new count value.
      */
-    public void updateStats(Animal animal, int count) {
+    public void updateStats(AnimalEnum animal, int count) {
         if (animalCounts.containsKey(animal)) {
             animalCounts.put(animal, count);
             animalLabels.get(animal).setText(animal.name() + ": " + count);
