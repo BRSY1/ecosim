@@ -1,37 +1,131 @@
 package org.openjfx.grid;
 
-import org.openjfx.App;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.input.ScrollEvent;
+import javafx.scene.input.MouseEvent;
 
 public class GridView {
     private Canvas canvas;
     private int width;
     private int height;
-
+    private double zoomLevel = 1.0;
+    private final double minZoomLevel = 1.0;
+    private final double maxZoomLevel = 4.0;
+    private double dragStartX, dragStartY;
+    private double translateX = 0, translateY = 0;
+    private Pane container;
 
     public GridView(int width, int height) {
         this.width = width;
         this.height = height;
-        int canvasWidth = 500;
-        int canvasHeight = 500;
-        canvas = new Canvas(canvasWidth, canvasHeight);
-        canvas.setTranslateX((this.width - canvasWidth) / 2.0);  // Center horizontally
-        canvas.setTranslateY((this.height - canvasHeight) / 2.0);  // Center vertically
+
+        // Make canvas match the defined width and height
+        canvas = new Canvas(width, height);
+        container = new Pane(canvas);
+
+        setupEventHandlers();
         drawMap();
     }
+
+    private void setupEventHandlers() {
+        // Zoom handler
+        canvas.setOnScroll(this::handleScroll);
+
+        // Drag handler for panning
+        canvas.setOnMousePressed(this::handleMousePressed);
+        canvas.setOnMouseDragged(this::handleMouseDragged);
+    }
+
+    private void handleMousePressed(MouseEvent e) {
+        dragStartX = e.getX() - translateX;
+        dragStartY = e.getY() - translateY;
+    }
+
+    private void handleMouseDragged(MouseEvent e) {
+        double newTranslateX = e.getX() - dragStartX;
+        double newTranslateY = e.getY() - dragStartY;
+
+        // Limit panning within valid bounds
+        translateX = clampTranslateX(newTranslateX);
+        translateY = clampTranslateY(newTranslateY);
+
+        // Apply panning
+        canvas.setTranslateX(translateX);
+        canvas.setTranslateY(translateY);
+    }
+
+    private void handleScroll(ScrollEvent event) {
+        double zoomFactor = 1.05;
+        double oldZoom = zoomLevel;
+        double deltaY = event.getDeltaY();
+
+        // Determine new zoom level
+        if (deltaY < 0) {
+            zoomLevel /= zoomFactor;
+        } else {
+            zoomLevel *= zoomFactor;
+        }
+
+        // Clamp zoom level
+        zoomLevel = Math.min(Math.max(zoomLevel, minZoomLevel), maxZoomLevel);
+
+        // Compute scale ratio
+        double scaleChange = zoomLevel / oldZoom;
+
+        // Always zoom toward the **center** of the canvas
+        double centerX = canvas.getWidth() / 2;
+        double centerY = canvas.getHeight() / 2;
+
+        // Adjust translation to keep the center in place
+        translateX = (translateX - centerX) * scaleChange + centerX;
+        translateY = (translateY - centerY) * scaleChange + centerY;
+
+        // Clamp translation to prevent white space
+        translateX = clampTranslateX(translateX);
+        translateY = clampTranslateY(translateY);
+
+        // Apply transformations
+        canvas.setScaleX(zoomLevel);
+        canvas.setScaleY(zoomLevel);
+        canvas.setTranslateX(translateX);
+        canvas.setTranslateY(translateY);
+
+        event.consume();
+    }
+
+    private double clampTranslateX(double proposedTranslateX) {
+        double scaledWidth = width * zoomLevel;
+        double viewWidth = canvas.getWidth();
+    
+        // Clamp based on current zoom scale
+        double minTranslateX = Math.min(0, viewWidth - scaledWidth);
+        double maxTranslateX = 0;
+    
+        return Math.max(minTranslateX, Math.min(proposedTranslateX, maxTranslateX));
+    }
+    
+    private double clampTranslateY(double proposedTranslateY) {
+        double scaledHeight = height * zoomLevel;
+        double viewHeight = canvas.getHeight();
+    
+        // Clamp based on current zoom scale
+        double minTranslateY = Math.min(0, viewHeight - scaledHeight);
+        double maxTranslateY = 0;
+    
+        return Math.max(minTranslateY, Math.min(proposedTranslateY, maxTranslateY));
+    }    
 
     private void drawMap() {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         PixelWriter pw = gc.getPixelWriter();
 
-        // Generate random terrain (replace with your logic)
-        for (int y = 0; y < 500; y++) {
-            for (int x = 0; x < 500; x++) {
+        // Example terrain: green for top, blue for left, brown for bottom-right
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 Color color = getTileColor(x, y);
                 pw.setColor(x, y, color);
             }
@@ -41,7 +135,7 @@ public class GridView {
     private Color getTileColor(int x, int y) {
         if (y < 250) {
             return Color.GREEN;  // Grass
-        } else if (x < 250) {
+        } else if (x < width / 2) {
             return Color.BLUE;   // Water
         } else {
             return Color.BROWN;  // Dirt
@@ -49,6 +143,6 @@ public class GridView {
     }
 
     public Pane getGridPane() {
-        return new Pane(canvas);
+        return container;
     }
 }
