@@ -34,7 +34,7 @@ public class App extends Application {
     private GameMap gameMap;
     private GridView gridView;
     private EventBox eventBox;
-    private InfoBox infoBox;
+    private InfoBox infoBox = new InfoBox();
     private ArrayList<ArrayList<Terrain>> terrainArray;
     private ArrayList<Animal> animals = new ArrayList<Animal>();
     private SettingsPage settingsPage;
