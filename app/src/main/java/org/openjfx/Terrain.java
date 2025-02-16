@@ -5,11 +5,10 @@ import java.util.List;
 abstract class Terrain {
     private int xcord;
     private int ycord;
-    private List<Integer> rgb;
     private boolean occupied;
     private Animal occupiedBy;
     private List<Animal> validOccupiers = new ArrayList<Animal>();
-
+    private int colour;
     public void addOccupier(boolean setOccupied, Animal Occupier){
         if ((this.isOccupied() == false) || (this.validOccupiers.contains(Occupier))){
             this.occupied = setOccupied;
@@ -25,8 +24,7 @@ abstract class Terrain {
         return occupied;
     }
 
-    public List<Integer> getRgb() {
-        return this.rgb;
+    public int getColour(){
+        return colour;
     }
-
 }

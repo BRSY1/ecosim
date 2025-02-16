@@ -1,19 +1,41 @@
-public class Map {
-    ArrayList<ArrayList<Terrain>> map;
+public class GameMap {
+   Grid myGrid;
+   List<List<Terrain>> terrainArray;
 
 
-    // add terrain objects to the map
-    private void createMap() {
-        for (int i = 0; i < 500; i++) {
-            ArrayList<Terrain> tmpList = new ArrayList<Terrain>();
-            ArrayList<Integer> rgb = new ArrayList<>();
-            rgb.add(0); rgb.add(0); rgb.add(0);
-            for (int j = 0; j < 500; j++) {
-                tmpList.add(new Terrain(i, j, false, rgb, null));
+
+   public Map(Grid myGrid){
+       this.myGrid = myGrid;
+       this.terrainArray = new ArrayList<>();
+       for (int y=0; y<myGrid.getHeight(); y++){
+            List<Terrain> innerList = new ArrayList<>();
+            for (int x=0; x<myGrid.getWidth(); x++){
+                if ((myGrid[y][x] <= 1.0) && (myGrid[y])[x] > 0.8){innerList.add(new Rock(x, y));}
+                if ((myGrid[y][x] <= 0.8) && (myGrid[y])[x] > 0.6){innerList.add(new Tree(x,y));}
+                if ((myGrid[y][x] <= 0.6) && (myGrid[y])[x] > 0.2){innerList.add(new Shrub(x, y));}
+                if ((myGrid[y][x] <= 0.2) && (myGrid[y])[x] > -0.2){innerList.add(new Grass(x, y));}
+                if ((myGrid[y][x] <= -0.2) && (myGrid[y])[x] > -0.4){innerList.add(new SandLight(x, y));}
+                if ((myGrid[y][x] <= -0.4) && (myGrid[y])[x] > -0.6){innerList.add(new SandDark(x, y));}
+                if ((myGrid[y][x] <= -0.6) && (myGrid[y])[x] > -0.8){innerList.add(new WaterLight(x, y));}
+                if ((myGrid[y][x] <= -0.8) && (myGrid[y])[x] > -1.0){innerList.add(new WaterDark(x, y));}
             }
-            map.add(tmpList);
+        }
+
+   }
+
+    public void printMap(){
+       for (int x<0; x<myGrid.getWidth(); x++){
+           for (int y<0; y<myGrid.height(); y++){
+                System.out.println(this.(terrainArray[x][y]).getColour());
+            }
         }
     }
+
+
+
+
+
+
 
     // return the animal's view
     public <Terrain> ArrayList<ArrayList<Terrain>> getGridSubset(int centerX, int centerY, int offset) {
