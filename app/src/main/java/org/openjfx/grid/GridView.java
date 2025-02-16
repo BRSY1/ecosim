@@ -20,8 +20,8 @@ public class GridView {
         int canvasWidth = 500;
         int canvasHeight = 500;
         canvas = new Canvas(canvasWidth, canvasHeight);
-        canvas.setTranslateX((width - canvasWidth) / 2.0);  // Center horizontally
-        canvas.setTranslateY((height - canvasHeight) / 2.0);  // Center vertically
+        canvas.setTranslateX((this.width - canvasWidth) / 2.0);  // Center horizontally
+        canvas.setTranslateY((this.height - canvasHeight) / 2.0);  // Center vertically
         drawMap();
     }
 

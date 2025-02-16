@@ -18,8 +18,8 @@ public class App extends Application {
     public void start(Stage stage) {
     var javaVersion = SystemInfo.javaVersion();
     var javafxVersion = SystemInfo.javafxVersion();
-    final int width = 1000;
-    final int height = 1000;
+    final int width = 800;
+    final int height = 800;
 
     // Create main layout
     BorderPane root = new BorderPane();
@@ -36,6 +36,7 @@ public class App extends Application {
 
     var scene = new Scene(root, width, height);
     stage.setScene(scene);
+    stage.setResizable(false);
     stage.show();
 }
 
