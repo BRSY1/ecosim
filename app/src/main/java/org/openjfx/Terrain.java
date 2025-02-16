@@ -6,20 +6,19 @@ public class Terrain {
     public int x;
     public int y;
     public int colour;
+    public int underlyingColour;
     private List<Integer> rgb;
-    private boolean occupied;
+    private boolean occupied = false;
     private Animal occupiedBy;
-    // private List<Animal> validOccupiers = new ArrayList<Animal>();
 
     public void addOccupier(Animal Occupier){
-        if ((this.isOccupied() == false)){ //  && (this.validOccupiers.contains(Occupier))
-            this.occupied = true;
-            this.occupiedBy = Occupier;
-        }
+        this.occupied = true;
+        this.occupiedBy = Occupier;
     }
 
     public void removeOccupier(Animal Occupier) {
-        if (this.occupiedBy == Occupier){this.occupiedBy = null;}
+        this.occupied = false;
+        this.occupiedBy = null; 
     }
 
     public boolean isOccupied(){
