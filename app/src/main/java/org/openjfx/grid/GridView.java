@@ -39,7 +39,6 @@ public class GridView {
     }
 
     private Color getTileColor(int x, int y) {
-        // Example: Simple terrain generation based on coordinates
         if (y < 250) {
             return Color.GREEN;  // Grass
         } else if (x < 250) {

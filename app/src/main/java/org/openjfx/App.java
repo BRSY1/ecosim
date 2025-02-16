@@ -1,48 +1,66 @@
 package org.openjfx;
 
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Priority;
+import javafx.geometry.Insets;
 import javafx.stage.Stage;
-
+import org.openjfx.ui.Header;
+import org.openjfx.ui.Stats;
 import org.openjfx.grid.GridView;
 
-/**
- * JavaFX App
- */
 public class App extends Application {
 
     @Override
     public void start(Stage stage) {
-    var javaVersion = SystemInfo.javaVersion();
-    var javafxVersion = SystemInfo.javafxVersion();
-    final int width = 800;
-    final int height = 800;
+        // Create main VBox layout (stacks items vertically)
+        VBox root = new VBox();
+        root.setStyle("-fx-background-color: #202020;");
+        root.setSpacing(0); // No extra space between elements
 
-    // Create main layout
-    BorderPane root = new BorderPane();
+        // Create the header
+        var header = Header.createHeader();
+        header.setPrefHeight(50);
+        header.setStyle("-fx-background-color: #151515; -fx-text-fill: white;"); // Dark header
 
-    var label = new Label("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
-    // root.setTop(label);
+        // Create the map (GridView) inside a StackPane
+        StackPane mapContainer = new StackPane();
+        mapContainer.setPrefHeight(300); // Adjustable height for map
+        GridView gridView = new GridView(600, 600);
+        mapContainer.getChildren().add(gridView.getGridPane());
 
-    // Create GridView
-    GridView gridView = new GridView(width, height);
+        VBox.setVgrow(mapContainer, Priority.ALWAYS);
 
-    // Wrap grid in StackPane to center it
-    StackPane centerPane = new StackPane(gridView.getGridPane());
-    root.setCenter(centerPane);  // Center the StackPane inside BorderPane
 
-    var scene = new Scene(root, width, height);
-    stage.setScene(scene);
-    stage.setResizable(false);
-    stage.show();
-}
+        // Create the stats panel
+        Stats stats = new Stats();
+        VBox statsBox = stats.getStatsBox();
+        statsBox.setPrefHeight(150); // Larger stats section
+        statsBox.setBackground(new Background(new BackgroundFill(
+            Color.web("#151515"), // Dark background
+            CornerRadii.EMPTY,
+            Insets.EMPTY
+        )));
 
+        // Add everything to the VBox
+        root.getChildren().addAll(header, mapContainer, statsBox);
+
+        // Set up the scene
+        Scene scene = new Scene(root, 600, 800);
+        stage.setScene(scene);
+        stage.setTitle("Ecosim");
+        stage.setResizable(true);
+        stage.show();
+    }
 
     public static void main(String[] args) {
         launch();
     }
-
 }
