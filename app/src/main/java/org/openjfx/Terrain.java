@@ -33,8 +33,8 @@ class Terrain {
         return occupied;
     }
 
-    public List<Integer> getRgb() {
-        return this.rgb;
+    public int getColour(){
+        return colour;
     }
 
 }

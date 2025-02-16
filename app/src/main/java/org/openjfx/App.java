@@ -24,8 +24,6 @@ public class App extends Application {
 
     public static void main(String[] args) {
         launch();
-        Map myMap = new Map(50,50,0.5f);
-        myMap.printMap();
     }
 
 }
