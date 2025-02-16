@@ -2,14 +2,14 @@ package org.openjfx.ui;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class Header {
-    public static HBox createHeader() {
-        HBox header = new HBox();
+    public static VBox createHeader() {
+        VBox header = new VBox();
         header.setPrefHeight(80);
         header.setAlignment(Pos.CENTER);
 

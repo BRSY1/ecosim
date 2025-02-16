@@ -23,7 +23,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
-        this.grid = new Grid(1000, 1000, 0.01f);
+        this.grid = new Grid(800, 800, 0.01f);
         this.gameMap = new GameMap(grid);
         ArrayList<ArrayList<Terrain>> terrainArray = gameMap.getTerrainArray();
     
@@ -42,10 +42,10 @@ public class App extends Application {
     
         // GRID (Map) CONTAINER - Takes full space on the left
         StackPane mapContainer = new StackPane();
-        this.gridView = new GridView(1000, 1000);
+        this.gridView = new GridView(800, 800);
         mapContainer.getChildren().add(gridView.getGridPane());
         this.gridView.drawMap(terrainArray);
-        mapContainer.setClip(new Rectangle(1000, 1000));
+        mapContainer.setClip(new Rectangle(800, 800));
         HBox.setHgrow(mapContainer, Priority.ALWAYS); // Let it expand
     
         // RIGHT PANEL (Stats + Event Log)
@@ -70,16 +70,16 @@ public class App extends Application {
         VBox.setVgrow(eventBoxContainer, Priority.ALWAYS); // Allow event log to expand
     
         // ADD STATS + EVENT LOG TO RIGHT PANEL
-        rightPanel.getChildren().addAll(statsBox, eventBoxContainer);
+        rightPanel.getChildren().addAll(header, statsBox, eventBoxContainer);
     
         // ADD COMPONENTS TO MAIN CONTENT (Map on Left, Right Panel on Right)
         mainContent.getChildren().addAll(mapContainer, rightPanel);
     
         // ADD HEADER & MAIN CONTENT TO ROOT
-        root.getChildren().addAll(header, mainContent);
+        root.getChildren().addAll(mainContent);
     
         // SCENE SETUP
-        Scene scene = new Scene(root, 1400, 1080);
+        Scene scene = new Scene(root, 1200, 800);
         stage.setScene(scene);
         stage.setTitle("Ecosim");
         stage.setResizable(true);
