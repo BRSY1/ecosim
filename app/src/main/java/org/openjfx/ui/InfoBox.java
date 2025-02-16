@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.StackPane;
@@ -58,7 +59,8 @@ public class InfoBox {
 
         infoBoxDescription = new Label("Information about biome/animal will appear here!");
         infoBoxDescription.setStyle("-fx-font-size: 16px; -fx-text-fill: #bbbbbb; -fx-font-weight: bold;");
-        infoBoxDescription.setPadding(new Insets(0,5,0,5));
+        infoBoxDescription.setPadding(new Insets(0,10,0,10));
+        infoBoxDescription.setTextAlignment(TextAlignment.CENTER);
         infoBoxDescription.setWrapText(true);
 
 
