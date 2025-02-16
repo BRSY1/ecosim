@@ -123,7 +123,7 @@ public class App extends Application {
         settingsBox.setAlignment(javafx.geometry.Pos.BOTTOM_RIGHT); // Align to bottom-right
 
         // ADD COMPONENTS TO RIGHT PANEL IN ORDER
-        rightPanel.getChildren().addAll(header, statsBox, eventBoxContainer, infoBoxContainer, spacer, settingsBox);
+        rightPanel.getChildren().addAll(header, statsBox, infoBoxContainer, eventBoxContainer, spacer, settingsBox);
     
         // ADD COMPONENTS TO MAIN CONTENT (Map on Left, Right Panel on Right)
         mainContent.getChildren().addAll(mapContainer, rightPanel);
