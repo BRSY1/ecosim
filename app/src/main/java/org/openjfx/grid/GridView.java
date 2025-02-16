@@ -41,9 +41,10 @@ public class GridView {
             Color.DARKGRAY
         ));
 
-    public GridView(int width, int height) {
+    public GridView(int width, int height, InfoBox infobox) {
         this.width = width;
         this.height = height;
+        this.infoBox = infobox;
 
         // Make canvas match the defined width and height
         canvas = new Canvas(width, height);
@@ -85,7 +86,7 @@ public class GridView {
 
         if (biomeMap.containsKey(clickedColor)) {
             BiomeInfo biome = biomeMap.get(clickedColor);
-            infoBox.displayBiome(biome);
+            this.infoBox.displayBiome(biome);
         }
     }
 

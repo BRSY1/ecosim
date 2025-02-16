@@ -34,7 +34,7 @@ public class App extends Application {
     private GameMap gameMap;
     private GridView gridView;
     private EventBox eventBox;
-    private InfoBox infoBox = new InfoBox();
+    private InfoBox infoBox;
     private ArrayList<ArrayList<Terrain>> terrainArray;
     private ArrayList<Animal> animals = new ArrayList<Animal>();
     private SettingsPage settingsPage;
@@ -59,10 +59,16 @@ public class App extends Application {
         HBox mainContent = new HBox();
         mainContent.setPrefWidth(400);
         VBox.setVgrow(mainContent, Priority.ALWAYS); // Allow main content to expand
+
+        // infobox
+        this.infoBox = new InfoBox();
+        VBox infoBoxContainer = infoBox.getInfoBox();
+        VBox.setMargin(infoBoxContainer, new Insets(10,10,10,10));
+        infoBoxContainer.setPrefHeight(400);
  
         // GRID (Map) CONTAINER - Takes full space on the left
         StackPane mapContainer = new StackPane();
-        this.gridView = new GridView(800, 800);
+        this.gridView = new GridView(800, 800, infoBox);
         mapContainer.getChildren().add(gridView.getGridPane());
         this.gridView.drawMap(terrainArray);
         mapContainer.setClip(new Rectangle(800, 800));
@@ -89,10 +95,7 @@ public class App extends Application {
         VBox eventBoxContainer = eventBox.getEventBox();
         eventBoxContainer.setPrefHeight(200);
 
-        this.infoBox = new InfoBox();
-        VBox infoBoxContainer = infoBox.getInfoBox();
-        VBox.setMargin(infoBoxContainer, new Insets(10,10,10,10));
-        infoBoxContainer.setPrefHeight(400);
+
 
         // Spacer to push settings icon down
         Region spacer = new Region();
