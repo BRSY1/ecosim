@@ -55,15 +55,31 @@ public class GridView {
     }
 
     private void initialiseBiomeData() {
-        biomeMap.put(Color.DARKGRAY, new BiomeInfo("Rocky Mountains", "A high-altitude region with rocky peaks.", "images/mountain.jpg"));
-        biomeMap.put(Color.DARKBLUE, new BiomeInfo("Oasis", "A fertile area in a desert, providing water.", "images/oasis.jpg"));
-        biomeMap.put(Color.BLUE, new BiomeInfo("Oasis", "A fertile area in a desert, providing water.", "images/oasis.jpg"));
-        biomeMap.put(Color.rgb(247, 239, 83), new BiomeInfo("Sandy Desert", "An arid biome with vast sand dunes.", "images/desert.jpg"));
-        biomeMap.put(Color.rgb(61, 148, 21), new BiomeInfo("Grasslands", "A vast area of open fields and grass.", "images/grasslands.jpg"));
-        biomeMap.put(Color.GREEN, new BiomeInfo("Grasslands", "A vast area of open fields and grass.", "images/grasslands.jpg"));
-        biomeMap.put(Color.DARKGREEN, new BiomeInfo("Shrubbery", "Densely packed low vegetation.", "images/shrubbery.jpg"));
-        biomeMap.put(Color.FORESTGREEN, new BiomeInfo("Forests", "A biome covered with tall trees and rich wildlife.", "images/forest.jpg"));
+        biomeMap.put(Color.DARKGRAY, new BiomeInfo("Rocky Mountains", "A high-altitude region with rocky peaks.",
+            getClass().getResource("/org/openjfx/ui/assets/rocky.jpg").toExternalForm()));
+    
+        biomeMap.put(Color.DARKBLUE, new BiomeInfo("Oasis", "A fertile area in a desert, providing water.",
+            getClass().getResource("/org/openjfx/ui/assets/ocean.jpg").toExternalForm()));
+    
+        biomeMap.put(Color.BLUE, new BiomeInfo("Oasis", "A fertile area in a desert, providing water.",
+            getClass().getResource("/org/openjfx/ui/assets/ocean.jpg").toExternalForm()));
+    
+        biomeMap.put(Color.rgb(247, 239, 83), new BiomeInfo("Sandy Desert", "An arid biome with vast sand dunes.",
+            getClass().getResource("/org/openjfx/ui/assets/desert.jpg").toExternalForm()));
+    
+        biomeMap.put(Color.rgb(61, 148, 21), new BiomeInfo("Grasslands", "A vast area of open fields and grass.",
+            getClass().getResource("/org/openjfx/ui/assets/grass.jpg").toExternalForm()));
+    
+        biomeMap.put(Color.GREEN, new BiomeInfo("Grasslands", "A vast area of open fields and grass.",
+            getClass().getResource("/org/openjfx/ui/assets/grass.jpg").toExternalForm()));
+    
+        biomeMap.put(Color.DARKGREEN, new BiomeInfo("Shrubbery", "Densely packed low vegetation.",
+            getClass().getResource("/org/openjfx/ui/assets/shrub.jpg").toExternalForm()));
+    
+        biomeMap.put(Color.FORESTGREEN, new BiomeInfo("Forests", "A biome covered with tall trees and rich wildlife.",
+            getClass().getResource("/org/openjfx/ui/assets/forest.jpg").toExternalForm()));
     }
+    
 
     private void setupEventHandlers() {
         // Zoom handler

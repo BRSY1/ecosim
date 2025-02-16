@@ -12,7 +12,7 @@ public class BiomeInfo{
   public BiomeInfo(String name, String description, String imagePath){
     this.name = name;
     this.description = description;
-    // this.image = new Image(imagePath);
+    this.image = new Image(imagePath);
   }
 
   public String getName() {
