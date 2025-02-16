@@ -1,63 +1,72 @@
 package org.openjfx;
 
 import javafx.application.Application;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Priority;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.openjfx.ui.Header;
 import org.openjfx.ui.Stats;
+import org.openjfx.ui.EventBox; // Import new EventBox
 import org.openjfx.grid.GridView;
 
 public class App extends Application {
 
     @Override
     public void start(Stage stage) {
-        // Create main VBox layout (stacks items vertically)
+        // Create main VBox layout
         VBox root = new VBox();
         root.setStyle("-fx-background-color: #202020;");
         root.setSpacing(0); // No extra space between elements
 
-        // Create the header
+        // HEADER
         var header = Header.createHeader();
         header.setPrefHeight(50);
-        header.setStyle("-fx-background-color: #151515; -fx-text-fill: white;"); // Dark header
+        header.setStyle("-fx-background-color: #151515; -fx-text-fill: white;");
 
-        // Create the map (GridView) inside a StackPane
+        // GRID (Map) CONTAINER
         StackPane mapContainer = new StackPane();
         mapContainer.setPrefHeight(300); // Adjustable height for map
         GridView gridView = new GridView(600, 600);
         mapContainer.getChildren().add(gridView.getGridPane());
-
         VBox.setVgrow(mapContainer, Priority.ALWAYS);
 
-
-        // Create the stats panel
+        // STATS PANEL
         Stats stats = new Stats();
         VBox statsBox = stats.getStatsBox();
-        statsBox.setPrefHeight(150); // Larger stats section
+        statsBox.setPrefHeight(150);
         statsBox.setBackground(new Background(new BackgroundFill(
-            Color.web("#151515"), // Dark background
-            CornerRadii.EMPTY,
-            Insets.EMPTY
+            Color.web("#151515"), CornerRadii.EMPTY, Insets.EMPTY
         )));
 
-        // Add everything to the VBox
-        root.getChildren().addAll(header, mapContainer, statsBox);
+        // EVENT BOX
+        EventBox eventBox = new EventBox();
+        VBox eventBoxContainer = eventBox.getEventBox();
 
-        // Set up the scene
+        // BOTTOM CONTAINER (Stats + Event Log)
+        HBox bottomContainer = new HBox();
+        bottomContainer.setSpacing(10);
+        bottomContainer.setPadding(new Insets(10));
+        bottomContainer.setBackground(new Background(new BackgroundFill(
+            Color.web("#151515"), CornerRadii.EMPTY, Insets.EMPTY
+        )));
+        bottomContainer.getChildren().addAll(statsBox, eventBoxContainer);
+        HBox.setHgrow(statsBox, Priority.ALWAYS);
+        HBox.setHgrow(eventBoxContainer, Priority.ALWAYS);
+
+        // ADD COMPONENTS TO ROOT
+        root.getChildren().addAll(header, mapContainer, bottomContainer);
+
+        // SCENE SETUP
         Scene scene = new Scene(root, 600, 800);
         stage.setScene(scene);
         stage.setTitle("Ecosim");
         stage.setResizable(true);
         stage.show();
+
+        // Example of adding an event
+        eventBox.addEvent("Simulation started...");
     }
 
     public static void main(String[] args) {

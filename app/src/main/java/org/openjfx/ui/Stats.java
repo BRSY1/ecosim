@@ -10,10 +10,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +20,7 @@ public class Stats {
     private Map<Animal, Label> animalLabels; // Maps animals to their UI labels
 
     public Stats() {
-        statsBox = new VBox(5); // Vertical layout with spacing
+        statsBox = new VBox(); // Vertical layout with spacing
         statsBox.setPadding(new Insets(10, 10, 10, 10)); // Add padding inside
         statsBox.setMinWidth(150); // Minimum width to make it look good
         statsBox.setMaxWidth(200); // Prevent excessive width
