@@ -83,7 +83,6 @@ public class Animal {
       for (int i = 0; i < numCols; i++) {
         if (true && Math.max(Math.abs(j - (int) numRows / 2), Math.abs(i - (int) numCols / 2)) < distance && !this.terrain.equals(view.get(j).get(i))) {
           if (view.get(j).get(i).isOccupied()) {
-            System.out.println("hi");
             closest = view.get(j).get(i);
             distance = Math.max(Math.abs(j - (int) numRows / 2), Math.abs(i - (int) numCols / 2));
           }
