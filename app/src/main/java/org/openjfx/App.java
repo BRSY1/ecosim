@@ -1,5 +1,5 @@
 package org.openjfx;
-
+ 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -12,9 +12,9 @@ import org.openjfx.ui.Header;
 import org.openjfx.ui.Stats;
 import org.openjfx.ui.EventBox; // Import new EventBox
 import org.openjfx.grid.GridView;
-
+ 
 import java.util.*;
-
+ 
 public class App extends Application {
     private Grid grid;
     private GameMap gameMap;
@@ -26,75 +26,80 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
-        this.grid = new Grid(600,600, 0.01f);
+        this.grid = new Grid(800, 800, 0.0055f);
         this.gameMap = new GameMap(grid);
         terrainArray = gameMap.getTerrainArray();
         animals.add(new Animal(gameMap, 0, 0, 2, gameMap.terrainArray.get(300).get(300)));
 
-        // Create main VBox layout
+
+        // Create main VBox layout (Header at top, Content below)
         VBox root = new VBox();
         root.setStyle("-fx-background-color: #202020;");
-        root.setSpacing(0); // No extra space between elements
-
-        // HEADER
+ 
+        // HEADER (Stays at the top)
         var header = Header.createHeader();
-        header.setPrefHeight(50);
         header.setStyle("-fx-background-color: #151515; -fx-text-fill: white;");
-
-        // GRID (Map) CONTAINER
+ 
+        // MAIN CONTENT (HBox: Left - Map, Right - Stats/Event Log)
+        HBox mainContent = new HBox();
+        mainContent.setPrefWidth(400);
+        VBox.setVgrow(mainContent, Priority.ALWAYS); // Allow main content to expand
+ 
+        // GRID (Map) CONTAINER - Takes full space on the left
         StackPane mapContainer = new StackPane();
-        mapContainer.setPrefHeight(300); // Adjustable height for map
-        this.gridView = new GridView(600, 600);
+        this.gridView = new GridView(800, 800);
         mapContainer.getChildren().add(gridView.getGridPane());
         this.gridView.drawMap(terrainArray);
-        VBox.setVgrow(mapContainer, Priority.ALWAYS);
-        // ** FIX: Prevent grid from overlapping the header when zooming **
-        mapContainer.setClip(new Rectangle(600, 600));
-
-        // STATS PANEL
+        mapContainer.setClip(new Rectangle(800, 800));
+        HBox.setHgrow(mapContainer, Priority.ALWAYS); // Let it expand
+ 
+        // RIGHT PANEL (Stats + Event Log)
+        VBox rightPanel = new VBox();
+        rightPanel.setPrefWidth(400); // Fixed width for right panel
+        rightPanel.setPadding(new Insets(10));
+        rightPanel.setBackground(new Background(new BackgroundFill(
+            Color.web("#151515"), CornerRadii.EMPTY, Insets.EMPTY
+        )));
+ 
+        // STATS PANEL (Top of right panel)
         Stats stats = new Stats();
         VBox statsBox = stats.getStatsBox();
         statsBox.setPrefHeight(150);
         statsBox.setBackground(new Background(new BackgroundFill(
             Color.web("#151515"), CornerRadii.EMPTY, Insets.EMPTY
         )));
-
-        // EVENT BOX
+ 
+        // EVENT BOX (Below Stats)
         this.eventBox = new EventBox();
         VBox eventBoxContainer = eventBox.getEventBox();
-
-        // BOTTOM CONTAINER (Stats + Event Log)
-        HBox bottomContainer = new HBox();
-        bottomContainer.setSpacing(10);
-        bottomContainer.setPadding(new Insets(10));
-        bottomContainer.setBackground(new Background(new BackgroundFill(
-            Color.web("#151515"), CornerRadii.EMPTY, Insets.EMPTY
-        )));
-        bottomContainer.getChildren().addAll(statsBox, eventBoxContainer);
-        HBox.setHgrow(statsBox, Priority.ALWAYS);
-        HBox.setHgrow(eventBoxContainer, Priority.ALWAYS);
-
-        // ADD COMPONENTS TO ROOT
-        root.getChildren().addAll(header, mapContainer, bottomContainer);
-
+        VBox.setVgrow(eventBoxContainer, Priority.ALWAYS); // Allow event log to expand
+ 
+        // ADD STATS + EVENT LOG TO RIGHT PANEL
+        rightPanel.getChildren().addAll(header, statsBox, eventBoxContainer);
+    
+        // ADD COMPONENTS TO MAIN CONTENT (Map on Left, Right Panel on Right)
+        mainContent.getChildren().addAll(mapContainer, rightPanel);
+ 
+        // ADD HEADER & MAIN CONTENT TO ROOT
+        root.getChildren().addAll(mainContent);
+    
         // SCENE SETUP
-        Scene scene = new Scene(root, 600, 800);
+        Scene scene = new Scene(root, 1200, 800);
         stage.setScene(scene);
         stage.setTitle("Ecosim");
         stage.setResizable(true);
         stage.show();
-
-        // Example of adding an event
-        this.eventBox.addEvent("Simulation started...");
-
-        // Start the game loop
+ 
+        // Start game loop
         startGameLoop();
     }
-
+ 
+ 
+ 
     private void startGameLoop() {
         AnimationTimer gameLoop = new AnimationTimer() {
             private long lastUpdate = 0;
-
+ 
             @Override
             public void handle(long now) {
                 if (lastUpdate == 0 || now - lastUpdate >= 1_000_000_000) { // ~60 FPS (16.67ms per frame)
@@ -105,7 +110,7 @@ public class App extends Application {
         };
         gameLoop.start();
     }
-
+ 
     private void updateGame() {
         for (Animal animal : animals) {
             animal.animalUpdate();
@@ -117,7 +122,7 @@ public class App extends Application {
         // Log an event (optional)
         eventBox.addEvent("Game tick updated.");
     }
-
+ 
     public static void main(String[] args) {
         launch();
     }

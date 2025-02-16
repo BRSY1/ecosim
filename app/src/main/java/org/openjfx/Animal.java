@@ -64,7 +64,6 @@ public class Animal {
 
     terrain.removeOccupier(this);
 
-    System.out.println(terrain); System.out.println(newTerrain);
     this.terrain = newTerrain;
     terrain.addOccupier(this);
     terrain.colour = 8;

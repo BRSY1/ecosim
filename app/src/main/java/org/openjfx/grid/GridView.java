@@ -24,13 +24,15 @@ public class GridView {
     private ArrayList<Color> colorList = new ArrayList<>(Arrays.asList(
             Color.DARKBLUE,   // Dark Blue
             Color.BLUE,       // Blue
-            Color.DARKGOLDENROD,
-            Color.GOLD,
+            Color.rgb(247, 239, 83),
+            Color.rgb(61, 148, 21),
             Color.GREEN,      // Green
             Color.DARKGREEN,
             Color.FORESTGREEN,
             Color.DARKGRAY,
-            Color.RED
+            Color.RED,
+            Color.rgb(0,80,0),
+            Color.DARKGRAY
         ));
 
     public GridView(int width, int height) {
