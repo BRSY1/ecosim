@@ -1,5 +1,8 @@
 package org.openjfx.grid;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
@@ -18,6 +21,16 @@ public class GridView {
     private double dragStartX, dragStartY;
     private double translateX = 0, translateY = 0;
     private Pane container;
+    private ArrayList<Color> colorList = new ArrayList<>(Arrays.asList(
+            Color.DARKBLUE,   // Dark Blue
+            Color.BLUE,       // Blue
+            Color.DARKGOLDENROD,
+            Color.GOLD,
+            Color.GREEN,      // Green
+            Color.DARKGREEN,
+            Color.FORESTGREEN,
+            Color.DARKGRAY
+        ));
 
     public GridView(int width, int height) {
         this.width = width;
@@ -124,21 +137,16 @@ public class GridView {
         PixelWriter pw = gc.getPixelWriter();
 
         // Example terrain: green for top, blue for left, brown for bottom-right
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                Color color = getTileColor(x, y);
-                pw.setColor(x, y, color);
+        int y = 0;
+        for (ArrayList<Terrain> oneDterrains : twoDList){
+            int x = 0;
+            for (Terrain temp : oneDterrains){
+                int index = temp.colour;
+                Color colour = colorList.get(index);
+                pw.setColor(x,y,colour);
+                x++;
             }
-        }
-    }
-
-    private Color getTileColor(int x, int y) {
-        if (y < 250) {
-            return Color.GREEN;  // Grass
-        } else if (x < width / 2) {
-            return Color.BLUE;   // Water
-        } else {
-            return Color.BROWN;  // Dirt
+            y++;
         }
     }
 
