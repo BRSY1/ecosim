@@ -4,8 +4,8 @@ import java.util.List;
 
 public class Tree extends Terrain{
     public Tree(int x, int y){
-        this.xcord = x;
-        this.ycord = y;
+        this.x = x;
+        this.y = y;
         this.colour = 6;
     }
 }

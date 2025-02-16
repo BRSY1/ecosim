@@ -1,3 +1,4 @@
+package org.openjfx;
 import java.util.*;
 
 public class Grid {
@@ -68,7 +69,7 @@ public class Grid {
 
 
     // return the animal's view
-    public <Terrain> ArrayList<ArrayList<Terrain>> getGridSubset(int centerX, int centerY, int offset) {
+    public ArrayList<ArrayList<Terrain>> getGridSubset(int centerX, int centerY, int offset) {
         ArrayList<ArrayList<Terrain>> subset = new ArrayList<>();
 
         int numRows = map.size();
