@@ -48,10 +48,10 @@ public class Animal {
     ArrayList<ArrayList<Terrain>> view = gameMap.getView(terrain, viewRange);
     Move move = move(view);
     
-    int newx = move.getDx();
-    int newy = move.getDy();
+    int newx = terrain.x + move.getDx();
+    int newy = terrain.y + move.getDy();
     // check on map
-    if (newx < 0 || newy < 0 || newx >= 500 || newy >= 500) {
+    if (newx < 0 || newy < 0 || newx >= 600 || newy >= 600) {
       return;
     }
     
@@ -59,14 +59,15 @@ public class Animal {
 
     // check not occupied
     if (newTerrain.isOccupied()) {
-      return;
+      return; 
     }
 
     terrain.removeOccupier(this);
 
-    terrain = newTerrain;
+    System.out.println(terrain); System.out.println(newTerrain);
+    this.terrain = newTerrain;
     terrain.addOccupier(this);
-
+    terrain.colour = 8;
   }
 
   private Move move(ArrayList<ArrayList<Terrain>> view) {
@@ -74,8 +75,11 @@ public class Animal {
     int distance = 0;
 
     // find closest occupied tile with an animal on
-    for (int i = 0; i < 2 * viewRange + 1; i++) {
-      for (int j = 0; j < 2 * viewRange + 1; j++) {
+    int numRows = view.size();
+    int numCols = view.get(0).size();
+
+    for (int i = 0; i < numRows; i++) {
+      for (int j = 0; j < numCols; j++) {
         if (view.get(i).get(j).isOccupied() && Math.max(i, j) < distance) {
           closest = view.get(i).get(j);
           distance = Math.max(i, j);
@@ -119,6 +123,6 @@ public class Animal {
       }
 
     }
-    return null;
+    return Move.UP;
   }
 }
