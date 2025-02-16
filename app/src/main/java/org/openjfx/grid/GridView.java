@@ -91,8 +91,6 @@ public class GridView {
     }
 
     private void handleMousePressed(MouseEvent e) {
-        dragStartX = e.getX() - translateX;
-        dragStartY = e.getY() - translateY;
 
         int x = (int) e.getX();
         int y = (int) e.getY();
