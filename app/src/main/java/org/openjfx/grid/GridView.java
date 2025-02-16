@@ -74,11 +74,10 @@ public class GridView {
     }
 
     private void handleScroll(ScrollEvent event) {
-        double zoomFactor = 1.05;
+        double zoomFactor = 1.1;
+        double oldZoom = zoomLevel;
         double deltaY = event.getDeltaY();
     
-        // Determine new zoom level
-        double oldZoom = zoomLevel;
         if (deltaY < 0) {
             zoomLevel /= zoomFactor;
         } else {
@@ -88,25 +87,26 @@ public class GridView {
         // Clamp zoom level
         zoomLevel = Math.min(Math.max(zoomLevel, minZoomLevel), maxZoomLevel);
     
-        // Get mouse position relative to the container
-        double mouseX = event.getX();
-        double mouseY = event.getY();
+        // Get mouse position relative to the canvas BEFORE zooming
+        double mouseX = event.getX() - 400;
+        double mouseY = event.getY() - 400;
+        System.out.println("" + mouseX + "" +  mouseY);
     
-        // Convert mouse position to a percentage of the current view
-        double mouseXRatio = (mouseX - translateX) / (canvas.getWidth() * oldZoom);
-        double mouseYRatio = (mouseY - translateY) / (canvas.getHeight() * oldZoom);
+        // Convert mouse position to world coordinates before zooming
+        double worldX = (mouseX - translateX) / oldZoom;
+        double worldY = (mouseY - translateY) / oldZoom;
     
-        // Adjust translation based on new zoom level to keep the point under the cursor fixed
-        translateX = mouseX - (mouseXRatio * canvas.getWidth() * zoomLevel);
-        translateY = mouseY - (mouseYRatio * canvas.getHeight() * zoomLevel);
-    
-        // Clamp translation to prevent white space
-        translateX = clampTranslateX(translateX);
-        translateY = clampTranslateY(translateY);
-    
-        // Apply transformations
+        // Apply zoom scaling
         canvas.setScaleX(zoomLevel);
         canvas.setScaleY(zoomLevel);
+    
+        // Convert world coordinates back to new screen coordinates
+        double newTranslateX = mouseX - (worldX * zoomLevel); 
+        double newTranslateY = mouseY - (worldY * zoomLevel);
+    
+        // Apply new translations
+        translateX = clampTranslateX(newTranslateX);
+        translateY = clampTranslateY(newTranslateY);
         canvas.setTranslateX(translateX);
         canvas.setTranslateY(translateY);
     
@@ -114,15 +114,15 @@ public class GridView {
     }
     
     
-    
+       
 
     private double clampTranslateX(double proposedTranslateX) {
         double scaledWidth = width * zoomLevel;
         double viewWidth = canvas.getWidth();
     
-        // Clamp based on current zoom scale
-        double minTranslateX = Math.min(0, viewWidth - scaledWidth);
-        double maxTranslateX = 0;
+        // **Corrected clamping**
+        double minTranslateX = viewWidth - scaledWidth;  // Allow negative values
+        double maxTranslateX = 0;  // Prevent moving too far right
     
         return Math.max(minTranslateX, Math.min(proposedTranslateX, maxTranslateX));
     }
@@ -131,12 +131,14 @@ public class GridView {
         double scaledHeight = height * zoomLevel;
         double viewHeight = canvas.getHeight();
     
-        // Clamp based on current zoom scale
-        double minTranslateY = Math.min(0, viewHeight - scaledHeight);
-        double maxTranslateY = 0;
+        // **Corrected clamping**
+        double minTranslateY = viewHeight - scaledHeight;  // Allow negative values
+        double maxTranslateY = 0;  // Prevent moving too far down
     
         return Math.max(minTranslateY, Math.min(proposedTranslateY, maxTranslateY));
-    }    
+    }
+    
+       
 
     public void drawMap(ArrayList<ArrayList<Terrain>> terrainArray) {
         GraphicsContext gc = canvas.getGraphicsContext2D();
