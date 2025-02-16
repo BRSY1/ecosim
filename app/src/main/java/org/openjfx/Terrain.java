@@ -15,7 +15,7 @@ class Terrain {
         this.y = y;
         this.occupied = occupied;
         this.rgb = rgb;
-        this.occupiedBy = occupiedBy;
+        this.occupiedBy = null;
     }
 
     public void addOccupier(boolean setOccupied, Animal Occupier){
@@ -25,8 +25,8 @@ class Terrain {
         }
     }
 
-    public void remove () {
-
+    public void removeOccupier(Animal Occupier) {
+        if (this.occupiedBy == Occupier){this.occupiedBy = null;}
     }
 
     public boolean isOccupied(){
