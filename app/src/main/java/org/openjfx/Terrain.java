@@ -1,6 +1,7 @@
 package org.openjfx;
 import java.util.ArrayList;
 import java.util.List;
+
 abstract class Terrain {
     private int xcord;
     private int ycord;
@@ -10,7 +11,7 @@ abstract class Terrain {
     private Animal occupiedBy;
     private List<Animal> validOccupiers = new ArrayList<Animal>();
 
-    Terrain(int xcord, int ycord, List<Animal> eaters, boolean occupied, List<Integer> rgb){
+    Terrain(int xcord, int ycord, List<Animal> eaters, boolean occupied, List<Integer> rgb, Animal occupiedBy){
         this.xcord = xcord;
         this.ycord = ycord;
         this.eaters = eaters;
