@@ -26,6 +26,10 @@ class Terrain {
         return occupied;
     }
 
+    public Animal getOccupied() {
+        return occupiedBy;
+    }
+
     public int getColour(){
         return colour;
     }

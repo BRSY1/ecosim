@@ -7,10 +7,10 @@ public class Animal {
   private int naturalTerrain;
   private int viewRange;
   private Terrain terrain;
-  private ArrayList<ArrayList<Terrain>> map; // reference to the main map
+  private GameMap gameMap; // reference to the main map
 
-  Animal(ArrayList<ArrayList<Terrain>> map, int foodChainLevel, int naturalTerrain, int viewRange, Terrain terrain) {
-    this.map = map;
+  Animal(GameMap gameMap, int foodChainLevel, int naturalTerrain, int viewRange, Terrain terrain) {
+    this.gameMap = gameMap;
     this.foodChainLevel = foodChainLevel;
     this.naturalTerrain = naturalTerrain;
     this.viewRange = viewRange;
@@ -26,6 +26,9 @@ public class Animal {
     UP_RIGHT(1, 1),
     DOWN_LEFT(-1, -1),
     DOWN_RIGHT(1, -1);
+
+    private final int dx;
+    private final int dy;
     
     Move(int dx, int dy) {
       this.dx = dx;
@@ -42,7 +45,7 @@ public class Animal {
   }
 
   public void animalUpdate() {
-    List<List<Terrain>> view = map.getView(terrain, viewRange);
+    ArrayList<ArrayList<Terrain>> view = gameMap.getView(terrain, viewRange);
     Move move = move(view);
     
     int newx = move.getDx();
@@ -52,7 +55,7 @@ public class Animal {
       return;
     }
     
-    Terrain newTerrain = map.get(newx).get(newy);
+    Terrain newTerrain = gameMap.terrainArray.get(newx).get(newy);
 
     // check not occupied
     if (newTerrain.isOccupied()) {
@@ -66,7 +69,7 @@ public class Animal {
 
   }
 
-  private int move(List<List<Terrain>> view) {
+  private Move move(ArrayList<ArrayList<Terrain>> view) {
     Terrain closest = null;
     int distance = 0;
 
@@ -85,7 +88,7 @@ public class Animal {
       int dx = this.terrain.x - closest.x;
       int dy = this.terrain.y - closest.y;
 
-      if (this.foodChainLevel <= closest.foodChainLevel) {
+      if (this.foodChainLevel <= closest.getOccupied().foodChainLevel) {
         if (dx >= 0) {
           if (dy >= 0) {
             return Move.UP_RIGHT;
@@ -116,12 +119,6 @@ public class Animal {
       }
 
     }
-
-    
-    return 0;
-  }
-
-  void updateAnimal() {
-    map.getView(location, viewRange);
+    return null;
   }
 }

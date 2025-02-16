@@ -24,41 +24,31 @@ public class GameMap {
         }
 
    }
-}
-//    public void printMap(){
-//       for (int x<0; x<myGrid.getWidth(); x++){
-//           for (int y<0; y<myGrid.height(); y++){
-//                System.out.println(this.(terrainArray[x][y]).getColour());
-//            }
-//            map.add(tmpList);
-//        }
-//    }
 
     // return the animal's view
-//    public <Terrain> ArrayList<ArrayList<Terrain>> getView(Terrain terrain, int offset) {
-//        int centerX = terrain.x;
-//        int centerY = terrain.y;
-//
+    public ArrayList<ArrayList<Terrain>> getView(Terrain terrain, int offset) {
+        int centerX = terrain.x;
+        int centerY = terrain.y;
 
-//        ArrayList<ArrayList<Terrain>> subset = new ArrayList<>();
-//
-//      int numRows = map.size();
-//        if (numRows == 0) return subset;
-//        int numCols = map.get(0).size();
-//
-//       for (int i = centerX - offset; i <= centerX + offset; i++) {
-//            ArrayList<Terrain> rowSubset = new ArrayList<>();
-//            for (int j = centerY - offset; j <= centerY + offset; j++) {
-//                if (i >= 0 && i < numRows && j >= 0 && j < numCols) {
-//                    rowSubset.add((Terrain) map.get(i).get(j));
-//                }
-//            }
-//            if (!rowSubset.isEmpty()) {
-//                subset.add(rowSubset);
-//            }
-//        }
-//
-//        return subset;
-//    }
 
-//}
+        ArrayList<ArrayList<Terrain>> subset = new ArrayList<>();
+
+        int numRows = terrainArray.size();
+        if (numRows == 0) return subset;
+        int numCols = terrainArray.get(0).size();
+
+        for (int i = centerX - offset; i <= centerX + offset; i++) {
+            ArrayList<Terrain> rowSubset = new ArrayList<>();
+            for (int j = centerY - offset; j <= centerY + offset; j++) {
+                if (i >= 0 && i < numRows && j >= 0 && j < numCols) {
+                   rowSubset.add((Terrain) terrainArray.get(i).get(j));
+                }
+            }
+            if (!rowSubset.isEmpty()) {
+                subset.add(rowSubset);
+            }
+        }
+
+        return subset;
+    }
+}
