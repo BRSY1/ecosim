@@ -1,8 +1,8 @@
 package org.openjfx;
 
-public class Antelope extends Animal {
+// public class Antelope extends Animal {
 
-  Antelope() {
-    super(1);
-  }
-}
+  // Antelope() {
+  //   super(1, 1);
+  // }
+// }
