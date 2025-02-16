@@ -1,5 +1,6 @@
 package org.openjfx;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -15,11 +16,15 @@ import org.openjfx.grid.GridView;
 import java.util.*;
 
 public class App extends Application {
+    private Grid grid;
+    private GameMap gameMap;
+    private GridView gridView;
+    private EventBox eventBox;
 
     @Override
     public void start(Stage stage) {
-        Grid grid = new Grid(600,600, 0.01f);
-        GameMap gameMap = new GameMap(grid);
+        this.grid = new Grid(600,600, 0.01f);
+        this.gameMap = new GameMap(grid);
         ArrayList<ArrayList<Terrain>> terrainArray = gameMap.getTerrainArray();
 
         // Create main VBox layout
@@ -35,9 +40,9 @@ public class App extends Application {
         // GRID (Map) CONTAINER
         StackPane mapContainer = new StackPane();
         mapContainer.setPrefHeight(300); // Adjustable height for map
-        GridView gridView = new GridView(600, 600);
+        this.gridView = new GridView(600, 600);
         mapContainer.getChildren().add(gridView.getGridPane());
-        gridView.drawMap(terrainArray);
+        this.gridView.drawMap(terrainArray);
         VBox.setVgrow(mapContainer, Priority.ALWAYS);
         // ** FIX: Prevent grid from overlapping the header when zooming **
         mapContainer.setClip(new Rectangle(600, 600));
@@ -51,7 +56,7 @@ public class App extends Application {
         )));
 
         // EVENT BOX
-        EventBox eventBox = new EventBox();
+        this.eventBox = new EventBox();
         VBox eventBoxContainer = eventBox.getEventBox();
 
         // BOTTOM CONTAINER (Stats + Event Log)
@@ -76,7 +81,40 @@ public class App extends Application {
         stage.show();
 
         // Example of adding an event
-        eventBox.addEvent("Simulation started...");
+        this.eventBox.addEvent("Simulation started...");
+
+        // Start the game loop
+        startGameLoop();
+    }
+
+    private void startGameLoop() {
+        AnimationTimer gameLoop = new AnimationTimer() {
+            private long lastUpdate = 0;
+
+            @Override
+            public void handle(long now) {
+                if (lastUpdate == 0 || now - lastUpdate >= 1_000_000_000) { // ~60 FPS (16.67ms per frame)
+                    updateGame();
+                    lastUpdate = now;
+                }
+            }
+        };
+        gameLoop.start();
+    }
+
+    private void updateGame() {
+        // Step 1: Update the game logic (e.g., terrain changes, animals moving, etc.)
+        //gameMap.update();  // Assuming GameMap has an update method
+        //grid.update();     // Assuming Grid has an update method
+
+        // Step 2: Get the latest terrain array
+        ArrayList<ArrayList<Terrain>> terrainArray = gameMap.getTerrainArray();
+
+        // Step 3: Redraw the map with updated terrain
+        gridView.drawMap(terrainArray);
+
+        // Step 4: Log an event (optional)
+        eventBox.addEvent("Game tick updated.");
     }
 
     public static void main(String[] args) {
