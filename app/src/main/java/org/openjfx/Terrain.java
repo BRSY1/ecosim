@@ -9,10 +9,10 @@ public class Terrain {
     private List<Integer> rgb;
     private boolean occupied;
     private Animal occupiedBy;
-    private List<Animal> validOccupiers = new ArrayList<Animal>();
+    // private List<Animal> validOccupiers = new ArrayList<Animal>();
 
     public void addOccupier(Animal Occupier){
-        if ((this.isOccupied() == false) && (this.validOccupiers.contains(Occupier))){
+        if ((this.isOccupied() == false)){ //  && (this.validOccupiers.contains(Occupier))
             this.occupied = true;
             this.occupiedBy = Occupier;
         }

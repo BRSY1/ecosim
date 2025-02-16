@@ -20,12 +20,16 @@ public class App extends Application {
     private GameMap gameMap;
     private GridView gridView;
     private EventBox eventBox;
- 
+    private ArrayList<ArrayList<Terrain>> terrainArray;
+
+    private ArrayList<Animal> animals = new ArrayList<Animal>();
+
     @Override
     public void start(Stage stage) {
         this.grid = new Grid(800, 800, 0.0055f);
         this.gameMap = new GameMap(grid);
-        ArrayList<ArrayList<Terrain>> terrainArray = gameMap.getTerrainArray();
+        terrainArray = gameMap.getTerrainArray();
+        animals.add(new Animal(gameMap, 0, 0, 2, gameMap.terrainArray.get(300).get(300)));
 
 
         // Create main VBox layout (Header at top, Content below)
@@ -108,17 +112,14 @@ public class App extends Application {
     }
  
     private void updateGame() {
-        // Step 1: Update the game logic (e.g., terrain changes, animals moving, etc.)
-        //gameMap.update();  // Assuming GameMap has an update method
-        //grid.update();     // Assuming Grid has an update method
- 
-        // Step 2: Get the latest terrain array
-        ArrayList<ArrayList<Terrain>> terrainArray = gameMap.getTerrainArray();
- 
-        // Step 3: Redraw the map with updated terrain
+        for (Animal animal : animals) {
+            animal.animalUpdate();
+        }
+
+        // Redraw the map with updated terrain
         gridView.drawMap(terrainArray);
- 
-        // Step 4: Log an event (optional)
+
+        // Log an event (optional)
         eventBox.addEvent("Game tick updated.");
     }
  

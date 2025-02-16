@@ -28,6 +28,9 @@ public class GridView {
             Color.rgb(61, 148, 21),
             Color.GREEN,      // Green
             Color.DARKGREEN,
+            Color.FORESTGREEN,
+            Color.DARKGRAY,
+            Color.RED,
             Color.rgb(0,80,0),
             Color.DARKGRAY
         ));
