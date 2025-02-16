@@ -81,7 +81,11 @@ public class Map {
     }
 
     // return the animal's view
-    public <Terrain> ArrayList<ArrayList<Terrain>> getGridSubset(int centerX, int centerY, int offset) {
+    public <Terrain> ArrayList<ArrayList<Terrain>> getView(Terrain terrain, int offset) {
+        int centerX = terrain.x;
+        int centerY = terrain.y;
+
+
         ArrayList<ArrayList<Terrain>> subset = new ArrayList<>();
         
         int numRows = map.size();
@@ -102,7 +106,7 @@ public class Map {
         
         return subset;
     }
-    
+
     // Implements Perlin noise
     public double perlin(double sampleX, double sampleY) {
         // Find the integer grid cell coordinates

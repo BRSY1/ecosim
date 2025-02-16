@@ -3,16 +3,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Terrain {
-    private int xcord;
-    private int ycord;
+    public int x;
+    public int y;
     private List<Integer> rgb;
     private boolean occupied;
     private Animal occupiedBy;
     private List<Animal> validOccupiers = new ArrayList<Animal>();
 
-    Terrain(int xcord, int ycord, boolean occupied, List<Integer> rgb, Animal occupiedBy){
-        this.xcord = xcord;
-        this.ycord = ycord;
+    Terrain(int x, int y, boolean occupied, List<Integer> rgb, Animal occupiedBy){
+        this.x = x;
+        this.y = y;
         this.occupied = occupied;
         this.rgb = rgb;
         this.occupiedBy = occupiedBy;
