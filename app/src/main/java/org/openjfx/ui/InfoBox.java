@@ -58,7 +58,7 @@ public class InfoBox {
 
         infoBoxDescription = new Label("Information about biome/animal will appear here!");
         infoBoxDescription.setStyle("-fx-font-size: 16px; -fx-text-fill: #bbbbbb; -fx-font-weight: bold;");
-        infoBoxDescription.wrapTextProperty();
+        infoBoxDescription.setWrapText(true);
 
 
         infoBox = new VBox();
