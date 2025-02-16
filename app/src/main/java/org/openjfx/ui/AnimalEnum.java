@@ -1,5 +1,5 @@
 package org.openjfx.ui;
 
-public enum Animal {
+public enum AnimalEnum {
   RABBIT, FOX, DEER, WOLF, LION
 }
