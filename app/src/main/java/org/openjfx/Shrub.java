@@ -3,9 +3,9 @@ import java.util.List;
 import java.util.ArrayList;
 
 
-public class Rock extends Terrain{
+public class Shrub extends Terrain{
 
-    public Rock(int x, int y){
+    public Shrub(int x, int y){
         this.colour = 5;
         this.x = x;
         this.y = y;
