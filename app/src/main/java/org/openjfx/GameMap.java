@@ -11,14 +11,14 @@ public class GameMap {
        for (int y=0; y<myGrid.getHeight(); y++){
             ArrayList<Terrain> innerList = new ArrayList<>();
             for (int x=0; x<myGrid.getWidth(); x++){
-                if ((myGrid.grid[y][x] <= 1.0) && (myGrid.grid[y])[x] > 0.8){innerList.add(new Rock(x, y));}
-                if ((myGrid.grid[y][x] <= 0.8) && (myGrid.grid[y])[x] > 0.6){innerList.add(new Tree(x,y));}
-                if ((myGrid.grid[y][x] <= 0.6) && (myGrid.grid[y])[x] > 0.2){innerList.add(new Shrub(x, y));}
-                if ((myGrid.grid[y][x] <= 0.2) && (myGrid.grid[y])[x] > -0.2){innerList.add(new Grass(x, y));}
-                if ((myGrid.grid[y][x] <= -0.2) && (myGrid.grid[y])[x] > -0.4){innerList.add(new SandLight(x, y));}
-                if ((myGrid.grid[y][x] <= -0.4) && (myGrid.grid[y])[x] > -0.6){innerList.add(new SandDark(x, y));}
-                if ((myGrid.grid[y][x] <= -0.6) && (myGrid.grid[y])[x] > -0.8){innerList.add(new WaterLight(x, y));}
-                if ((myGrid.grid[y][x] <= -0.8) && (myGrid.grid[y])[x] > -1.0){innerList.add(new WaterDark(x, y));}
+                if ((myGrid.grid[y][x] <= 1.0) && (myGrid.grid[y])[x] > 0.4){innerList.add(new Rock(x, y));}
+                if ((myGrid.grid[y][x] <= 0.4) && (myGrid.grid[y])[x] > 0.3){innerList.add(new Tree(x,y));}
+                if ((myGrid.grid[y][x] <= 0.3) && (myGrid.grid[y])[x] > 0.2){innerList.add(new Shrub(x, y));}
+                if ((myGrid.grid[y][x] <= 0.2) && (myGrid.grid[y])[x] > 0.0){innerList.add(new Grass(x, y));}
+                if ((myGrid.grid[y][x] <= 0.0) && (myGrid.grid[y])[x] > -0.15){innerList.add(new SandLight(x, y));}
+                if ((myGrid.grid[y][x] <= -0.15) && (myGrid.grid[y])[x] > -0.25){innerList.add(new SandDark(x, y));}
+                if ((myGrid.grid[y][x] <= -0.25) && (myGrid.grid[y])[x] > -0.4){innerList.add(new WaterLight(x, y));}
+                if ((myGrid.grid[y][x] <= -0.4) && (myGrid.grid[y])[x] > -1.0){innerList.add(new WaterDark(x, y));}
             }
             terrainArray.add(innerList);
         }

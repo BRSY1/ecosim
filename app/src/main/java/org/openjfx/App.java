@@ -18,10 +18,18 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
-        Grid grid = new Grid(600,600, 0.01f);
+        Grid grid = new Grid(1000,1000, 0.0075f);
         GameMap gameMap = new GameMap(grid);
         ArrayList<ArrayList<Terrain>> terrainArray = gameMap.getTerrainArray();
-
+        
+        
+        //for(int x=0; x<grid.getWidth();x++){
+        //    for (int y=0; y<grid.getHeight(); y++){
+        //        System.out.println(grid.grid[x][y]);
+        //    }
+        //}
+        
+        
         // Create main VBox layout
         VBox root = new VBox();
         root.setStyle("-fx-background-color: #202020;");
@@ -35,12 +43,12 @@ public class App extends Application {
         // GRID (Map) CONTAINER
         StackPane mapContainer = new StackPane();
         mapContainer.setPrefHeight(300); // Adjustable height for map
-        GridView gridView = new GridView(600, 600);
+        GridView gridView = new GridView(1000, 1000);
         mapContainer.getChildren().add(gridView.getGridPane());
         gridView.drawMap(terrainArray);
         VBox.setVgrow(mapContainer, Priority.ALWAYS);
         // ** FIX: Prevent grid from overlapping the header when zooming **
-        mapContainer.setClip(new Rectangle(600, 600));
+        mapContainer.setClip(new Rectangle(1000, 1000));
 
         // STATS PANEL
         Stats stats = new Stats();
@@ -69,7 +77,7 @@ public class App extends Application {
         root.getChildren().addAll(header, mapContainer, bottomContainer);
 
         // SCENE SETUP
-        Scene scene = new Scene(root, 600, 800);
+        Scene scene = new Scene(root, 1920, 1080);
         stage.setScene(scene);
         stage.setTitle("Ecosim");
         stage.setResizable(true);
