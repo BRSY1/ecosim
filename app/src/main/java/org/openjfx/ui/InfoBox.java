@@ -52,12 +52,13 @@ public class InfoBox {
         infoBoxImage.setEffect(dropShadow);  
   
 
-        infoBoxLabel = new Label();
+        infoBoxLabel = new Label("Click anywhere!");
         infoBoxLabel.setStyle("-fx-font-size: 18px; -fx-text-fill: white; -fx-font-weight: bold;");
         infoBoxLabel.setPadding(new Insets(10,0,0,0));
 
-        infoBoxDescription = new Label();
+        infoBoxDescription = new Label("Information about biome/animal will appear here!");
         infoBoxDescription.setStyle("-fx-font-size: 16px; -fx-text-fill: #bbbbbb; -fx-font-weight: bold;");
+        infoBoxDescription.wrapTextProperty();
 
 
         infoBox = new VBox();

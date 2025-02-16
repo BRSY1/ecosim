@@ -87,6 +87,7 @@ public class App extends Application {
         Stats stats = new Stats();
         VBox statsBox = stats.getStatsBox();
         statsBox.setPrefHeight(150);
+        VBox.setMargin(statsBox, new Insets(10,10,10,10));
         statsBox.setBackground(new Background(new BackgroundFill(
             Color.web("#151515"), CornerRadii.EMPTY, Insets.EMPTY
         )));
@@ -94,9 +95,8 @@ public class App extends Application {
         // EVENT BOX (Below Stats)
         this.eventBox = new EventBox();
         VBox eventBoxContainer = eventBox.getEventBox();
-        eventBoxContainer.setPrefHeight(200);
-
-
+        VBox.setMargin(eventBoxContainer, new Insets(10,10,10,10));
+        eventBoxContainer.setPrefHeight(150);
 
         // Spacer to push settings icon down
         Region spacer = new Region();

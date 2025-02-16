@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 
 public class EventBox {
     private VBox eventBox;
@@ -14,25 +15,26 @@ public class EventBox {
 
     public EventBox() {
         // EVENT LOG TITLE
-        Label eventLogTitle = new Label("Events:");
-        eventLogTitle.setStyle("-fx-font-size: 16px; -fx-text-fill: white; -fx-font-weight: bold;");
-
+        Label eventLogTitle = new Label("Events");
+        eventLogTitle.setStyle("-fx-font-size: 24px; -fx-text-fill: white; -fx-font-weight: bold;");
         // EVENT LOG TEXT AREA
         eventLog = new TextArea();
         eventLog.setEditable(false);
         eventLog.setWrapText(true);
         eventLog.setStyle(
-            "-fx-control-inner-background: #151515; " +
+            "-fx-control-inner-background: #202020; " +
             "-fx-text-fill: white; " +
             "-fx-background-insets: 0; " +
-            "-fx-background-color: #151515; " +
+            "-fx-background-color: #202020; " +
             "-fx-border-width: 0;"
         );
         eventLog.setPrefHeight(120);
+        
 
         // EVENT LOG CONTAINER (Title + Log)
         eventBox = new VBox();
         eventBox.setPadding(new Insets(10, 10, 10, 10)); // Add padding inside
+        eventBox.setAlignment(Pos.TOP_CENTER);
 
         eventBox.getChildren().addAll(eventLogTitle, eventLog);
         eventBox.setSpacing(5);
@@ -40,6 +42,7 @@ public class EventBox {
         eventBox.setBackground(new Background(new BackgroundFill(
             Color.web("#151515"), null, Insets.EMPTY
         )));
+        eventBox.setStyle("-fx-background-color: #202020; -fx-background-radius: 10px; -fx-border: 20px; -fx-border-color: black; -fx-border-radius: 10px;");
     }
 
     public VBox getEventBox() {

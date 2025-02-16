@@ -24,6 +24,9 @@ public class Stats {
         statsBox.setPadding(new Insets(10, 10, 10, 10)); // Add padding inside
         statsBox.setMinWidth(150); // Minimum width to make it look good
         statsBox.setMaxWidth(200); // Prevent excessive width
+        statsBox.setStyle("-fx-background-color: #202020; -fx-background-radius: 10px; -fx-border: 20px; -fx-border-color: black; -fx-border-radius: 10px;");
+        statsBox.setAlignment(Pos.TOP_CENTER);
+
 
         // Set background (dark, transparent with rounded corners)
         statsBox.setBackground(new Background(new BackgroundFill(
@@ -34,8 +37,7 @@ public class Stats {
 
         // Title label
         Label title = new Label("Stats");
-        title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-        title.setTextFill(Color.WHITE);
+        title.setStyle("-fx-font-size: 24px; -fx-text-fill: white; -fx-font-weight: bold;");
 
         // Initialize containers
         animalCounts = new HashMap<>();
