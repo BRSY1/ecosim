@@ -8,13 +8,16 @@ public class Animal {
   private int viewRange;
   private Terrain terrain;
   private GameMap gameMap; // reference to the main map
+  private int update = 0;
+  private int updateRate;
 
-  Animal(GameMap gameMap, int foodChainLevel, int naturalTerrain, int viewRange, Terrain terrain) {
+  Animal(GameMap gameMap, int foodChainLevel, int naturalTerrain, int viewRange, Terrain terrain, int updateRate) {
     this.gameMap = gameMap;
     this.foodChainLevel = foodChainLevel;
     this.naturalTerrain = naturalTerrain;
     this.viewRange = viewRange;
     this.terrain = terrain;
+    this.updateRate = updateRate;
   }
 
   private enum Move {
@@ -46,28 +49,35 @@ public class Animal {
 
   public void animalUpdate() {
     ArrayList<ArrayList<Terrain>> view = gameMap.getView(terrain, viewRange);
-    Move move = move(view);
+
+    if (update >= updateRate - 1) {
+      Move move = move(view);
     
-    int newx = terrain.x + move.getDx();
-    int newy = terrain.y + move.getDy();
+      int newx = terrain.x + move.getDx();
+      int newy = terrain.y + move.getDy();
+  
+      if (newx < 0 || newy < 0 || newx >= 800 || newy >= 800) {
+        return;
+      }
+      
+      Terrain newTerrain = gameMap.terrainArray.get(newy).get(newx);
+  
+      // check not occupied
+      if (newTerrain.isOccupied()) {
+        return;
+      }
+  
+      terrain.removeOccupier(this);
+      terrain.colour = terrain.underlyingColour;
+  
+      this.terrain = newTerrain;
+      terrain.addOccupier(this);
+      terrain.colour = 8;
 
-    if (newx < 0 || newy < 0 || newx >= 800 || newy >= 800) {
-      return;
+      update = 0;
+    } else {
+      update++;
     }
-    
-    Terrain newTerrain = gameMap.terrainArray.get(newy).get(newx);
-
-    // check not occupied
-    if (newTerrain.isOccupied()) {
-      return;
-    }
-
-    terrain.removeOccupier(this);
-    terrain.colour = terrain.underlyingColour;
-
-    this.terrain = newTerrain;
-    terrain.addOccupier(this);
-    terrain.colour = 8;
   }
 
   private Move move(ArrayList<ArrayList<Terrain>> view) {

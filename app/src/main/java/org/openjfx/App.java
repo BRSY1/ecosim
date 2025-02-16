@@ -44,8 +44,8 @@ public class App extends Application {
         this.grid = new Grid(800, 800, 0.0055f);
         this.gameMap = new GameMap(grid);
         terrainArray = gameMap.getTerrainArray();
-        animals.add(new Animal(gameMap, 0, 0, 10, gameMap.terrainArray.get(290).get(290)));
-        animals.add(new Animal(gameMap, 1, 0, 10, gameMap.terrainArray.get(295).get(295)));
+        animals.add(new Animal(gameMap, 0, 0, 10, gameMap.terrainArray.get(290).get(290), 2));
+        animals.add(new Animal(gameMap, 1, 0, 10, gameMap.terrainArray.get(295).get(295), 1));
 
 
         // Create main VBox layout (Header at top, Content below)
