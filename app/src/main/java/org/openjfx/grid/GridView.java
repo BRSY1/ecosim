@@ -21,7 +21,7 @@ public class GridView {
     private int height;
     private double zoomLevel = 1.0;
     private final double minZoomLevel = 1.0;
-    private final double maxZoomLevel = 10.0;
+    private final double maxZoomLevel = 4.0;
     private double translateX = 0, translateY = 0;
     private Pane container;        // Whether the user is currently highlighting
     private InfoBox infoBox;
