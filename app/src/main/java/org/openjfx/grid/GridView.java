@@ -21,10 +21,13 @@ public class GridView {
     private int height;
     private double zoomLevel = 1.0;
     private final double minZoomLevel = 1.0;
-    private final double maxZoomLevel = 4.0;
+    private final double maxZoomLevel = 10.0;
     private double dragStartX, dragStartY;
     private double translateX = 0, translateY = 0;
     private Pane container;
+    private double highlightStartX, highlightStartY; // Starting point of the highlight
+    private double highlightEndX, highlightEndY;     // Ending point of the highlight
+    private boolean isHighlighting = false;         // Whether the user is currently highlighting
     private InfoBox infoBox;
     private final Map<Color, BiomeInfo> biomeMap = new HashMap<>();
     private ArrayList<Color> colorList = new ArrayList<>(Arrays.asList(
@@ -84,11 +87,11 @@ public class GridView {
 
     private void setupEventHandlers() {
         // Zoom handler
-        canvas.setOnScroll(this::handleScroll);
+        container.setOnScroll(this::handleScroll);
 
         // Drag handler for panning
         canvas.setOnMousePressed(this::handleMousePressed);
-        canvas.setOnMouseDragged(this::handleMouseDragged);
+        
     }
 
     private void handleMousePressed(MouseEvent e) {
@@ -97,6 +100,7 @@ public class GridView {
 
         int x = (int) e.getX();
         int y = (int) e.getY();
+        System.out.println("X: " + x + "Y: " + y);
 
         
         Color clickedColor = getPixelColor(x,y);
@@ -105,19 +109,6 @@ public class GridView {
             BiomeInfo biome = biomeMap.get(clickedColor);
             this.infoBox.displayBiome(biome);
         }
-    }
-
-    private void handleMouseDragged(MouseEvent e) {
-        double newTranslateX = e.getX() - dragStartX;
-        double newTranslateY = e.getY() - dragStartY;
-
-        // Limit panning within valid bounds
-        translateX = clampTranslateX(newTranslateX);
-        translateY = clampTranslateY(newTranslateY);
-
-        // Apply panning
-        canvas.setTranslateX(translateX);
-        canvas.setTranslateY(translateY);
     }
 
     private void handleScroll(ScrollEvent event) {
@@ -143,8 +134,8 @@ public class GridView {
         double worldY = (mouseY - translateY) / oldZoom;
     
         // Apply zoom scaling
-        canvas.setScaleX(zoomLevel);
-        canvas.setScaleY(zoomLevel);
+        container.setScaleX(zoomLevel);
+        container.setScaleY(zoomLevel);
     
         // Convert world coordinates back to new screen coordinates
         double newTranslateX = mouseX - (worldX * zoomLevel); 
@@ -153,8 +144,8 @@ public class GridView {
         // Apply new translations
         translateX = clampTranslateX(newTranslateX);
         translateY = clampTranslateY(newTranslateY);
-        canvas.setTranslateX(translateX);
-        canvas.setTranslateY(translateY);
+        container.setTranslateX(translateX);
+        container.setTranslateY(translateY);
     
         event.consume();
     }
@@ -166,25 +157,26 @@ public class GridView {
 
     private double clampTranslateX(double proposedTranslateX) {
         double scaledWidth = width * zoomLevel;
-        double viewWidth = canvas.getWidth();
+        double viewWidth = container.getWidth();
     
         // **Corrected clamping**
         double minTranslateX = viewWidth - scaledWidth;  // Allow negative values
-        double maxTranslateX = 0;  // Prevent moving too far right
+        double maxTranslateX = 1600;  // Prevent moving too far right
     
         return Math.max(minTranslateX, Math.min(proposedTranslateX, maxTranslateX));
     }
     
     private double clampTranslateY(double proposedTranslateY) {
         double scaledHeight = height * zoomLevel;
-        double viewHeight = canvas.getHeight();
+        double viewHeight = container.getHeight();
     
         // **Corrected clamping**
         double minTranslateY = viewHeight - scaledHeight;  // Allow negative values
-        double maxTranslateY = 0;  // Prevent moving too far down
+        double maxTranslateY = 1600;  // Prevent moving too far down
     
         return Math.max(minTranslateY, Math.min(proposedTranslateY, maxTranslateY));
     }
+    
     
        
 

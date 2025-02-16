@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -13,20 +14,22 @@ import javafx.stage.Stage;
 import org.openjfx.ui.Header;
 import org.openjfx.ui.Stats;
 import org.openjfx.pages.SettingsPage; // Import the new SettingsPage class
+import java.awt.Desktop;
+import java.net.URI;
 
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.materialdesign2.MaterialDesignC;
-
+import org.kordamp.ikonli.materialdesign2.MaterialDesignG;
+import org.kordamp.ikonli.materialdesign2.MaterialDesignIIkonHandler;
 import org.openjfx.ui.EventBox;
 import org.openjfx.ui.InfoBox;
 import org.openjfx.pages.SettingsPage; // Import the new SettingsPage class
 
-import org.kordamp.ikonli.javafx.FontIcon;
-import org.kordamp.ikonli.materialdesign2.MaterialDesignC;
 
 import org.openjfx.ui.EventBox;
 import org.openjfx.grid.GridView;
- 
+
+import java.net.URI;
 import java.util.*;
  
 public class App extends Application {
@@ -102,6 +105,11 @@ public class App extends Application {
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
 
+        FontIcon githubIcon = new FontIcon(MaterialDesignG.GITHUB);
+        githubIcon.setIconSize(24);
+        githubIcon.setIconColor(Color.WHITE);
+        githubIcon.setCursor(Cursor.HAND); // Change cursor to pointer on hover
+
         // SETTINGS ICON (Bottom-right)
         FontIcon settingsIcon = new FontIcon(MaterialDesignC.COG);
         settingsIcon.setIconSize(24);
@@ -116,14 +124,23 @@ public class App extends Application {
         overlay.setPickOnBounds(false); // Allow clicking outside to close settings
 
         settingsIcon.setOnMouseClicked(e -> settingsPage.showSettings());
+        githubIcon.setOnMouseClicked((MouseEvent event) -> {
+            try {
+                Desktop.getDesktop().browse(new URI("https://github.com/BRSY1")); // Change to your GitHub link
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
         // Create an HBox for right alignment
-        HBox settingsBox = new HBox(settingsIcon);
-        settingsBox.setPadding(new Insets(10));
-        settingsBox.setAlignment(javafx.geometry.Pos.BOTTOM_RIGHT); // Align to bottom-right
+        HBox iconBox = new HBox();
+        iconBox.setSpacing(5);
+        iconBox.getChildren().addAll(githubIcon, settingsIcon);
+        iconBox.setPadding(new Insets(10));
+        iconBox.setAlignment(javafx.geometry.Pos.BOTTOM_RIGHT); // Align to bottom-right
 
         // ADD COMPONENTS TO RIGHT PANEL IN ORDER
-        rightPanel.getChildren().addAll(header, statsBox, infoBoxContainer, eventBoxContainer, spacer, settingsBox);
+        rightPanel.getChildren().addAll(header, statsBox, infoBoxContainer, eventBoxContainer, spacer, iconBox);
     
         // ADD COMPONENTS TO MAIN CONTENT (Map on Left, Right Panel on Right)
         mainContent.getChildren().addAll(mapContainer, rightPanel);

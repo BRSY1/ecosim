@@ -4,6 +4,7 @@ module org.openjfx {
     requires MaterialFX;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.ikonli.materialdesign2;
+    requires javafx.graphics;
     
     exports org.openjfx;
     opens org.openjfx to javafx.fxml;
