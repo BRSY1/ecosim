@@ -38,7 +38,8 @@ public class GridView {
             Color.DARKGRAY,
             Color.RED,
             Color.rgb(0,80,0),
-            Color.DARKGRAY
+            Color.DARKGRAY,
+            Color.rgb(70, 42, 1)
         ));
 
     public GridView(int width, int height, InfoBox infobox) {
