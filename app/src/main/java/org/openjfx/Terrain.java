@@ -18,9 +18,9 @@ class Terrain {
         this.occupiedBy = null;
     }
 
-    public void addOccupier(boolean setOccupied, Animal Occupier){
-        if ((this.isOccupied() == false) || (this.validOccupiers.contains(Occupier))){
-            this.occupied = setOccupied;
+    public void addOccupier(Animal Occupier){
+        if ((this.isOccupied() == false) && (this.validOccupiers.contains(Occupier))){
+            this.occupied = true;
             this.occupiedBy = Occupier;
         }
     }
