@@ -7,6 +7,7 @@ public class Grass extends Terrain{
 
     public Grass(int x, int y){
         this.colour = 4;
+        this.underlyingColour = this.colour;
         this.x = x;
         this.y = y;
     }
