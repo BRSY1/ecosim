@@ -5,7 +5,7 @@ public class GameMap {
    Grid myGrid;
    ArrayList<ArrayList<Terrain>> terrainArray;
 
-   public GameMap(Grid myGrid){
+   public GameMap(Grid myGrid) {
        this.myGrid = myGrid;
        this.terrainArray = new ArrayList<>();
        for (int y=0; y<myGrid.getHeight(); y++){
@@ -34,18 +34,17 @@ public class GameMap {
         int centerX = terrain.x;
         int centerY = terrain.y;
 
-
         ArrayList<ArrayList<Terrain>> subset = new ArrayList<>();
 
         int numRows = terrainArray.size();
         if (numRows == 0) return subset;
         int numCols = terrainArray.get(0).size();
 
-        for (int i = centerX - offset; i <= centerX + offset; i++) {
+        for (int j = centerY - offset; j <= centerY + offset; j++) {  // Loop rows first
             ArrayList<Terrain> rowSubset = new ArrayList<>();
-            for (int j = centerY - offset; j <= centerY + offset; j++) {
-                if (i >= 0 && i < numRows && j >= 0 && j < numCols) {
-                   rowSubset.add((Terrain) terrainArray.get(i).get(j));
+            for (int i = centerX - offset; i <= centerX + offset; i++) {  // Loop cols
+                if (j >= 0 && j < numRows && i >= 0 && i < numCols) {
+                   rowSubset.add(terrainArray.get(j).get(i)); // Ensure proper indexing
                 }
             }
             if (!rowSubset.isEmpty()) {
