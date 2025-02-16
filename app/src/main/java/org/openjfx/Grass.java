@@ -14,6 +14,7 @@ public class Grass extends Terrain implements Food{
         this.x = x;
         this.y = y;
         this.framesToRegrow = 0;
+        this.biome = 1;
     }
 
     @Override

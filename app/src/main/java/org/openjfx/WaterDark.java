@@ -10,5 +10,6 @@ public class WaterDark extends Terrain{
         this.underlyingColour = this.colour;
         this.x = x;
         this.y = y;
+        this.biome = 7;
     }
 }

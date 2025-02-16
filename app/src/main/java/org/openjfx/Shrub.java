@@ -14,6 +14,7 @@ public class Shrub extends Terrain implements Food{
         this.y = y;
         this.isDead = false;
         this.framesToRegrow = 0;
+        this.biome = 5;
     }
 
     @Override

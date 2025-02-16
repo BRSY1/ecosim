@@ -11,6 +11,8 @@ public class Tree extends Terrain implements Food{
         this.y = y;
         this.colour = 6;
         this.isDead = false;
+        this.underlyingColour = 7;
+        this.biome = 6;
     }
 
     @Override

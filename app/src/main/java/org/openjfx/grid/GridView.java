@@ -137,7 +137,6 @@ public class GridView {
         // Get mouse position relative to the canvas BEFORE zooming
         double mouseX = event.getX() - 400;
         double mouseY = event.getY() - 400;
-        System.out.println("" + mouseX + "" +  mouseY);
     
         // Convert mouse position to world coordinates before zooming
         double worldX = (mouseX - translateX) / oldZoom;
