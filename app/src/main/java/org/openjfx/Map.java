@@ -1,3 +1,6 @@
+package org.openjfx;
+import java.utils.*;
+
 public class Map {
     ArrayList<ArrayList<Terrain>> map;
 
