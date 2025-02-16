@@ -39,7 +39,7 @@ public class GameMap {
    
    public ArrayList<ArrayList<Terrain>> getTerrainArray() {
         return terrainArray;
-   }
+    }
 
     // return the animal's view
     public ArrayList<ArrayList<Terrain>> getView(Terrain terrain, int offset) {

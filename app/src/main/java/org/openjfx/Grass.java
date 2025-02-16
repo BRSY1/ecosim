@@ -10,6 +10,7 @@ public class Grass extends Terrain implements Food{
 
     public Grass(int x, int y){
         this.colour = 4;
+        this.underlyingColour = this.colour;
         this.x = x;
         this.y = y;
         this.framesToRegrow = 0;
@@ -18,7 +19,7 @@ public class Grass extends Terrain implements Food{
     @Override
     public void getsEaten() {
         this.framesToRegrow = 5;
-        this.colour = 8;
+        this.colour = 11;
     }
 
     @Override

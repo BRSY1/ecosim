@@ -18,14 +18,14 @@ public class Animal {
   }
 
   private enum Move {
-    UP(0, 1),
-    DOWN(0, -1),
+    UP(0, -1),
+    DOWN(0, 1),
     LEFT(-1, 0),
     RIGHT(1, 0),
-    UP_LEFT(-1, 1),
-    UP_RIGHT(1, 1),
-    DOWN_LEFT(-1, -1),
-    DOWN_RIGHT(1, -1);
+    UP_LEFT(-1, -1),
+    UP_RIGHT(1, -1),
+    DOWN_LEFT(-1, 1),
+    DOWN_RIGHT(1, 1);
 
     private final int dx;
     private final int dy;
@@ -48,14 +48,14 @@ public class Animal {
     ArrayList<ArrayList<Terrain>> view = gameMap.getView(terrain, viewRange);
     Move move = move(view);
     
-    int newx = move.getDx();
-    int newy = move.getDy();
-    // check on map
-    if (newx < 0 || newy < 0 || newx >= 500 || newy >= 500) {
+    int newx = terrain.x + move.getDx();
+    int newy = terrain.y + move.getDy();
+
+    if (newx < 0 || newy < 0 || newx >= 800 || newy >= 800) {
       return;
     }
     
-    Terrain newTerrain = gameMap.terrainArray.get(newx).get(newy);
+    Terrain newTerrain = gameMap.terrainArray.get(newy).get(newx);
 
     // check not occupied
     if (newTerrain.isOccupied()) {
@@ -63,54 +63,63 @@ public class Animal {
     }
 
     terrain.removeOccupier(this);
+    terrain.colour = terrain.underlyingColour;
 
-    terrain = newTerrain;
+    this.terrain = newTerrain;
     terrain.addOccupier(this);
-
+    terrain.colour = 8;
   }
 
   private Move move(ArrayList<ArrayList<Terrain>> view) {
     Terrain closest = null;
-    int distance = 0;
+    int distance = 100;
 
     // find closest occupied tile with an animal on
-    for (int i = 0; i < 2 * viewRange + 1; i++) {
-      for (int j = 0; j < 2 * viewRange + 1; j++) {
-        if (view.get(i).get(j).isOccupied() && Math.max(i, j) < distance) {
-          closest = view.get(i).get(j);
-          distance = Math.max(i, j);
+    int numRows = view.size();
+    int numCols = view.get(0).size();
+
+    // j is inverse y co-ord, i is the x co-ord
+    for (int j = 0; j < numRows; j++) {
+      for (int i = 0; i < numCols; i++) {
+        if (true && Math.max(Math.abs(j - (int) numRows / 2), Math.abs(i - (int) numCols / 2)) < distance && !this.terrain.equals(view.get(j).get(i))) {
+          if (view.get(j).get(i).isOccupied()) {
+            closest = view.get(j).get(i);
+            distance = Math.max(Math.abs(j - (int) numRows / 2), Math.abs(i - (int) numCols / 2));
+          }
         }
       }
     }
 
     if (closest != null) {
-      // vector in direction of animal to this
+      // vector in direction of this to animal
       int dx = this.terrain.x - closest.x;
       int dy = this.terrain.y - closest.y;
 
+      // if this is the prey
       if (this.foodChainLevel <= closest.getOccupied().foodChainLevel) {
         if (dx >= 0) {
-          if (dy >= 0) {
+          if (dy <= 0) {
             return Move.UP_RIGHT;
           } else {
             return Move.DOWN_RIGHT;
           }
         } else {
-          if (dy >= 0) {
+          if (dy <= 0) {
             return Move.UP_LEFT;
           } else {
             return Move.DOWN_LEFT;
           }
         }
+      // if this is the predator
       } else {
         if (dx >= 0) {
-          if (dy >= 0) {
+          if (dy <= 0) {
             return Move.DOWN_LEFT;
           } else {
             return Move.UP_LEFT;
           }
         } else {
-          if (dy >= 0) {
+          if (dy <= 0) {
             return Move.DOWN_RIGHT;
           } else {
             return Move.UP_RIGHT;
@@ -119,6 +128,6 @@ public class Animal {
       }
 
     }
-    return null;
+    return Move.UP;
   }
 }
