@@ -23,7 +23,7 @@ public class InfoBox {
         infoBoxTitle.setStyle("-fx-font-size: 24px; -fx-text-fill: white; -fx-font-weight: bold;");
         infoBoxTitle.setPadding(new Insets(10,0,0,0));
 
-        infoBoxImage = new ImageView("");
+        // infoBoxImage = new ImageView("");
 
         infoBoxLabel = new Label();
         infoBoxLabel.setStyle("-fx-font-size: 18px; -fx-text-fill: white; -fx-font-weight: bold;");
@@ -34,7 +34,7 @@ public class InfoBox {
 
 
         infoBox = new VBox();
-        infoBox.getChildren().addAll(infoBoxTitle, infoBoxImage, infoBoxLabel, infoBoxDescription);
+        infoBox.getChildren().addAll(infoBoxTitle, infoBoxLabel, infoBoxDescription);
         infoBox.setAlignment(Pos.TOP_CENTER);
         infoBox.setStyle("-fx-background-color: #202020; -fx-background-radius: 10px; -fx-border: 20px; -fx-border-color: black; -fx-border-radius: 10px;");
     }
