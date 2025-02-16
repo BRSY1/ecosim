@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import org.openjfx.ui.Header;
 import org.openjfx.ui.Stats;
@@ -31,6 +32,8 @@ public class App extends Application {
         GridView gridView = new GridView(600, 600);
         mapContainer.getChildren().add(gridView.getGridPane());
         VBox.setVgrow(mapContainer, Priority.ALWAYS);
+        // ** FIX: Prevent grid from overlapping the header when zooming **
+        mapContainer.setClip(new Rectangle(600, 600));
 
         // STATS PANEL
         Stats stats = new Stats();
