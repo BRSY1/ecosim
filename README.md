@@ -4,6 +4,8 @@
 
 EcoSim is a Java-based simulation developed during BrisHack 2025. It models ecological systems, allowing users to observe interactions within a virtual ecosystem.
 
+<img src="app/src/main/resources/org/openjfx/ui/assets/ecosim.png">
+
 ## Prerequisites
 
 - **Java Runtime Environment (JRE)**: Ensure you have Java installed. You can download it from the [official Oracle website](https://www.oracle.com/java/technologies/downloads/).
