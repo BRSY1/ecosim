@@ -166,7 +166,8 @@ public class App extends Application {
             for (int i = 0; i < 800; i++) {
                 Terrain terrain = this.gameMap.terrainArray.get(j).get(i);
                 if (terrain.biome != 7 && terrain.biome != 8 && Math.random() < probSpawn) {
-                    animals.add(new Animal(gameMap, random.nextInt(10) + 1, 0, 20, gameMap.terrainArray.get(j).get(i), random.nextInt(2) + 1));
+                    animals.add(new Animal(gameMap, random.nextInt(10) + 1, 0, 20, gameMap.terrainArray.get(j).get(i), 
+                    random.nextInt(2) + 1));
                 }
             }
         }
