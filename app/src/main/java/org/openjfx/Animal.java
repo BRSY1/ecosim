@@ -191,7 +191,6 @@ public class Animal {
       for (int i = 0; i < numCols; i++) {
         if (true && !this.terrain.equals(view.get(j).get(i))) {
           if (view.get(j).get(i).isOccupied()) {
-            System.out.println("hihi");
             animals.add(view.get(j).get(i).getOccupied());
           }
         }
@@ -221,8 +220,6 @@ public class Animal {
     } else {
       reward += foodLevel;
     }
-
-    System.out.println(reward);
 
     return reward;
   }
