@@ -29,6 +29,7 @@ public class Animal {
   private static final int meatFoodIncrease = 20;
   private static final int maxFood = 1500;
   private static final int mapSize = 800;
+  private static final int predatorFoodLevelGain = 200;
 
   Animal(GameMap gameMap, int foodChainLevel, int naturalTerrain, int viewRange, Terrain terrain, int updateRate) {
     this.gameMap = gameMap;
@@ -40,10 +41,7 @@ public class Animal {
     this.terrain = terrain;
     this.updateRate = updateRate;
     Random rand = new Random();
-    this.foodLevel = rand.nextInt(800) + 200; // Generates between 200 and 2000
-
-
-
+    this.foodLevel = rand.nextInt(maxFood) + 200; // Generates between 200 and 2000
 
     ArrayList<Integer> invalidMoves = new ArrayList<Integer>();
     if ((foodChainLevel < 6) || (foodChainLevel == 9)){
@@ -122,7 +120,7 @@ public class Animal {
         if (current.foodChainLevel < occupier.foodChainLevel) {
           killed = current;
           killer = occupier;
-          killer.foodLevel += 200;
+          killer.foodLevel += predatorFoodLevelGain;
           current.dead = true;
           AnimalEnum killerAnimalEnum = AnimalEnum.values()[killer.foodChainLevel - 1];
           AnimalEnum killedAnimalEnum = AnimalEnum.values()[killed.foodChainLevel - 1];
@@ -169,7 +167,7 @@ public class Animal {
         } else {
           killed = occupier;
           killer = current;
-          killer.foodLevel += 200;
+          killer.foodLevel += predatorFoodLevelGain;
           occupier.dead = true;
           occupier.getCurrentTerrain().removeOccupier(killed);
           app.animals.remove(killed);
@@ -273,6 +271,7 @@ public class Animal {
 
   private static final int foodMul = 20;
   private static final int distMul = 2;
+  private static final int killReward = 100;
 
   // error to be fixed - check for illegal moves
   private int reward(ArrayList<Animal> animals, Animal currAnimal, ArrayList<ArrayList<Integer>> locs, ArrayList<Integer> thisLoc) {
@@ -283,16 +282,16 @@ public class Animal {
       Animal animal = animals.get(i);
       int dist = (int) Math.sqrt(Math.pow(Math.abs(locs.get(i).get(0) - x), 2) + Math.pow(Math.abs(locs.get(i).get(1) - y), 2));
       if (currAnimal.foodChainLevel < animal.foodChainLevel) {
-        if (dist == 0) reward -= 100;
+        if (dist == 0) reward -= killReward;
         else reward -= distMul * (int) this.viewRange - dist;
       } else {
-        if (dist == 0) reward += 100;
+        if (dist == 0) reward += killReward;
         else reward += distMul * (int) this.viewRange - dist;
       }
     }
 
     // get change in food level
-    if (gameMap.terrainArray.get(y).get(x).framesToRegrow <= 0 && currAnimal.foodLevel < 70) {
+    if (gameMap.terrainArray.get(y).get(x).framesToRegrow <= 0 && currAnimal.foodLevel < maxFood) {
       reward += (foodLevel + 20) / foodMul;
     } else {
       reward += foodLevel / foodMul;
@@ -300,15 +299,17 @@ public class Animal {
     return reward;
   }
 
+  private static final int numMoves = 8;
+
   void randomMove(ArrayList<Integer> location) {
     Random random = new Random();
-    Move move = Move.values()[random.nextInt(8)];
+    Move move = Move.values()[random.nextInt(numMoves)];
     location.set(0, Math.max(0, Math.min(mapSize - 1, location.get(0) + move.dx)));
     location.set(1, Math.max(0, Math.min(mapSize - 1, location.get(1) + move.dy)));
   }
 
   // rl parameters
-  private static final int numRandomWalks = 8;
+  private static final int numRandomWalks = 16;
   private static final int walkDepth = 6;
 
   private Move moveMCTS(ArrayList<ArrayList<Terrain>> view) {
@@ -374,8 +375,6 @@ public class Animal {
         } 
         avgReward += reward(animals, this, locs, thisLoc) / numRandomWalks;
       }
-
-      // avgReward = reward(animals, this, initLocs, thisLoc);
 
       // pick the move with the highest return
       if (avgReward > maxReward) {

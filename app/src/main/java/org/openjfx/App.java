@@ -272,6 +272,7 @@ public class App extends Application {
 
     public void updateAnimalPopulation(double targetPopulation) {
         int currentPopulation = animals.size();
+        boolean isDecreasing = targetPopulation < currentPopulation;
         int targetCount = (int) targetPopulation;
         Random rand = new Random();
         
@@ -301,8 +302,14 @@ public class App extends Application {
 
             // Update stats
             AnimalEnum animalEnum = AnimalEnum.values()[animalToRemove.foodChainLevel - 1];
-            stats.updateStats(animalEnum, 0,1);
 
+            if (isDecreasing) {
+                stats.updateStats(animalEnum, 0,1);
+            }
+            else {
+                stats.updateStats(animalEnum, -1,0);
+            }
+            
             animals.remove(--currentPopulation);
         }
 
