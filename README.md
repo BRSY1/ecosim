@@ -2,9 +2,18 @@
 
 🏆 **Best ML Project — BrisHack 2025**
 
-EcoSim is a Java-based simulation developed during BrisHack 2025. It models ecological systems, allowing users to observe interactions within a virtual ecosystem.
+EcoSim is a Java-based simulation developed during BrisHack 2025. It models the interactions between various animal species and their environment, utilizing procedural terrain generation and intelligent agent behavior.
 
 <img src="app/src/main/resources/org/openjfx/ui/assets/ecosim.png">
+
+## Features
+
+- **Procedural Terrain Generation**: Uses **Perlin noise** to create realistic and dynamic terrain landscapes.
+- **Animal AI with Monte Carlo Tree Search (MCTS)**: Animals use **MCTS-based decision-making** to move intelligently, avoiding predators, seeking food, and reproducing.
+- **Predator-Prey Dynamics**: Implements a food chain where animals interact based on hierarchical levels, engaging in hunting, fleeing, and breeding behaviors.
+- **Environmental Factors**: Includes terrain types that influence movement and survival.
+- **Graphical Interface**: Built using **JavaFX**, allowing users to visualize the ecosystem in real time.
+- **Event Logging and Statistics**: Displays ecosystem events and population statistics in real-time.
 
 ## Prerequisites
 
