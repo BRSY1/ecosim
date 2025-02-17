@@ -21,6 +21,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.materialdesign2.MaterialDesignC;
 import org.kordamp.ikonli.materialdesign2.MaterialDesignG;
 import org.kordamp.ikonli.materialdesign2.MaterialDesignIIkonHandler;
+import org.openjfx.ui.AnimalEnum;
 import org.openjfx.ui.EventBox;
 import org.openjfx.ui.InfoBox;
 import org.openjfx.pages.SettingsPage; // Import the new SettingsPage class
@@ -38,6 +39,7 @@ public class App extends Application {
     private GridView gridView;
     private EventBox eventBox;
     private InfoBox infoBox;
+    private Stats stats = new Stats();
     private ArrayList<ArrayList<Terrain>> terrainArray;
     private ArrayList<Animal> animals = new ArrayList<Animal>();
     private SettingsPage settingsPage;
@@ -87,7 +89,6 @@ public class App extends Application {
         )));
  
         // STATS PANEL (Top of right panel)
-        Stats stats = new Stats();
         VBox statsBox = stats.getStatsBox();
         statsBox.setPrefHeight(150);
         VBox.setMargin(statsBox, new Insets(10,10,10,10));
@@ -166,7 +167,11 @@ public class App extends Application {
             for (int i = 0; i < 800; i++) {
                 Terrain terrain = this.gameMap.terrainArray.get(j).get(i);
                 if (terrain.biome != 7 && terrain.biome != 8 && Math.random() < probSpawn) {
-                    animals.add(new Animal(gameMap, random.nextInt(10) + 1, 0, 20, gameMap.terrainArray.get(j).get(i), random.nextInt(2) + 1));
+                    Animal animal = new Animal(gameMap, random.nextInt(10) + 1, 0, 20, gameMap.terrainArray.get(j).get(i), random.nextInt(2) + 1);
+                    animals.add(animal);
+                    AnimalEnum animalEnum = AnimalEnum.values()[animal.foodChainLevel - 1];
+                    System.out.println(animalEnum);
+                    stats.updateStats(animalEnum, 1);
                 }
             }
         }

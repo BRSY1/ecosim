@@ -122,8 +122,6 @@ public class GridView {
     private void handleMousePressed(MouseEvent e) {
         int x = (int) e.getX();
         int y = (int) e.getY();
-        System.out.println("X: " + x + "Y: " + y);
-
         
         Color clickedColor = getPixelColor(x,y);
 

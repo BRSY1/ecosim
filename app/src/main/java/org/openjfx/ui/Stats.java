@@ -64,8 +64,9 @@ public class Stats {
      */
     public void updateStats(AnimalEnum animal, int count) {
         if (animalCounts.containsKey(animal)) {
-            animalCounts.put(animal, count);
-            animalLabels.get(animal).setText(animal.name() + ": " + count);
+            int oldValue = animalCounts.get(animal);
+            animalCounts.put(animal, (oldValue + count));
+            animalLabels.get(animal).setText(animal.name() + ": " + animalCounts.get(animal));
         }
     }
 

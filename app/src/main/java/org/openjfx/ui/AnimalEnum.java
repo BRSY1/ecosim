@@ -1,5 +1,5 @@
 package org.openjfx.ui;
 
 public enum AnimalEnum {
-  SQUIRREL, RABBIT, FOX, DEER, WOLF, LION
+  SQUIRREL, RABBIT, ELEPHANT, FOX, WOLF, JELLYFISH, SALMON, CROCODILE, LION, SHARK
 }
