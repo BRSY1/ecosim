@@ -21,6 +21,12 @@ public class Animal {
   private Stats stats;
   private List<Integer> invalidMoves;
 
+  // constants
+  private static final int foodIncrease = 20;
+  private static final int meatFoodIncrease = 20;
+  private static final int maxFood = 20;
+  private static final int mapSize = 800;
+
   Animal(GameMap gameMap, int foodChainLevel, int naturalTerrain, int viewRange, Terrain terrain, int updateRate) {
     this.gameMap = gameMap;
     this.dead = false;
@@ -90,7 +96,7 @@ public class Animal {
       int newx = terrain.x + move.getDx();
       int newy = terrain.y + move.getDy();
   
-      if (newx < 0 || newy < 0 || newx >= 800 || newy >= 800) {
+      if (newx < 0 || newy < 0 || newx >= mapSize || newy >= mapSize) {
         return;
       }
       
@@ -155,9 +161,9 @@ public class Animal {
       update++;
     }
   
-    if (foodLevel < 70 && (terrain.biome == 6 || terrain.biome == 1 || terrain.biome == 5 || terrain.biome == 7 || terrain.biome == 8)) {
+    if (foodLevel < maxFood && (terrain.biome == 6 || terrain.biome == 1 || terrain.biome == 5 || terrain.biome == 7 || terrain.biome == 8)) {
       terrain.getsEaten();
-      foodLevel += 20;
+      foodLevel += foodIncrease;
     }
 
     if (foodLevel > 0) {foodLevel-= foodLevelDecreaseRate; }
@@ -206,7 +212,8 @@ public class Animal {
     return arrayList;
   }
 
-  private static final int foodMul = 4;
+  private static final int foodMul = 20;
+  private static final int distMul = 2;
 
   // error to be fixed - check for illegal moves
   private int reward(ArrayList<Animal> animals, Animal currAnimal, ArrayList<ArrayList<Integer>> locs, ArrayList<Integer> thisLoc) {
@@ -216,17 +223,18 @@ public class Animal {
     for (int i = 0; i < locs.size(); i++) {
       Animal animal = animals.get(i);
       int dist = (int) Math.sqrt(Math.pow(Math.abs(locs.get(i).get(0) - x), 2) + Math.pow(Math.abs(locs.get(i).get(1) - y), 2));
-      if (dist == 0) dist = 1;
       if (currAnimal.foodChainLevel < animal.foodChainLevel) {
-        reward -= (int) this.viewRange / dist * 2;
+        if (dist == 0) reward -= 100;
+        else reward -= distMul * (int) this.viewRange - dist;
       } else {
-        reward += (int) this.viewRange / dist * 2;
+        if (dist == 0) reward += 100;
+        else reward += distMul * (int) this.viewRange - dist;
       }
     }
 
     // get change in food level
-    if (gameMap.terrainArray.get(y).get(x).framesToRegrow <= 0) {
-      reward += (foodLevel + 4) / foodMul;
+    if (gameMap.terrainArray.get(y).get(x).framesToRegrow <= 0 && currAnimal.foodLevel < 70) {
+      reward += (foodLevel + 20) / foodMul;
     } else {
       reward += foodLevel / foodMul;
     }
@@ -236,13 +244,13 @@ public class Animal {
   void randomMove(ArrayList<Integer> location) {
     Random random = new Random();
     Move move = Move.values()[random.nextInt(8)];
-    location.set(0, Math.max(0, Math.min(599, location.get(0) + move.dx)));
-    location.set(1, Math.max(0, Math.min(599, location.get(1) + move.dy)));
+    location.set(0, Math.max(0, Math.min(mapSize - 1, location.get(0) + move.dx)));
+    location.set(1, Math.max(0, Math.min(mapSize - 1, location.get(1) + move.dy)));
   }
 
   // rl parameters
-  private static final int numRandomWalks = 5;
-  private static final int walkDepth = 2;
+  private static final int numRandomWalks = 8;
+  private static final int walkDepth = 6;
 
   private Move moveMCTS(ArrayList<ArrayList<Terrain>> view) {
     int numRows = view.size();
@@ -303,7 +311,7 @@ public class Animal {
               exit = true;
               break;
             }
-          } 
+          }
         } 
         avgReward += reward(animals, this, locs, thisLoc) / numRandomWalks;
       }

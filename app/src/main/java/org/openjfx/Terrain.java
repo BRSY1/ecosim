@@ -8,7 +8,7 @@ public class Terrain {
     private boolean occupied = false;
     public Animal occupiedBy;
     protected int biome;
-    public int framesToRegrow;
+    public int framesToRegrow = 1; // so the class is not considered consumable by default
 
     public void getsEaten() {
 
