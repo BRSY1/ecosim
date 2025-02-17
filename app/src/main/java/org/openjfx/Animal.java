@@ -134,7 +134,7 @@ public class Animal {
           if (!current.hasBred && !occupier.hasBred) {
             Terrain safe = findSafeLocation(current, occupier);
             Animal child = new Animal(gameMap, current.foodChainLevel, current.naturalTerrain, current.viewRange, safe, current.updateRate);
-            if (safe != null && !safe.isOccupied()) {
+            if (safe != null) {
               safe.addOccupier(child);
               safe.underlyingColour = safe.colour;
               safe.colour = 11 + child.foodChainLevel;
@@ -232,8 +232,8 @@ public class Animal {
   public Terrain findSafeLocation(Animal a, Animal b) {
     for (int x = (a.getCurrentTerrain().x - 1); x < (a.getCurrentTerrain().x + 1); x++) {
       for (int y = (a.getCurrentTerrain().y - 1); y < (a.getCurrentTerrain().y + 1); y++) {
-        if (!(app.terrainArray.get(x).get(y).isOccupied()) && (a.getCurrentTerrain().colour == app.terrainArray.get(x).get(y).colour)) {
-          return app.terrainArray.get(x).get(y);
+        if (!(app.terrainArray.get(y).get(x).isOccupied()) && (a.getCurrentTerrain().colour == app.terrainArray.get(y).get(x).colour)) {
+          return app.terrainArray.get(y).get(x);
         }
       }
     }
