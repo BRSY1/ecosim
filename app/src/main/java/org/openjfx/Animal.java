@@ -63,6 +63,10 @@ public class Animal {
     }
   }
 
+  public Terrain getCurrentTerrain() {
+    return this.terrain;
+  }
+
   public void animalUpdate() {
     ArrayList<ArrayList<Terrain>> view = gameMap.getView(terrain, viewRange);
 
