@@ -178,13 +178,14 @@ public class App extends Application {
     }
 
     private void spawn(float probSpawn) {
+        probSpawn = probSpawn;
         Random random = new Random();
         for (int j = 0; j < 800; j++) {
             for (int i = 0; i < 800; i++) {
                 Terrain terrain = this.gameMap.terrainArray.get(j).get(i);
                 int randomType = random.nextInt(10) + 1;
                 if ((randomType < 6 || randomType == 9) && ((terrain.biome != 7) && (terrain.biome != 8) && (terrain.biome != 2) && (Math.random() < probSpawn))){
-                    Animal animal = new Animal(gameMap,randomType, 0, 20, gameMap.terrainArray.get(j).get(i), random.nextInt(2) + 1);
+                    Animal animal = new Animal(gameMap, randomType, 0, 20, gameMap.terrainArray.get(j).get(i), random.nextInt(2) + 1);
                     animals.add(animal);
                     AnimalEnum animalEnum = AnimalEnum.values()[animal.foodChainLevel - 1];
                     stats.updateStats(animalEnum, 1,0);
