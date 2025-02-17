@@ -53,7 +53,7 @@ public class App extends Application {
         terrainArray = gameMap.getTerrainArray();
 
         // spaw animals
-        this.spawn(0.0002f);
+        this.spawn(0.001f);
 
         // Create main VBox layout (Header at top, Content below)
         VBox root = new VBox();
@@ -169,11 +169,29 @@ public class App extends Application {
         for (int j = 0; j < 800; j++) {
             for (int i = 0; i < 800; i++) {
                 Terrain terrain = this.gameMap.terrainArray.get(j).get(i);
-                if (terrain.biome != 7 && terrain.biome != 8 && Math.random() < probSpawn) {
-                    Animal animal = new Animal(gameMap, random.nextInt(10) + 1, 0, 20, gameMap.terrainArray.get(j).get(i), random.nextInt(3) + 1);
+                int randomType = random.nextInt(10) + 1;
+                if ((randomType < 6 || randomType == 9) && ((terrain.biome != 7) && (terrain.biome != 8) && (terrain.biome != 2) && (Math.random() < probSpawn))){
+                    Animal animal = new Animal(gameMap,randomType, 0, 20, gameMap.terrainArray.get(j).get(i), random.nextInt(2) + 1);
                     animals.add(animal);
                     AnimalEnum animalEnum = AnimalEnum.values()[animal.foodChainLevel - 1];
-                    System.out.println(animalEnum);
+                    stats.updateStats(animalEnum, 1);
+                }
+                if((randomType == 6) && ((terrain.biome == 7) && (Math.random() < probSpawn))){
+                    Animal animal = new Animal(gameMap, randomType, 0, 20, gameMap.terrainArray.get(j).get(i), random.nextInt(2) + 1);
+                    animals.add(animal);
+                    AnimalEnum animalEnum = AnimalEnum.values()[animal.foodChainLevel - 1];
+                    stats.updateStats(animalEnum, 1);
+                }
+                if(((randomType == 7) || (randomType == 10)) && (((terrain.biome == 7) || (terrain.biome == 8)) && (Math.random() < probSpawn))){
+                    Animal animal = new Animal(gameMap, randomType, 0, 20, gameMap.terrainArray.get(j).get(i), random.nextInt(2) + 1);
+                    animals.add(animal);
+                    AnimalEnum animalEnum = AnimalEnum.values()[animal.foodChainLevel - 1];
+                    stats.updateStats(animalEnum, 1);
+                }
+                if((randomType == 8) && (((terrain.biome == 7)|| (terrain.biome == 8) || (terrain.biome == 3)) && (Math.random() < probSpawn))){
+                    Animal animal = new Animal(gameMap, randomType, 0, 20, gameMap.terrainArray.get(j).get(i), random.nextInt(2) + 1);
+                    animals.add(animal);
+                    AnimalEnum animalEnum = AnimalEnum.values()[animal.foodChainLevel - 1];
                     stats.updateStats(animalEnum, 1);
                 }
             }

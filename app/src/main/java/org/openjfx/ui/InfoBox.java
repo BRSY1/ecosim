@@ -16,6 +16,12 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.StackPane;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import org.openjfx.Animal;
+
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -24,6 +30,7 @@ public class InfoBox {
     private VBox infoBox;
     private Label infoBoxLabel;
     private Label infoBoxDescription;
+    private Label infoBoxPrey;
     private ImageView infoBoxImage;
 
     public InfoBox() {
@@ -58,11 +65,16 @@ public class InfoBox {
         infoBoxLabel.setPadding(new Insets(10,0,0,0));
 
         infoBoxDescription = new Label("Information about biome/animal will appear here!");
-        infoBoxDescription.setStyle("-fx-font-size: 16px; -fx-text-fill: #bbbbbb; -fx-font-weight: bold;");
+        infoBoxDescription.setStyle("-fx-font-size: 14px; -fx-text-fill: #bbbbbb; -fx-font-weight: bold;");
         infoBoxDescription.setPadding(new Insets(0,10,0,10));
         infoBoxDescription.setTextAlignment(TextAlignment.CENTER);
         infoBoxDescription.setWrapText(true);
-
+        
+        infoBoxPrey = new Label("");
+        infoBoxPrey.setStyle("-fx-font-size: 12px; -fx-text-fill: #bbbbbb; -fx-font-weight: bold;");
+        infoBoxPrey.setPadding(new Insets(0,10,0,10));
+        infoBoxPrey.setTextAlignment(TextAlignment.CENTER);
+        infoBoxPrey.setWrapText(true);
 
         infoBox = new VBox();
         infoBox.getChildren().addAll(infoBoxTitle, infoBoxImage, infoBoxLabel, infoBoxDescription);
@@ -83,12 +95,24 @@ public class InfoBox {
           } else {
               System.out.println("Warning: Biome image is null!");
           }
-  
-          System.out.println(biome.getName());
       });
+    }
+
+      public void displayAnimal(AnimalInfo animal) {
+        Platform.runLater(() -> {
+            infoBoxLabel.setText(animal.getName());
+            infoBoxDescription.setText(animal.getDescription());
+            
+            if (animal.getImage() != null) {
+                infoBoxImage.setImage(animal.getImage());
+            } else {
+                System.out.println("Warning: animal image is null!");
+            }
+        });
+      }
   }
   
 
 
 
-}
+
