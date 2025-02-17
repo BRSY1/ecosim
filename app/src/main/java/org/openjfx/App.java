@@ -43,11 +43,13 @@ public class App extends Application {
     private ArrayList<ArrayList<Terrain>> terrainArray;
     private ArrayList<Animal> animals = new ArrayList<Animal>();
     private SettingsPage settingsPage;
+    private double multiplier;
     private int initialBirths;
 
     @Override
     public void start(Stage stage) {
         this.stage = stage;
+        this.multiplier = 3.0;
         this.grid = new Grid(800, 800, 0.0055f);
         this.gameMap = new GameMap(grid);
         terrainArray = gameMap.getTerrainArray();
@@ -212,13 +214,17 @@ public class App extends Application {
             private long lastUpdate = 0;
             @Override
             public void handle(long now) {
-                if (lastUpdate == 0 || now - lastUpdate >= 100_000_000) { // ~60 FPS (16.67ms per frame)
+                if (lastUpdate == 0 || now - lastUpdate >= (1_000_000_000 / multiplier)) { // ~60 FPS (16.67ms per frame)
                     updateGame();
                     lastUpdate = now;
                 }
             }
         };
         gameLoop.start();
+    }
+
+    public void updateGameSpeed(double newSpeed) {
+        multiplier = newSpeed;
     }
 
     private void updateGame() {
