@@ -164,12 +164,13 @@ public class App extends Application {
     }
 
     private void spawn(float probSpawn) {
+        probSpawn = probSpawn * 5;
         Random random = new Random();
         for (int j = 0; j < 800; j++) {
             for (int i = 0; i < 800; i++) {
                 Terrain terrain = this.gameMap.terrainArray.get(j).get(i);
                 if (terrain.biome != 7 && terrain.biome != 8 && Math.random() < probSpawn) {
-                    Animal animal = new Animal(gameMap, random.nextInt(10) + 1, 0, 20, gameMap.terrainArray.get(j).get(i), random.nextInt(2) + 1);
+                    Animal animal = new Animal(gameMap, random.nextInt(10) + 1, 0, 20, gameMap.terrainArray.get(j).get(i), random.nextInt(3) + 1);
                     animals.add(animal);
                     AnimalEnum animalEnum = AnimalEnum.values()[animal.foodChainLevel - 1];
                     System.out.println(animalEnum);
@@ -177,6 +178,9 @@ public class App extends Application {
                 }
             }
         }
+        // animals.add(new Animal(gameMap, 5, 0, 20, gameMap.terrainArray.get(200).get(200), 1));
+        // animals.add(new Animal(gameMap, 4, 0, 20, gameMap.terrainArray.get(190).get(190), 2));
+        // animals.add(new Animal(gameMap, 3, 0, 20, gameMap.terrainArray.get(195).get(195), 2));
     }
     
     private void startGameLoop() {
@@ -185,7 +189,7 @@ public class App extends Application {
  
             @Override
             public void handle(long now) {
-                if (lastUpdate == 0 || now - lastUpdate >= 1_000_000_000) { // ~60 FPS (16.67ms per frame)
+                if (lastUpdate == 0 || now - lastUpdate >= 30_000_000) { // ~60 FPS (16.67ms per frame)
                     updateGame();
                     lastUpdate = now;
                 }
