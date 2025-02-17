@@ -9,9 +9,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.Stop;
-import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Paint;
-import javafx.scene.text.Text;
 
 public class Header {
     public static VBox createHeader() {
@@ -28,7 +26,7 @@ public class Header {
             new Stop(1, Color.web("#004d00"))   // Deep dark green
         );
 
-        Label title = new Label("🌿 Ecosim 🌿");
+        Label title = new Label("🌿 EcoSim 🌿");
         title.setFont(Font.font("Arial", FontWeight.BOLD, 36));
         title.setTextFill(gradient);
 

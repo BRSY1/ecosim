@@ -5,13 +5,9 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import org.openjfx.ui.AnimalEnum; // Adjust import if needed
 import org.openjfx.App;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class Stats {
     private VBox statsBox; // Holds title + gridPane
@@ -127,8 +123,13 @@ public class Stats {
             Color color = animalColors.get(animal);
             int oldValue = animalCounts.get(animal);
             int newValue = oldValue + birth - death;
+            if (newValue < 0){ newValue = 0;}
             animalCounts.put(animal, newValue);
-
+            
+            if (newValue ==0 && oldValue>0){
+                this.app.eventBox.addEvent(animal + " has gone extinct.");
+                
+            }
             Label label = animalLabels.get(animal);
             label.setTextFill(color);
             label.setText("● " + animal.name() + ": " + newValue);

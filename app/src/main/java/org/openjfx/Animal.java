@@ -14,7 +14,7 @@ public class Animal {
   private GameMap gameMap; // reference to the main map
   private int update = 0;
   private int updateRate;
-  private int foodLevel; // ranges between 1 and 5
+  private int foodLevel = 100; 
   private boolean hasBred;
   private int foodLevelDecreaseRate = 1;
   private EventBox eventBox;
@@ -105,6 +105,7 @@ public class Animal {
         if (current.foodChainLevel < occupier.foodChainLevel) {
           killed = current;
           killer = occupier;
+          killer.foodLevel += 40;
           current.dead = true;
           AnimalEnum killerAnimalEnum = AnimalEnum.values()[killer.foodChainLevel - 1];
           AnimalEnum killedAnimalEnum = AnimalEnum.values()[killed.foodChainLevel - 1];
@@ -122,6 +123,7 @@ public class Animal {
         } else {
           killed = occupier;
           killer = current;
+          killer.foodLevel += 40;
           occupier.dead = true;
           AnimalEnum killerAnimalEnum = AnimalEnum.values()[killer.foodChainLevel - 1];
           AnimalEnum killedAnimalEnum = AnimalEnum.values()[killed.foodChainLevel - 1];
@@ -153,17 +155,27 @@ public class Animal {
       update++;
     }
   
-    if (foodLevel < 10 && (terrain.biome == 6 || terrain.biome == 1 || terrain.biome == 5)) {
+    if (foodLevel < 70 && (terrain.biome == 6 || terrain.biome == 1 || terrain.biome == 5 || terrain.biome == 7 || terrain.biome == 8)) {
       terrain.getsEaten();
-      foodLevel += 4;
+      foodLevel += 20;
     }
 
     if (foodLevel > 0) {foodLevel-= foodLevelDecreaseRate; }
 
-    terrain.colour = 11 + this.foodChainLevel;
+    if (foodLevel<=0){
+      this.getCurrentTerrain().colour = this.terrain.underlyingColour;
+      AnimalEnum killedAnimalEnum = AnimalEnum.values()[this.foodChainLevel - 1];
+      eventBox.addEvent("A " + killedAnimalEnum + " died of hunger.");
+      this.dead = true;
+      stats.updateStats(killedAnimalEnum, 0,1);
+    }
+
+    else{
+      terrain.colour = 11 + this.foodChainLevel;
+    }
   }
 
-  // get a list of animals within view
+
   private ArrayList<Animal> getEntities(int numRows, int numCols, ArrayList<ArrayList<Terrain>> view) {
     ArrayList<Animal> animals = new ArrayList<Animal>();
 

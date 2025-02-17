@@ -1,26 +1,14 @@
 package org.openjfx.ui;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.StackPane;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 
-import org.openjfx.Animal;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -51,13 +39,13 @@ public class InfoBox {
         dropShadow.setOffsetY(10);       // Move shadow vertically
         dropShadow.setColor(Color.rgb(0, 0, 0, 1)); // Semi-transparent black
                 
-        infoBoxImage = new ImageView(new Image(getClass().getResource("/org/openjfx/ui/assets/blank.png").toExternalForm()));
+        infoBoxImage = new ImageView(new Image(getClass().getResource("/org/openjfx/ui/assets/leaf.png").toExternalForm()));
         infoBoxImage.setFitWidth(300); // Set a fixed width
         infoBoxImage.setFitHeight(200); // Set a fixed height
         infoBoxImage.setPreserveRatio(false); // Allow full stretching
         infoBoxImage.setSmooth(true); // Enable smoothing
         infoBoxImage.setClip(clip);    
-        infoBoxImage.setEffect(dropShadow);  
+        // infoBoxImage.setEffect(dropShadow);  
   
 
         infoBoxLabel = new Label("Click anywhere!");
@@ -105,6 +93,7 @@ public class InfoBox {
             
             if (animal.getImage() != null) {
                 infoBoxImage.setImage(animal.getImage());
+                infoBoxImage.setFitHeight(200); // Set a fixed height
             } else {
                 System.out.println("Warning: animal image is null!");
             }

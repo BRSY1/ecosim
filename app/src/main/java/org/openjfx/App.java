@@ -4,7 +4,6 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
-import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -23,17 +22,13 @@ import java.net.URI;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.materialdesign2.MaterialDesignC;
 import org.kordamp.ikonli.materialdesign2.MaterialDesignG;
-import org.kordamp.ikonli.materialdesign2.MaterialDesignIIkonHandler;
 import org.openjfx.ui.AnimalEnum;
 import org.openjfx.ui.EventBox;
 import org.openjfx.ui.InfoBox;
-import org.openjfx.pages.SettingsPage; // Import the new SettingsPage class
 
 
-import org.openjfx.ui.EventBox;
 import org.openjfx.grid.GridView;
 
-import java.net.URI;
 import java.util.*;
  
 public class App extends Application {
@@ -41,18 +36,20 @@ public class App extends Application {
     private Stage stage;
     private GameMap gameMap;
     private GridView gridView;
-    private EventBox eventBox;
+    public EventBox eventBox;
     private InfoBox infoBox;
     private Label birthsSlashDeaths = new Label();
     private Stats stats = new Stats(this);
     private ArrayList<ArrayList<Terrain>> terrainArray;
     private ArrayList<Animal> animals = new ArrayList<Animal>();
     private SettingsPage settingsPage;
+    private double multiplier;
     private int initialBirths;
 
     @Override
     public void start(Stage stage) {
         this.stage = stage;
+        this.multiplier = 3.0;
         this.grid = new Grid(800, 800, 0.0055f);
         this.gameMap = new GameMap(grid);
         terrainArray = gameMap.getTerrainArray();
@@ -143,13 +140,14 @@ public class App extends Application {
         birthsSlashDeaths.setText("Births: " + "/" + "Deaths: ");
         birthsSlashDeaths.setFont(Font.font("Arial", FontWeight.BOLD, 12));
         birthsSlashDeaths.setTextFill(Color.WHITE);
+        birthsSlashDeaths.setAlignment(javafx.geometry.Pos.BOTTOM_LEFT);
 
         // Create an HBox for right alignment
         HBox iconBox = new HBox();
-        iconBox.setSpacing(5);
+        iconBox.setSpacing(50);
         iconBox.getChildren().addAll(birthsSlashDeaths, githubIcon, settingsIcon);
         iconBox.setPadding(new Insets(10));
-        iconBox.setAlignment(javafx.geometry.Pos.BOTTOM_RIGHT); // Align to bottom-right
+        iconBox.setAlignment(javafx.geometry.Pos.CENTER); // Align to bottom-right
 
         // ADD COMPONENTS TO RIGHT PANEL IN ORDER
         rightPanel.getChildren().addAll(header, statsBox, infoBoxContainer, eventBoxContainer, spacer, iconBox);
@@ -216,7 +214,7 @@ public class App extends Application {
             private long lastUpdate = 0;
             @Override
             public void handle(long now) {
-                if (lastUpdate == 0 || now - lastUpdate >= 100_000_000) { // ~60 FPS (16.67ms per frame)
+                if (lastUpdate == 0 || now - lastUpdate >= (1_000_000_000 / multiplier)) { // ~60 FPS (16.67ms per frame)
                     updateGame();
                     lastUpdate = now;
                 }
@@ -225,18 +223,26 @@ public class App extends Application {
         gameLoop.start();
     }
 
+    public void updateGameSpeed(double newSpeed) {
+        multiplier = newSpeed;
+    }
+
     private void updateGame() {
-        gameMap.update();  // Assuming GameMap has an update method
+        gameMap.update();
+        ArrayList<Animal> newAnimals = new ArrayList<>();
         for (Animal animal : animals) {
             animal.setEventBoxAndStats(eventBox, stats);
+            newAnimals.add(animal);
             if (!animal.dead) {
                 animal.animalUpdate();
+            } 
+            else {
+                newAnimals.remove(animal);
             }
         }
- 
         // Step 2: Get the latest terrain array
         ArrayList<ArrayList<Terrain>> terrainArray = gameMap.getTerrainArray();
-
+        this.animals = newAnimals;
         // Step 3: Redraw the map with updated terrain
         gridView.drawMap(terrainArray);
 

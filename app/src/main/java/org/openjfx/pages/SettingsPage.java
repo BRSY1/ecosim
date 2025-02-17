@@ -3,17 +3,16 @@ package org.openjfx.pages;
 import io.github.palexdev.materialfx.controls.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.scene.Node;
 import org.openjfx.App;
 
 public class SettingsPage {
     private final VBox settingsPanel;
     private final StackPane overlay;
     private final MFXSlider animalPopulationSlider;
+    private final MFXSlider animalSpeedSlider;
     private final MFXToggleButton resetGameToggle;
     private final App app;
 
@@ -26,6 +25,13 @@ public class SettingsPage {
         this.animalPopulationSlider.setMax(1000);
         this.animalPopulationSlider.setValue(100);
         this.animalPopulationSlider.setPrefWidth(300);
+
+        this.animalSpeedSlider = new MFXSlider();
+        this.animalSpeedSlider.setMin(1);
+        this.animalSpeedSlider.setMax(10);
+        this.animalSpeedSlider.setValue(3);
+        this.animalSpeedSlider.setPrefWidth(100);
+        
 
         this.resetGameToggle = new MFXToggleButton("Reset Game");
         
@@ -60,6 +66,9 @@ public class SettingsPage {
         Text animalPopulationText = new Text("Animal Population");
         animalPopulationText.setFill(Color.WHITE);
 
+        Text animalSpeedText = new Text("Animal Speed");
+        animalSpeedText.setFill(Color.WHITE);
+
         // Buttons container
         HBox buttonContainer = new HBox(10);
         buttonContainer.setAlignment(Pos.CENTER);
@@ -78,6 +87,8 @@ public class SettingsPage {
             title,
             animalPopulationText,
             animalPopulationSlider,
+            animalSpeedText,
+            animalSpeedSlider,
             resetGameToggle,
             buttonContainer
         );
@@ -94,6 +105,9 @@ public class SettingsPage {
 
         double newPopulation = animalPopulationSlider.getValue();
         app.updateAnimalPopulation(newPopulation);
+
+        double newSpeed = animalSpeedSlider.getValue();
+        app.updateGameSpeed(newSpeed);
         
         hideSettings();
     }
