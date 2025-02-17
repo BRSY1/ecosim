@@ -12,6 +12,7 @@ public class Animal {
   private int updateRate;
   private int foodLevel; // ranges between 1 and 5
   private int foodLevelDecreaseRate = 20;
+  private List<Integer> invalidMoves;
 
   Animal(GameMap gameMap, int foodChainLevel, int naturalTerrain, int viewRange, Terrain terrain, int updateRate) {
     this.gameMap = gameMap;
@@ -20,6 +21,19 @@ public class Animal {
     this.viewRange = viewRange;
     this.terrain = terrain;
     this.updateRate = updateRate;
+    ArrayList<Integer> invalidMoves = new ArrayList<Integer>();
+    if ((foodChainLevel < 6) || (foodChainLevel == 10)){
+      invalidMoves.add(0);
+      invalidMoves.add(1);
+      invalidMoves.add(7);
+    }
+    if(foodChainLevel == 6){
+      invalidMoves.add(1);
+    
+    }
+    if((foodChainLevel == 7) || (foodChainLevel == 10)){invalidMoves.add(2);}
+    if(foodChainLevel == 8){invalidMoves.add(3);}
+    this.invalidMoves = invalidMoves;
   }
 
   private enum Move {
@@ -68,7 +82,11 @@ public class Animal {
       if (newTerrain.isOccupied()) {
         return;
       }
-  
+      
+      if(invalidMoves.contains(newTerrain)){
+        return;
+      }
+
       terrain.removeOccupier(this);
       if (terrain.framesToRegrow > 0 && (terrain.biome == 1 || terrain.biome == 5 || terrain.biome == 6)) {
         terrain.colour = 11;
@@ -77,6 +95,7 @@ public class Animal {
       }
   
       this.terrain = newTerrain;
+
 
       update = 0;
     } else {
@@ -94,7 +113,7 @@ public class Animal {
       foodLevelDecreaseRate = 0;
     }
 
-    terrain.colour = 8;
+    terrain.colour = 10 + this.foodChainLevel;
   }
 
   private Move move(ArrayList<ArrayList<Terrain>> view) {
