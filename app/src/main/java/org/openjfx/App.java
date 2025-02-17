@@ -175,6 +175,14 @@ public class App extends Application {
         birthsSlashDeaths.setText("Births: " + (stats.births - initialBirths) + " / " + "Deaths: " + stats.deaths);
     }
 
+    public double getMultiplier() {
+        return multiplier;
+    }
+
+    public int getAnimalSize() {
+        return animals.size();
+    }
+
     private void spawn(float probSpawn) {
         Random random = new Random();
         for (int j = 0; j < 800; j++) {
@@ -245,12 +253,13 @@ public class App extends Application {
     }
 
     public void resetGame() {
-        // Reset game state
-        animals.clear();
-        
         // Restart the game using stored stage reference
         try {
+            // Reset game state
+            animals.clear();
+            stats = new Stats(this);
             start(this.stage);
+            stats.deaths = 0;
             eventBox.addEvent("Game has been reset!");
         } catch (Exception e) {
             eventBox.addEvent("Failed to reset game: " + e.getMessage());
@@ -260,6 +269,7 @@ public class App extends Application {
     public void updateAnimalPopulation(double targetPopulation) {
         int currentPopulation = animals.size();
         int targetCount = (int) targetPopulation;
+        Random rand = new Random();
         
         while (currentPopulation < targetCount) {
             // Add more animals
@@ -267,13 +277,18 @@ public class App extends Application {
             currentPopulation = animals.size();
         } 
         while (currentPopulation > targetCount) {
-            // Remove excess animals
-            Animal animalToRemove = animals.get(currentPopulation - 1);
+            // Select a random index
+            int randomIndex = rand.nextInt(currentPopulation);
+
+            // Swap with the last animal
+            Animal animalToRemove = animals.get(randomIndex);
+            animals.set(randomIndex, animals.get(currentPopulation - 1));
+            animals.set(currentPopulation - 1, animalToRemove);
             
             // Clear the animal's position from the map
             Terrain currentTerrain = animalToRemove.getCurrentTerrain(); 
-            
             currentTerrain.removeOccupier(animalToRemove);
+
             if (currentTerrain.framesToRegrow > 0 && (currentTerrain.biome == 1 || currentTerrain.biome == 5 || currentTerrain.biome == 6)) {
                 currentTerrain.colour = 11;
             } else {
