@@ -10,11 +10,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import org.openjfx.ui.Header;
 import org.openjfx.ui.Stats;
 import org.openjfx.pages.SettingsPage; // Import the new SettingsPage class
 import java.awt.Desktop;
+import javafx.scene.control.Label;
 import java.net.URI;
 
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -40,10 +43,12 @@ public class App extends Application {
     private GridView gridView;
     private EventBox eventBox;
     private InfoBox infoBox;
-    private Stats stats = new Stats();
+    private Label birthsSlashDeaths = new Label();
+    private Stats stats = new Stats(this);
     private ArrayList<ArrayList<Terrain>> terrainArray;
     private ArrayList<Animal> animals = new ArrayList<Animal>();
     private SettingsPage settingsPage;
+    private int initialBirths;
 
     @Override
     public void start(Stage stage) {
@@ -135,10 +140,14 @@ public class App extends Application {
             }
         });
 
+        birthsSlashDeaths.setText("Births: " + "/" + "Deaths: ");
+        birthsSlashDeaths.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+        birthsSlashDeaths.setTextFill(Color.WHITE);
+
         // Create an HBox for right alignment
         HBox iconBox = new HBox();
         iconBox.setSpacing(5);
-        iconBox.getChildren().addAll(githubIcon, settingsIcon);
+        iconBox.getChildren().addAll(birthsSlashDeaths, githubIcon, settingsIcon);
         iconBox.setPadding(new Insets(10));
         iconBox.setAlignment(javafx.geometry.Pos.BOTTOM_RIGHT); // Align to bottom-right
 
@@ -155,12 +164,17 @@ public class App extends Application {
         StackPane rootPane = new StackPane(root, overlay);
         Scene scene = new Scene(rootPane, 1200, 800);
         stage.setScene(scene);
-        stage.setTitle("Ecosim");
+        stage.setTitle("EcoSim");
         stage.setResizable(true);
         stage.show();
- 
+        
+        initialBirths = stats.births;
         // Start game loop
         startGameLoop();
+    }
+
+    public void updateBirthDeath() {
+        birthsSlashDeaths.setText("Births: " + (stats.births - initialBirths) + " / " + "Deaths: " + stats.deaths);
     }
 
     private void spawn(float probSpawn) {
@@ -173,25 +187,25 @@ public class App extends Application {
                     Animal animal = new Animal(gameMap, randomType, 0, 20, gameMap.terrainArray.get(j).get(i), random.nextInt(2) + 1);
                     animals.add(animal);
                     AnimalEnum animalEnum = AnimalEnum.values()[animal.foodChainLevel - 1];
-                    stats.updateStats(animalEnum, 1);
+                    stats.updateStats(animalEnum, 1,0);
                 }
                 if((randomType == 6) && ((terrain.biome == 7) && (Math.random() < probSpawn))){
                     Animal animal = new Animal(gameMap, randomType, 0, 20, gameMap.terrainArray.get(j).get(i), random.nextInt(2) + 1);
                     animals.add(animal);
                     AnimalEnum animalEnum = AnimalEnum.values()[animal.foodChainLevel - 1];
-                    stats.updateStats(animalEnum, 1);
+                    stats.updateStats(animalEnum, 1,0);
                 }
                 if(((randomType == 7) || (randomType == 10)) && (((terrain.biome == 7) || (terrain.biome == 8)) && (Math.random() < probSpawn))){
                     Animal animal = new Animal(gameMap, randomType, 0, 20, gameMap.terrainArray.get(j).get(i), random.nextInt(2) + 1);
                     animals.add(animal);
                     AnimalEnum animalEnum = AnimalEnum.values()[animal.foodChainLevel - 1];
-                    stats.updateStats(animalEnum, 1);
+                    stats.updateStats(animalEnum, 1,0);
                 }
                 if((randomType == 8) && (((terrain.biome == 7)|| (terrain.biome == 8) || (terrain.biome == 3)) && (Math.random() < probSpawn))){
                     Animal animal = new Animal(gameMap, randomType, 0, 20, gameMap.terrainArray.get(j).get(i), random.nextInt(2) + 1);
                     animals.add(animal);
                     AnimalEnum animalEnum = AnimalEnum.values()[animal.foodChainLevel - 1];
-                    stats.updateStats(animalEnum, 1);
+                    stats.updateStats(animalEnum, 1,0);
                 }
             }
         }
@@ -200,10 +214,9 @@ public class App extends Application {
     private void startGameLoop() {
         AnimationTimer gameLoop = new AnimationTimer() {
             private long lastUpdate = 0;
- 
             @Override
             public void handle(long now) {
-                if (lastUpdate == 0 || now - lastUpdate >= 30_000_000) { // ~60 FPS (16.67ms per frame)
+                if (lastUpdate == 0 || now - lastUpdate >= 100_000_000) { // ~60 FPS (16.67ms per frame)
                     updateGame();
                     lastUpdate = now;
                 }
@@ -214,9 +227,11 @@ public class App extends Application {
 
     private void updateGame() {
         gameMap.update();  // Assuming GameMap has an update method
-
         for (Animal animal : animals) {
-            animal.animalUpdate();
+            animal.setEventBoxAndStats(eventBox, stats);
+            if (!animal.dead) {
+                animal.animalUpdate();
+            }
         }
  
         // Step 2: Get the latest terrain array
@@ -225,8 +240,6 @@ public class App extends Application {
         // Step 3: Redraw the map with updated terrain
         gridView.drawMap(terrainArray);
 
-        // Log an event (optional)
-        eventBox.addEvent("Game tick updated.");
     }
 
     public void resetGame() {
@@ -267,7 +280,7 @@ public class App extends Application {
 
             // Update stats
             AnimalEnum animalEnum = AnimalEnum.values()[animalToRemove.foodChainLevel - 1];
-            stats.updateStats(animalEnum, -1);
+            stats.updateStats(animalEnum, 0,1);
 
             animals.remove(--currentPopulation);
         }

@@ -1,5 +1,8 @@
 package org.openjfx;
 
+import org.openjfx.ui.AnimalEnum;
+import org.openjfx.ui.EventBox;
+import org.openjfx.ui.Stats;
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -8,22 +11,27 @@ public class Animal {
   private int naturalTerrain;
   private int viewRange;
   private Terrain terrain;
+  public boolean dead;
   private GameMap gameMap; // reference to the main map
   private int update = 0;
   private int updateRate;
   private int foodLevel; // ranges between 1 and 5
+  private boolean hasBred;
   private int foodLevelDecreaseRate = 1;
+  private EventBox eventBox;
+  private Stats stats;
   private List<Integer> invalidMoves;
 
   Animal(GameMap gameMap, int foodChainLevel, int naturalTerrain, int viewRange, Terrain terrain, int updateRate) {
     this.gameMap = gameMap;
+    this.dead = false;
     this.foodChainLevel = foodChainLevel;
     this.naturalTerrain = naturalTerrain;
     this.viewRange = viewRange;
     this.terrain = terrain;
     this.updateRate = updateRate;
     ArrayList<Integer> invalidMoves = new ArrayList<Integer>();
-    if ((foodChainLevel < 6) || (foodChainLevel == 10)){
+    if ((foodChainLevel < 6) || (foodChainLevel == 9)){
       invalidMoves.add(0);
       invalidMoves.add(1);
       invalidMoves.add(7);
@@ -61,8 +69,17 @@ public class Animal {
     }
   }
 
+  public void setEventBoxAndStats(EventBox eventBox, Stats stats) {
+    this.eventBox = eventBox;
+    this.stats = stats;
+  }
+
   public Terrain getCurrentTerrain() {
     return this.terrain;
+  }
+
+  public void setCurrentTerrain(Terrain terrain) {
+    this.terrain = terrain;
   }
 
   public void animalUpdate() {
@@ -82,7 +99,40 @@ public class Animal {
   
       // check not occupied
       if (newTerrain.isOccupied()) {
-        return;
+        Animal current = this;
+        Animal occupier = newTerrain.getOccupied();
+        Animal killer;
+        Animal killed;
+        if (current.foodChainLevel < occupier.foodChainLevel) {
+          killed = current;
+          killer = occupier;
+          current.dead = true;
+          AnimalEnum killerAnimalEnum = AnimalEnum.values()[killer.foodChainLevel - 1];
+          AnimalEnum killedAnimalEnum = AnimalEnum.values()[killed.foodChainLevel - 1];
+          
+          eventBox.addEvent("A " + killerAnimalEnum + " eats a " + killedAnimalEnum);
+          stats.updateStats(killedAnimalEnum, 0,1);
+        } else if (current.foodChainLevel == occupier.foodChainLevel) { // reproduction logic
+          if (current.hasBred == false && occupier.hasBred == false) {
+            AnimalEnum animalEnum = AnimalEnum.values()[current.foodChainLevel - 1];
+            stats.updateStats(animalEnum, 1,0);
+            eventBox.addEvent("A baby " + animalEnum + " was made with ❤️");
+            current.hasBred = true;
+            occupier.hasBred = true;
+          } 
+        } else {
+          killed = occupier;
+          killer = current;
+          occupier.dead = true;
+          AnimalEnum killerAnimalEnum = AnimalEnum.values()[killer.foodChainLevel - 1];
+          AnimalEnum killedAnimalEnum = AnimalEnum.values()[killed.foodChainLevel - 1];
+          
+          eventBox.addEvent("A " + killerAnimalEnum + " eats a " + killedAnimalEnum);
+          stats.updateStats(killedAnimalEnum, 0,1);
+        }
+        
+        newTerrain.colour = newTerrain.underlyingColour;
+        
       }
       
       if(invalidMoves.contains(newTerrain.colour)){
