@@ -6,6 +6,6 @@ public class UneatableShrub extends Terrain {
         this.underlyingColour = this.colour;
         this.x = x;
         this.y = y;
-        this.biome = 5;
+        this.biome = 2;
     }
 }
