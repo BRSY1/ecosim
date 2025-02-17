@@ -40,7 +40,7 @@ public class App extends Application {
     private InfoBox infoBox;
     private Label birthsSlashDeaths = new Label();
     private Stats stats = new Stats(this);
-    private ArrayList<ArrayList<Terrain>> terrainArray;
+    public ArrayList<ArrayList<Terrain>> terrainArray;
     public ArrayList<Animal> animals = new ArrayList<Animal>();
     private SettingsPage settingsPage;
     private double multiplier;
@@ -214,7 +214,7 @@ public class App extends Application {
             private long lastUpdate = 0;
             @Override
             public void handle(long now) {
-                if (lastUpdate == 0 || now - lastUpdate >= (10_000_000 / multiplier)) { // ~60 FPS (16.67ms per frame)
+                if (lastUpdate == 0 || now - lastUpdate >= (250_000_000 / multiplier)) { // ~60 FPS (16.67ms per frame)
                     updateGame();
                     lastUpdate = now;
                 }

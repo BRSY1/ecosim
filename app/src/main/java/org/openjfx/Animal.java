@@ -21,6 +21,7 @@ public class Animal {
   private Stats stats;
   private App app;
   private int hungerTicks;
+  private Terrain safeTerrain;
   private List<Integer> invalidMoves;
 
   Animal(GameMap gameMap, int foodChainLevel, int naturalTerrain, int viewRange, Terrain terrain, int updateRate) {
@@ -125,6 +126,9 @@ public class Animal {
           stats.updateStats(killedAnimalEnum, 0,1);
         } else if (current.foodChainLevel == occupier.foodChainLevel) { // reproduction logic
           if (current.hasBred == false && occupier.hasBred == false) {
+            // findSafeLocation(killer, killed);
+            // Terrain safe = safeTerrain;
+            // Animal child = new Animal(gameMap, newy, newy, newx, safe, newy);
             AnimalEnum animalEnum = AnimalEnum.values()[current.foodChainLevel - 1];
             stats.updateStats(animalEnum, 1,0);
             eventBox.addEvent("A baby " + animalEnum + " was made with ❤️");
@@ -168,9 +172,9 @@ public class Animal {
       update++;
     }
   
-    if (foodLevel < 70 && (terrain.biome == 6 || terrain.biome == 1 || terrain.biome == 5 || terrain.biome == 7 || terrain.biome == 8)) {
+    if (foodLevel < 1500 && (terrain.biome == 6 || terrain.biome == 1 || terrain.biome == 5 || terrain.biome == 7 || terrain.biome == 8)) {
       terrain.getsEaten();
-      foodLevel += 50;
+      foodLevel += 20;
     }
 
     if (foodLevel > 0 && (hungerTicks % 3 == 0)) {foodLevel-= foodLevelDecreaseRate; }
@@ -194,6 +198,16 @@ public class Animal {
     this.app = app;
   }
 
+  public void findSafeLocation(Animal a, Animal b) {
+    for (int x = (a.getCurrentTerrain().x - 1); x < (a.getCurrentTerrain().x + 1); x++) {
+      for (int y = (a.getCurrentTerrain().y - 1); y < (a.getCurrentTerrain().y + 1); y++) {
+        if (!(app.terrainArray.get(x).get(y).isOccupied()) && (a.getCurrentTerrain().colour == app.terrainArray.get(x).get(y).colour)) {
+          this.safeTerrain =  app.terrainArray.get(x).get(y);
+        }
+      }
+    }
+  }
+  
 
   private ArrayList<Animal> getEntities(int numRows, int numCols, ArrayList<ArrayList<Terrain>> view) {
     ArrayList<Animal> animals = new ArrayList<Animal>();

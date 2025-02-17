@@ -11,7 +11,7 @@ public class Terrain {
     public int framesToRegrow;
 
     public void getsEaten() {
-
+        
     }
 
     public void addOccupier(Animal Occupier){
