@@ -51,13 +51,13 @@ public class InfoBox {
         dropShadow.setOffsetY(10);       // Move shadow vertically
         dropShadow.setColor(Color.rgb(0, 0, 0, 1)); // Semi-transparent black
                 
-        infoBoxImage = new ImageView(new Image(getClass().getResource("/org/openjfx/ui/assets/blank.png").toExternalForm()));
+        infoBoxImage = new ImageView(new Image(getClass().getResource("/org/openjfx/ui/assets/leaf.png").toExternalForm()));
         infoBoxImage.setFitWidth(300); // Set a fixed width
         infoBoxImage.setFitHeight(200); // Set a fixed height
         infoBoxImage.setPreserveRatio(false); // Allow full stretching
         infoBoxImage.setSmooth(true); // Enable smoothing
         infoBoxImage.setClip(clip);    
-        infoBoxImage.setEffect(dropShadow);  
+        // infoBoxImage.setEffect(dropShadow);  
   
 
         infoBoxLabel = new Label("Click anywhere!");
@@ -105,6 +105,7 @@ public class InfoBox {
             
             if (animal.getImage() != null) {
                 infoBoxImage.setImage(animal.getImage());
+                infoBoxImage.setFitHeight(200); // Set a fixed height
             } else {
                 System.out.println("Warning: animal image is null!");
             }

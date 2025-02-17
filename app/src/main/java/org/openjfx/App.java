@@ -143,13 +143,14 @@ public class App extends Application {
         birthsSlashDeaths.setText("Births: " + "/" + "Deaths: ");
         birthsSlashDeaths.setFont(Font.font("Arial", FontWeight.BOLD, 12));
         birthsSlashDeaths.setTextFill(Color.WHITE);
+        birthsSlashDeaths.setAlignment(javafx.geometry.Pos.BOTTOM_LEFT);
 
         // Create an HBox for right alignment
         HBox iconBox = new HBox();
-        iconBox.setSpacing(5);
+        iconBox.setSpacing(50);
         iconBox.getChildren().addAll(birthsSlashDeaths, githubIcon, settingsIcon);
         iconBox.setPadding(new Insets(10));
-        iconBox.setAlignment(javafx.geometry.Pos.BOTTOM_RIGHT); // Align to bottom-right
+        iconBox.setAlignment(javafx.geometry.Pos.CENTER); // Align to bottom-right
 
         // ADD COMPONENTS TO RIGHT PANEL IN ORDER
         rightPanel.getChildren().addAll(header, statsBox, infoBoxContainer, eventBoxContainer, spacer, iconBox);
