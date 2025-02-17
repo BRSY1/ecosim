@@ -32,7 +32,11 @@ public class Header {
         title.setFont(Font.font("Arial", FontWeight.BOLD, 36));
         title.setTextFill(gradient);
 
-        header.getChildren().add(title);
+        Label subTitle = new Label("made by TBD4");
+        subTitle.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+        subTitle.setTextFill(Color.WHITE);
+
+        header.getChildren().addAll(title, subTitle);
         return header;
     }
 }
