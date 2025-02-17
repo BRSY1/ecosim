@@ -45,6 +45,7 @@ public class App extends Application {
     private SettingsPage settingsPage;
     private double multiplier;
     private int initialBirths;
+    private final int BASE_SPEED = 1_250_000_000;
 
     @Override
     public void start(Stage stage) {
@@ -222,7 +223,7 @@ public class App extends Application {
             private long lastUpdate = 0;
             @Override
             public void handle(long now) {
-                if (lastUpdate == 0 || now - lastUpdate >= (250_000_000 / multiplier)) { // ~60 FPS (16.67ms per frame)
+                if (lastUpdate == 0 || now - lastUpdate >= (BASE_SPEED / multiplier)) { // ~60 FPS (16.67ms per frame)
                     updateGame();
                     lastUpdate = now;
                 }
