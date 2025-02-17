@@ -27,10 +27,7 @@ public class Animal {
       invalidMoves.add(1);
       invalidMoves.add(7);
     }
-    if(foodChainLevel == 6){
-      invalidMoves.add(1);
-    
-    }
+    if(foodChainLevel == 6){invalidMoves.add(1);}
     if((foodChainLevel == 7) || (foodChainLevel == 10)){invalidMoves.add(2);}
     if(foodChainLevel == 8){invalidMoves.add(3);}
     this.invalidMoves = invalidMoves;
@@ -87,7 +84,7 @@ public class Animal {
         return;
       }
       
-      if(invalidMoves.contains(newTerrain)){
+      if(invalidMoves.contains(newTerrain.colour)){
         return;
       }
 
@@ -113,7 +110,7 @@ public class Animal {
 
     foodLevel-= foodLevelDecreaseRate;
 
-    terrain.colour = 10 + this.foodChainLevel;
+    terrain.colour = 11 + this.foodChainLevel;
   }
 
   private Move move(ArrayList<ArrayList<Terrain>> view) {
