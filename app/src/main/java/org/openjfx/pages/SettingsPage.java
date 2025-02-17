@@ -44,9 +44,9 @@ public class SettingsPage {
     private VBox createSettingsPanel() {
         VBox panel = new VBox(15);
         panel.setPadding(new Insets(20));
-        panel.setStyle("-fx-background-color: #151515; -fx-background-radius: 20px; -fx-border-radius: 20px; -fx-border-color: #151515;");
-        panel.setPrefWidth(400);
-        panel.setMaxHeight(600); // Increased height for new components
+        panel.setStyle("-fx-background-color: #151515; -fx-background-radius: 20px; -fx-border-radius: 20px; -fx-border-color: #151515; -fx-effect: dropshadow(gaussian,rgb(48, 48, 48), 70, 0.3, 0, 0);");
+        panel.setMaxWidth(600);
+        panel.setMaxHeight(400); // Increased height for new components
         panel.setAlignment(Pos.CENTER);
 
         // Title with white text
