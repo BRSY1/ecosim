@@ -164,7 +164,6 @@ public class App extends Application {
     }
 
     private void spawn(float probSpawn) {
-        probSpawn = probSpawn;
         Random random = new Random();
         for (int j = 0; j < 800; j++) {
             for (int i = 0; i < 800; i++) {
