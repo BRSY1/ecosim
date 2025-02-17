@@ -5,8 +5,11 @@ import java.util.Arrays;
 import org.openjfx.Terrain;
 import org.openjfx.ui.InfoBox;
 import org.openjfx.ui.BiomeInfo;
+import javafx.scene.shape.Rectangle;
+import javafx.animation.TranslateTransition;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -14,6 +17,8 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
+import javafx.animation.TranslateTransition;
+import javafx.util.Duration;
 
 public class GridView {
     private Canvas canvas;
@@ -55,14 +60,29 @@ public class GridView {
         this.width = width;
         this.height = height;
         this.infoBox = infobox;
-
+    
         // Make canvas match the defined width and height
         canvas = new Canvas(width, height);
+        // Create a container and ensure it starts and stays at the correct size
         container = new Pane(canvas);
-        
+        container.setPrefSize(width, height);
+        container.setMinSize(width, height); // Prevents zooming out
+        container.setMaxSize(width, height);
+
+
+        Rectangle clipRect = new Rectangle();
+        clipRect.widthProperty().bind(container.widthProperty());
+        clipRect.heightProperty().bind(container.heightProperty());
+        container.setClip(clipRect);
+    
+        // Ensure the canvas matches the container size
+        canvas.widthProperty().bind(container.widthProperty());
+        canvas.heightProperty().bind(container.heightProperty());
+    
         initialiseBiomeData();
         setupEventHandlers();
     }
+        
 
     private void initialiseBiomeData() {
     biomeMap.put(Color.DARKGRAY, new BiomeInfo("Rocky Mountains", "A high-altitude region with rocky peaks.",
@@ -95,13 +115,11 @@ public class GridView {
         // Zoom handler
         container.setOnScroll(this::handleScroll);
 
-        // Drag handler for panning
         canvas.setOnMousePressed(this::handleMousePressed);
         
     }
 
     private void handleMousePressed(MouseEvent e) {
-
         int x = (int) e.getX();
         int y = (int) e.getY();
         System.out.println("X: " + x + "Y: " + y);
@@ -125,9 +143,9 @@ public class GridView {
         } else {
             zoomLevel *= zoomFactor;
         }
-    
+
         // Clamp zoom level
-        zoomLevel = Math.min(Math.max(zoomLevel, minZoomLevel), maxZoomLevel);
+        zoomLevel = Math.min(Math.max(zoomLevel, 1), maxZoomLevel);
     
         // Get mouse position relative to the canvas BEFORE zooming
         double mouseX = event.getX() - 400;
@@ -136,7 +154,7 @@ public class GridView {
         // Convert mouse position to world coordinates before zooming
         double worldX = (mouseX - translateX) / oldZoom;
         double worldY = (mouseY - translateY) / oldZoom;
-    
+        
         // Apply zoom scaling
         container.setScaleX(zoomLevel);
         container.setScaleY(zoomLevel);
@@ -144,20 +162,32 @@ public class GridView {
         // Convert world coordinates back to new screen coordinates
         double newTranslateX = mouseX - (worldX * zoomLevel); 
         double newTranslateY = mouseY - (worldY * zoomLevel);
-    
-        // Apply new translations
-        translateX = clampTranslateX(newTranslateX);
-        translateY = clampTranslateY(newTranslateY);
-        container.setTranslateX(translateX);
-        container.setTranslateY(translateY);
-    
+
+        // After computing newTranslateX and newTranslateY:
+        if (zoomLevel == 1.0) {
+            // Instead of snapping back immediately, animate the translation back to 0
+            TranslateTransition transition = new TranslateTransition(Duration.millis(20), container);
+            transition.setToX(0);
+            transition.setToY(0);
+            transition.play();
+            
+            // Also update our stored translation values
+            translateX = 0;
+            translateY = 0;
+        } else {
+            // Apply new translations immediately if not resetting to default zoom
+            translateX = clampTranslateX(newTranslateX);
+            translateY = clampTranslateY(newTranslateY);
+            container.setTranslateX(translateX);
+            container.setTranslateY(translateY);
+        }
+
         event.consume();
     }
 
     private Color getPixelColor(int x, int y) {
         return canvas.snapshot(null, null).getPixelReader().getColor(x, y);
     }
-       
 
     private double clampTranslateX(double proposedTranslateX) {
         double scaledWidth = width * zoomLevel;
@@ -165,7 +195,7 @@ public class GridView {
     
         // **Corrected clamping**
         double minTranslateX = viewWidth - scaledWidth;  // Allow negative values
-        double maxTranslateX = 1600;  // Prevent moving too far right
+        double maxTranslateX = viewWidth + scaledWidth;  // Prevent moving too far right
     
         return Math.max(minTranslateX, Math.min(proposedTranslateX, maxTranslateX));
     }
@@ -176,7 +206,7 @@ public class GridView {
     
         // **Corrected clamping**
         double minTranslateY = viewHeight - scaledHeight;  // Allow negative values
-        double maxTranslateY = 1600;  // Prevent moving too far down
+        double maxTranslateY = viewHeight + scaledHeight;  // Prevent moving too far down
     
         return Math.max(minTranslateY, Math.min(proposedTranslateY, maxTranslateY));
     }
