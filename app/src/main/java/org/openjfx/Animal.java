@@ -3,7 +3,6 @@ package org.openjfx;
 import org.openjfx.ui.AnimalEnum;
 import org.openjfx.ui.EventBox;
 import org.openjfx.ui.Stats;
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class Animal {
@@ -164,45 +163,47 @@ public class Animal {
     terrain.colour = 11 + this.foodChainLevel;
   }
 
+  // get a list of animals within view
   private ArrayList<Animal> getEntities(int numRows, int numCols, ArrayList<ArrayList<Terrain>> view) {
     ArrayList<Animal> animals = new ArrayList<Animal>();
 
     for (int j = 0; j < numRows; j++) {
       for (int i = 0; i < numCols; i++) {
-        if (true && !this.terrain.equals(view.get(j).get(i))) {
-          if (view.get(j).get(i).isOccupied()) {
-            animals.add(view.get(j).get(i).getOccupied());
-          }
+        if (view.get(j).get(i).isOccupied() && !this.terrain.equals(view.get(j).get(i))) {
+          animals.add(view.get(j).get(i).getOccupied());
         }
       }
     }
     return animals;
   }
 
+  // get a list of the grid locations of the animals within view
   private ArrayList<ArrayList<Integer>> getLocations(int numRows, int numCols, ArrayList<ArrayList<Terrain>> view) {
     ArrayList<ArrayList<Integer>> arrayList = new ArrayList<ArrayList<Integer>>();
+
     for (int j = 0; j < numRows; j++) {
       for (int i = 0; i < numCols; i++) {
-        if (true && !this.terrain.equals(view.get(j).get(i))) {
-          if (view.get(j).get(i).isOccupied()) {
-            ArrayList<Integer> tmp = new ArrayList<Integer>();
-            tmp.add(i);
-            tmp.add(j);
-            arrayList.add(tmp);
-          }
+        if (view.get(j).get(i).isOccupied() && !this.terrain.equals(view.get(j).get(i))) {
+          ArrayList<Integer> tmp = new ArrayList<Integer>();
+          tmp.add(view.get(j).get(i).x);
+          tmp.add(view.get(j).get(i).y);
+          arrayList.add(tmp);
         }
       }
     }
     return arrayList;
   }
 
+  private static final int foodMul = 4;
+
   // error to be fixed - check for illegal moves
-  private int reward(ArrayList<Animal> animals, Animal currAnimal, ArrayList<ArrayList<Integer>> locs, ArrayList<Integer> thisLoc, Move move) {
-    int x = Math.max(0, Math.min(599, currAnimal.terrain.x + move.dx));
-    int y = Math.max(0, Math.min(599, currAnimal.terrain.y + move.dy));
+  private int reward(ArrayList<Animal> animals, Animal currAnimal, ArrayList<ArrayList<Integer>> locs, ArrayList<Integer> thisLoc) {
+    int x = thisLoc.get(0);
+    int y = thisLoc.get(1);
     int reward = 0;
-    for (Animal animal : animals) {
-      int dist = (int) Math.sqrt(Math.pow(Math.abs(animal.terrain.x - x), 2) + Math.pow(Math.abs(animal.terrain.y - y), 2));
+    for (int i = 0; i < locs.size(); i++) {
+      Animal animal = animals.get(i);
+      int dist = (int) Math.sqrt(Math.pow(Math.abs(locs.get(i).get(0) - x), 2) + Math.pow(Math.abs(locs.get(i).get(1) - y), 2));
       if (dist == 0) dist = 1;
       if (currAnimal.foodChainLevel < animal.foodChainLevel) {
         reward -= (int) this.viewRange / dist * 2;
@@ -213,56 +214,67 @@ public class Animal {
 
     // get change in food level
     if (gameMap.terrainArray.get(y).get(x).framesToRegrow <= 0) {
-      reward += foodLevel + 4;
+      reward += (foodLevel + 4) / foodMul;
     } else {
-      reward += foodLevel;
+      reward += foodLevel / foodMul;
     }
-
     return reward;
   }
 
-  void randomMove(ArrayList<Integer> animal) {
+  void randomMove(ArrayList<Integer> location) {
     Random random = new Random();
     Move move = Move.values()[random.nextInt(8)];
-    animal.set(0, animal.get(0) + move.dx);
-    animal.set(1, animal.get(1) + move.dy);
+    location.set(0, Math.max(0, Math.min(599, location.get(0) + move.dx)));
+    location.set(1, Math.max(0, Math.min(599, location.get(1) + move.dy)));
   }
 
-  void randomAnimalMoves(ArrayList<ArrayList<Integer>> animals) {
-    Random random = new Random();
-    for (ArrayList<Integer> animal : animals) {
-      Move move = Move.values()[random.nextInt()];
-      animal.set(0, animal.get(0) + move.dx);
-      animal.set(1, animal.get(1) + move.dy);
-    }
-  }
+  // rl parameters
+  private static final int numRandomWalks = 5;
+  private static final int walkDepth = 2;
 
   private Move moveMCTS(ArrayList<ArrayList<Terrain>> view) {
     int numRows = view.size();
     int numCols = view.get(0).size();
 
+    // get arrays (of references) of the animal objects and their locations
     ArrayList<Animal> animals = getEntities(numRows, numCols, view);
-    ArrayList<ArrayList<Integer>> locs = getLocations(numRows, numCols, view);
-    ArrayList<Integer> thisLoc = new ArrayList<Integer>();
-    thisLoc.add(terrain.x);
-    thisLoc.add(terrain.y);
+    ArrayList<ArrayList<Integer>> initLocs = getLocations(numRows, numCols, view);
+    
+    // get this animal's location
+    ArrayList<Integer> initLoc = new ArrayList<Integer>();
+    initLoc.add(terrain.x);
+    initLoc.add(terrain.y);
 
-    int maxReward = -1000;
+    // initialise parameters to detect and store the maximum value
+    int maxReward = Integer.MIN_VALUE;
     Move bestMove = null;
 
+    // create a shuffled list of possible moves
     List<Move> movesList = Arrays.asList(Move.values());
     Collections.shuffle(movesList);
-    for (Move move : movesList) {
 
-      // in Lieu of a efficient way to simulate without calling the main game loop, only the
+    for (Move move : movesList) {
+      // in lieu of a efficient way to simulate without calling the main game loop, only the
       // key features of the game will be simulated (e.g. position)
+
       int avgReward = 0;
+
       // do 5 random runs
-      for (int i = 0; i < 5; i++) {
+      for (int i = 0; i < numRandomWalks; i++) {
         boolean exit = false;
 
+        // create new copies of locations
+        ArrayList<Integer> thisLoc = new ArrayList<Integer>(initLoc);
+        thisLoc.set(0, thisLoc.get(0) + move.getDx());
+        thisLoc.set(1, thisLoc.get(1) + move.getDy());
+
+        ArrayList<ArrayList<Integer>> locs = new ArrayList<ArrayList<Integer>>();
+        for (ArrayList<Integer> loc : initLocs) { // iterate to create deep copies
+            locs.add(new ArrayList<>(loc));
+        }
+
         // runs of depth 2
-        for (int j = 0; j < 2; j++) {
+        for (int j = 0; j < walkDepth; j++) {
           if (exit) { break; }
 
           // move this animal
@@ -281,8 +293,10 @@ public class Animal {
             }
           } 
         } 
-        avgReward += reward(animals, this, locs, thisLoc, move);
+        avgReward += reward(animals, this, locs, thisLoc) / numRandomWalks;
       }
+
+      // avgReward = reward(animals, this, initLocs, thisLoc);
 
       // pick the move with the highest return
       if (avgReward > maxReward) {
