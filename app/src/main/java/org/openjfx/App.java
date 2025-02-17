@@ -265,6 +265,10 @@ public class App extends Application {
                 currentTerrain.colour = currentTerrain.underlyingColour;
             }
 
+            // Update stats
+            AnimalEnum animalEnum = AnimalEnum.values()[animalToRemove.foodChainLevel - 1];
+            stats.updateStats(animalEnum, -1);
+
             animals.remove(--currentPopulation);
         }
 

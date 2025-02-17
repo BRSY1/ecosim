@@ -96,7 +96,7 @@ public class Animal {
       }
   
       this.terrain = newTerrain;
-
+      terrain.addOccupier(this);
 
       update = 0;
     } else {
