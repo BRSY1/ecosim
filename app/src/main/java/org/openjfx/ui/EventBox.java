@@ -18,6 +18,7 @@ public class EventBox {
         // EVENT LOG TITLE
         Label eventLogTitle = new Label("Events");
         eventLogTitle.setStyle("-fx-font-size: 24px; -fx-text-fill: white; -fx-font-weight: bold;");
+        eventLogTitle.setPadding(new Insets(5,0,0,0));
         // EVENT LOG TEXT AREA
         eventLog = new TextArea();
         eventLog.setEditable(false);

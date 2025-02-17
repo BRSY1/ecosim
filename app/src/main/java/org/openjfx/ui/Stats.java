@@ -36,6 +36,7 @@ public class Stats {
 
         // Title label
         Label title = new Label("Stats");
+        title.setPadding(new Insets(0,0,5,0));
         title.setStyle("-fx-font-size: 24px; -fx-text-fill: white; -fx-font-weight: bold;");
 
         // Initialize containers

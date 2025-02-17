@@ -2,6 +2,8 @@ package org.openjfx.grid;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import org.openjfx.ui.AnimalEnum;
+import org.openjfx.ui.AnimalInfo;
 import org.openjfx.Terrain;
 import org.openjfx.ui.InfoBox;
 import org.openjfx.ui.BiomeInfo;
@@ -26,11 +28,12 @@ public class GridView {
     private int height;
     private double zoomLevel = 1.0;
     private final double minZoomLevel = 1.0;
-    private final double maxZoomLevel = 4.0;
+    private final double maxZoomLevel = 10.0;
     private double translateX = 0, translateY = 0;
     private Pane container;        // Whether the user is currently highlighting
     private InfoBox infoBox;
     private final Map<Color, BiomeInfo> biomeMap = new HashMap<>();
+    private final Map<Color, AnimalInfo> animalMap = new HashMap<>();
     private ArrayList<Color> colorList = new ArrayList<>(Arrays.asList(
         Color.DARKBLUE,   // Dark Blue
         Color.BLUE,       // Blue
@@ -80,6 +83,7 @@ public class GridView {
         canvas.heightProperty().bind(container.heightProperty());
     
         initialiseBiomeData();
+        initialiseAnimalData();
         setupEventHandlers();
     }
         
@@ -110,6 +114,38 @@ public class GridView {
             getClass().getResource("/org/openjfx/ui/assets/forest.jpg").toExternalForm()));
     }
 
+    private void initialiseAnimalData() {
+        animalMap.put(Color.rgb(255, 128, 0), new AnimalInfo("Squirrel", "A nimble and quick rodent.\n Prey to Fox and Wolf.",
+            getClass().getResource("/org/openjfx/ui/assets/squirrel.jpg").toExternalForm()));
+    
+        animalMap.put(Color.rgb(255, 0, 127), new AnimalInfo("Rabbit", "A fast and cute animal.\n Prey to Fox and Wolf.",
+            getClass().getResource("/org/openjfx/ui/assets/rabbit.jpg").toExternalForm()));
+    
+        animalMap.put(Color.rgb(153, 204, 255), new AnimalInfo("Elephant", "A large, majestic, and intelligent animal.\n Prey to Wolf and Lion.",
+            getClass().getResource("/org/openjfx/ui/assets/elephant.jpg").toExternalForm()));
+    
+        animalMap.put(Color.BLUE, new AnimalInfo("Fox", "A cunning and agile predator.\n Prey to Wolf and Lion.",
+            getClass().getResource("/org/openjfx/ui/assets/fox.jpg").toExternalForm()));
+    
+        animalMap.put(Color.rgb(64, 64, 64), new AnimalInfo("Wolf", "A strong pack animal with a keen sense of loyalty.\n Prey to Lion.",
+            getClass().getResource("/org/openjfx/ui/assets/wolf.jpg").toExternalForm()));
+    
+        animalMap.put(Color.rgb(255, 153, 204), new AnimalInfo("Jellyfish", "A mesmerizing sea creature with a delicate form.\n Prey to Salmon and Crocodile.",
+            getClass().getResource("/org/openjfx/ui/assets/jellyfish.jpg").toExternalForm()));
+    
+        animalMap.put(Color.rgb(0, 255, 0), new AnimalInfo("Salmon", "A fish known for its upstream journey.\n Prey to Crocodile and Shark.",
+            getClass().getResource("/org/openjfx/ui/assets/salmon.jpg").toExternalForm()));
+    
+        animalMap.put(Color.RED, new AnimalInfo("Crocodile", "A powerful reptile with an impressive bite.\n Prey to Shark.",
+            getClass().getResource("/org/openjfx/ui/assets/crocodile.jpg").toExternalForm()));
+    
+        animalMap.put(Color.rgb(204, 204, 0), new AnimalInfo("Lion", "The king of the jungle, majestic and powerful.\n Apex Predator (on land).",
+            getClass().getResource("/org/openjfx/ui/assets/lion.jpg").toExternalForm()));
+    
+        animalMap.put(Color.rgb(0, 0, 0), new AnimalInfo("Shark", "A fearsome predator ruling the seas.\n Apex Predator (on water).",
+            getClass().getResource("/org/openjfx/ui/assets/shark.jpg").toExternalForm()));
+    }
+
 
     private void setupEventHandlers() {
         // Zoom handler
@@ -128,6 +164,10 @@ public class GridView {
         if (biomeMap.containsKey(clickedColor)) {
             BiomeInfo biome = biomeMap.get(clickedColor);
             this.infoBox.displayBiome(biome);
+        }
+        if (animalMap.containsKey(clickedColor)) {
+            AnimalInfo animal = animalMap.get(clickedColor);
+            this.infoBox.displayAnimal(animal);
         }
     }
 
