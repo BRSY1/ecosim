@@ -29,19 +29,29 @@ public class GridView {
     private InfoBox infoBox;
     private final Map<Color, BiomeInfo> biomeMap = new HashMap<>();
     private ArrayList<Color> colorList = new ArrayList<>(Arrays.asList(
-            Color.DARKBLUE,   // Dark Blue
-            Color.BLUE,       // Blue
-            Color.rgb(247, 239, 83),
-            Color.rgb(61, 148, 21),
-            Color.GREEN,      // Green
-            Color.DARKGREEN,
-            Color.rgb(5, 72, 5),
-            Color.DARKGRAY,
-            Color.RED,
-            Color.rgb(0,80,0),
-            Color.DARKGRAY,
-            Color.rgb(70, 42, 1)
-        ));
+        Color.DARKBLUE,   // Dark Blue
+        Color.BLUE,       // Blue
+        Color.rgb(247, 239, 83),
+        Color.rgb(61, 148, 21),
+        Color.GREEN,      // Green
+        Color.DARKGREEN,
+        Color.rgb(5, 72, 5),
+        Color.DARKGRAY,
+        Color.RED,
+        Color.rgb(0,80,0),
+        Color.DARKGRAY,
+        Color.rgb(255, 128, 0),
+        Color.rgb(70, 42, 1),        
+        Color.rgb(255, 0, 127),
+        Color.rgb(153,204,255),
+        Color.BLUE,
+        Color.rgb(64,64,64),
+        Color.rgb(255,153,204),
+        Color.rgb(0,255,0),
+        Color.RED,
+        Color.rgb(204,204,0),
+        Color.rgb(0,0,0)
+    ));
 
     public GridView(int width, int height, InfoBox infobox) {
         this.width = width;
