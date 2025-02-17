@@ -1,5 +1,6 @@
 package org.openjfx;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Animal {
@@ -184,20 +185,36 @@ public class Animal {
     }
   }
 
-  private ArrayList<Animal> getEntities(int numRows, int numCols, ArrayList<ArrayList<Terrain>> view) {
-    ArrayList<Animal> animals = new ArrayList<Animal>();
+  // private ArrayList<Animal> getEntities(int numRows, int numCols, ArrayList<ArrayList<Terrain>> view) {
+  //   ArrayList<Animal> animals = new ArrayList<Animal>();
 
+  //   for (int j = 0; j < numRows; j++) {
+  //     for (int i = 0; i < numCols; i++) {
+  //       if (true && !this.terrain.equals(view.get(j).get(i))) {
+  //         if (view.get(j).get(i).isOccupied()) {
+  //           animals.add(view.get(j).get(i).getOccupied());
+  //         }
+  //       }
+  //     }
+  //   }
+  //   return animals;
+  // }
+
+  private ArrayList<ArrayList<Integer>> getLocations(int numRows, int numCols, ArrayList<ArrayList<Terrain>> view) {
+    ArrayList<ArrayList<Integer>> arrayList = new ArrayList<ArrayList<Integer>>();
     for (int j = 0; j < numRows; j++) {
       for (int i = 0; i < numCols; i++) {
         if (true && !this.terrain.equals(view.get(j).get(i))) {
           if (view.get(j).get(i).isOccupied()) {
-            System.out.println("hihi");
-            animals.add(view.get(j).get(i).getOccupied());
+            ArrayList<Integer> tmp = new ArrayList<Integer>();
+            tmp.add(i);
+            tmp.add(j);
+            arrayList.add(tmp);
           }
         }
       }
     }
-    return animals;
+    return arrayList;
   }
 
   // error to be fixed - check for illegal moves
@@ -222,16 +239,33 @@ public class Animal {
       reward += foodLevel;
     }
 
-    System.out.println(reward);
-
     return reward;
+  }
+
+  void randomMove(ArrayList<Integer> animal) {
+    Random random = new Random();
+    Move move = Move.values()[random.nextInt()];
+    animal.set(0, animal.get(0) + move.dx);
+    animal.set(1, animal.get(1) + move.dy);
+  }
+
+  void randomAnimalMoves(ArrayList<ArrayList<Integer>> animals) {
+    Random random = new Random();
+    for (ArrayList<Integer> animal : animals) {
+      Move move = Move.values()[random.nextInt()];
+      animal.set(0, animal.get(0) + move.dx);
+      animal.set(1, animal.get(1) + move.dy);
+    }
   }
 
   private Move moveMCTS(ArrayList<ArrayList<Terrain>> view) {
     int numRows = view.size();
     int numCols = view.get(0).size();
 
-    ArrayList<Animal> animals = getEntities(numRows, numCols, view);
+    ArrayList<ArrayList<Integer>> locs = getLocations(numRows, numCols, view);
+    ArrayList<Integer> thisLoc;
+    thisLoc.add(terrain.x);
+    thisLoc.add(terrain.y);
 
     int maxReward = -1000;
     Move bestMove = null;
@@ -241,6 +275,23 @@ public class Animal {
     for (Move move : movesList) {
       // for each move, simulate the next n (=2) moves m (=5) and average the returns
       // consider only the grid within the viewable radius
+      // in Lieu of a efficient way to simulate without calling the main game loop, only the
+      // key features of the game will be simulated (e.g. position)
+      for (int i = 0; i < 5; i++) {
+        boolean exit = true;
+        for (int j = 0; j < 2; j++) {
+          randomMove(thisLoc);
+          for (ArrayList<Integer> loc : locs) {
+            if (loc.equals(thisLoc)) {
+              exit = true;
+            }
+            randomMove(loc);
+            if (loc.equals(thisLoc)) {
+              exit = true;
+            }
+          }
+        }
+      }
 
       // pick the move with the highest return
       int reward = reward(animals, this, move);

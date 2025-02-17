@@ -171,7 +171,7 @@ public class App extends Application {
                 Terrain terrain = this.gameMap.terrainArray.get(j).get(i);
                 int randomType = random.nextInt(10) + 1;
                 if ((randomType < 6 || randomType == 9) && ((terrain.biome != 7) && (terrain.biome != 8) && (terrain.biome != 2) && (Math.random() < probSpawn))){
-                    Animal animal = new Animal(gameMap,randomType, 0, 20, gameMap.terrainArray.get(j).get(i), random.nextInt(2) + 1);
+                    Animal animal = new Animal(gameMap, randomType, 0, 20, gameMap.terrainArray.get(j).get(i), random.nextInt(2) + 1);
                     animals.add(animal);
                     AnimalEnum animalEnum = AnimalEnum.values()[animal.foodChainLevel - 1];
                     stats.updateStats(animalEnum, 1);
@@ -196,9 +196,6 @@ public class App extends Application {
                 }
             }
         }
-        // animals.add(new Animal(gameMap, 5, 0, 20, gameMap.terrainArray.get(200).get(200), 1));
-        // animals.add(new Animal(gameMap, 4, 0, 20, gameMap.terrainArray.get(190).get(190), 2));
-        // animals.add(new Animal(gameMap, 3, 0, 20, gameMap.terrainArray.get(195).get(195), 2));
     }
     
     private void startGameLoop() {
