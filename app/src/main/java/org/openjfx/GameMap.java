@@ -39,7 +39,7 @@ public class GameMap {
        for (int y=0; y<myGrid.getHeight(); y++){
             for (int x=0; x<myGrid.getWidth(); x++){
                 
-                if(terrainArray.get(y).get(x) instanceof Tree | terrainArray.get(y).get(x) instanceof Shrub | terrainArray.get(y).get(x) instanceof Grass){
+                if(terrainArray.get(y).get(x) instanceof Tree | terrainArray.get(y).get(x) instanceof Shrub | terrainArray.get(y).get(x) instanceof Grass | terrainArray.get(y).get(x) instanceof WaterDark){
                     foodStuffs.add((Food)terrainArray.get(y).get(x));
                 }
             }
