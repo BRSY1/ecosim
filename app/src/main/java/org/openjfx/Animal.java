@@ -129,13 +129,41 @@ public class Animal {
           eventBox.addEvent("A " + killerAnimalEnum + " eats a " + killedAnimalEnum);
           stats.updateStats(killedAnimalEnum, 0,1);
         } else if (current.foodChainLevel == occupier.foodChainLevel) { // reproduction logic
-          if (current.hasBred == false && occupier.hasBred == false) {
-            AnimalEnum animalEnum = AnimalEnum.values()[current.foodChainLevel - 1];
-            stats.updateStats(animalEnum, 1,0);
-            eventBox.addEvent("A baby " + animalEnum + " was made with ❤️");
-            current.hasBred = true;
-            occupier.hasBred = true;
-          } 
+          if (!current.hasBred && !occupier.hasBred) {
+            Terrain safe = findSafeLocation(current, occupier);
+            Animal child = new Animal(gameMap, current.foodChainLevel, current.naturalTerrain, current.viewRange, safe, current.updateRate);
+            if (safe != null && !safe.isOccupied()) {
+              safe.addOccupier(child);
+              safe.underlyingColour = safe.colour;
+              safe.colour = 11 + child.foodChainLevel;
+          
+              if (current.foodChainLevel > 0 && current.foodChainLevel <= AnimalEnum.values().length) {
+                  AnimalEnum animalEnum = AnimalEnum.values()[current.foodChainLevel - 1];
+          
+                  if (stats != null) {
+                      stats.updateStats(animalEnum, 1, 0);
+                  } else {
+                      System.err.println("Error: stats is null");
+                  }
+          
+                  if (eventBox != null) {
+                      eventBox.addEvent("A baby " + animalEnum + " was made with ❤️");
+                  } else {
+                      System.err.println("Error: eventBox is null");
+                  }
+          
+                  app.animals.add(child); 
+          
+                  current.hasBred = true;
+                  occupier.hasBred = true;
+              } else {
+                  System.err.println("Error: Invalid foodChainLevel: " + current.foodChainLevel);
+              }
+          } else {
+              System.err.println("Error: No valid safe location found for breeding.");
+          }
+          
+        }
         } else {
           killed = occupier;
           killer = current;
@@ -199,14 +227,15 @@ public class Animal {
     this.app = app;
   }
 
-  public void findSafeLocation(Animal a, Animal b) {
+  public Terrain findSafeLocation(Animal a, Animal b) {
     for (int x = (a.getCurrentTerrain().x - 1); x < (a.getCurrentTerrain().x + 1); x++) {
       for (int y = (a.getCurrentTerrain().y - 1); y < (a.getCurrentTerrain().y + 1); y++) {
         if (!(app.terrainArray.get(x).get(y).isOccupied()) && (a.getCurrentTerrain().colour == app.terrainArray.get(x).get(y).colour)) {
-          this.safeTerrain =  app.terrainArray.get(x).get(y);
+          return app.terrainArray.get(x).get(y);
         }
       }
     }
+    return null;
   }
   
 

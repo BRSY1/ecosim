@@ -31,9 +31,9 @@ public class SettingsPage {
 
         this.animalSpeedSlider = new MFXSlider();
         this.animalSpeedSlider.setMin(1);
-        this.animalSpeedSlider.setMax(10);
+        this.animalSpeedSlider.setMax(20);
         this.animalSpeedSlider.setValue(app.getMultiplier());
-        this.animalSpeedSlider.setPrefWidth(100);
+        this.animalSpeedSlider.setPrefWidth(200);
 
         this.resetGameToggle = new MFXToggleButton("Reset Game");
         
