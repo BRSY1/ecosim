@@ -2,37 +2,36 @@ package org.openjfx.ui;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.paint.Color;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
+import org.openjfx.ui.AnimalEnum; // Adjust import if needed
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Stats {
-    private VBox statsBox; // Holds all labels
+    private VBox statsBox; // Holds title + gridPane
     private Map<AnimalEnum, Integer> animalCounts; // Stores animal counts
-    private Map<AnimalEnum, Label> animalLabels; // Maps animals to their UI labels
+    private Map<AnimalEnum, Label> animalLabels;   // Maps animals to their UI labels
 
     public Stats() {
-        statsBox = new VBox(); // Vertical layout with spacing
-        statsBox.setPadding(new Insets(10, 10, 10, 10)); // Add padding inside
-        statsBox.setMinWidth(150); // Minimum width to make it look good
-        statsBox.setMaxWidth(200); // Prevent excessive width
-        statsBox.setStyle("-fx-background-color: #202020; -fx-background-radius: 10px; -fx-border: 20px; -fx-border-color: black; -fx-border-radius: 10px;");
+        // Main container (VBox)
+        statsBox = new VBox();
+        statsBox.setPadding(new Insets(10));
+        statsBox.setMinWidth(150);
+        statsBox.setMaxWidth(400);
+        statsBox.setStyle("-fx-background-color: #202020; -fx-background-radius: 10px; " +
+                "-fx-border: 20px; -fx-border-color: black; -fx-border-radius: 10px;");
         statsBox.setAlignment(Pos.TOP_CENTER);
 
-
-        // Set background (dark, transparent with rounded corners)
+        // Semi-transparent black background
         statsBox.setBackground(new Background(new BackgroundFill(
-            Color.rgb(0, 0, 0, 0.7), // Black with 70% opacity
-            new CornerRadii(10), // Rounded corners
-            Insets.EMPTY
+                Color.rgb(0, 0, 0, 0.7),
+                new CornerRadii(10),
+                Insets.EMPTY
         )));
 
         // Title label
@@ -43,30 +42,46 @@ public class Stats {
         animalCounts = new HashMap<>();
         animalLabels = new HashMap<>();
 
-        // Initialize with some default animals (add more as needed)
+        // Create labels for each AnimalEnum
         for (AnimalEnum animal : AnimalEnum.values()) {
-            animalCounts.put(animal, 0); // Default count 0
+            animalCounts.put(animal, 0); // Default count is 0
             Label label = new Label(animal.name() + ": 0");
             label.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
             animalLabels.put(animal, label);
         }
 
-        // Add everything to statsBox
-        statsBox.getChildren().add(title);
-        statsBox.getChildren().addAll(animalLabels.values());
+        // Use a GridPane to arrange the labels: max 5 per column
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10); // Horizontal gap between columns
+        gridPane.setVgap(5); // Vertical gap between labels
+        gridPane.setAlignment(Pos.TOP_CENTER);
+
+        int i = 0;
+        for (Label label : animalLabels.values()) {
+            int row = i % 5;   // Each column has 5 rows max
+            int col = i / 5;   // New column after 5 labels
+            gridPane.add(label, col, row);
+            i++;
+        }
+
+        // Add title and gridPane to the statsBox
+        statsBox.getChildren().addAll(title, gridPane);
     }
 
     /**
      * Updates the count of a specific animal in the stats box.
      *
      * @param animal The animal type to update.
-     * @param count  The new count value.
+     * @param count  The increment to add to the current count.
      */
     public void updateStats(AnimalEnum animal, int count) {
         if (animalCounts.containsKey(animal)) {
             int oldValue = animalCounts.get(animal);
-            animalCounts.put(animal, (oldValue + count));
-            animalLabels.get(animal).setText(animal.name() + ": " + animalCounts.get(animal));
+            int newValue = oldValue + count;
+            animalCounts.put(animal, newValue);
+
+            Label label = animalLabels.get(animal);
+            label.setText(animal.name() + ": " + newValue);
         }
     }
 
