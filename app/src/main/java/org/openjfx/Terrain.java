@@ -1,13 +1,10 @@
 package org.openjfx;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Terrain {
     public int x;
     public int y;
     public int colour;
     public int underlyingColour;
-    private List<Integer> rgb;
     private boolean occupied = false;
     public Animal occupiedBy;
     protected int biome;

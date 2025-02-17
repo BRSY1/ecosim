@@ -2,7 +2,6 @@ package org.openjfx.grid;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.openjfx.ui.AnimalEnum;
 import org.openjfx.ui.AnimalInfo;
 import org.openjfx.Terrain;
 import org.openjfx.ui.InfoBox;
@@ -11,7 +10,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.animation.TranslateTransition;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -19,7 +17,6 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
-import javafx.animation.TranslateTransition;
 import javafx.util.Duration;
 
 public class GridView {
@@ -27,7 +24,6 @@ public class GridView {
     private int width;
     private int height;
     private double zoomLevel = 1.0;
-    private final double minZoomLevel = 1.0;
     private final double maxZoomLevel = 10.0;
     private double translateX = 0, translateY = 0;
     private Pane container;        // Whether the user is currently highlighting
