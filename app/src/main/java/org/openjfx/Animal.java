@@ -160,7 +160,7 @@ public class Animal {
                   System.err.println("Error: Invalid foodChainLevel: " + current.foodChainLevel);
               }
           } else {
-              System.err.println("Error: No valid safe location found for breeding.");
+              //System.err.println("Error: No valid safe location found for breeding.");
           }
           
         }
