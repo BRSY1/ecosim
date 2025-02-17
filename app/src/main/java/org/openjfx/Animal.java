@@ -11,7 +11,7 @@ public class Animal {
   private int update = 0;
   private int updateRate;
   private int foodLevel; // ranges between 1 and 5
-  private int foodLevelDecreaseRate = 20;
+  private int foodLevelDecreaseRate = 1;
   private List<Integer> invalidMoves;
 
   Animal(GameMap gameMap, int foodChainLevel, int naturalTerrain, int viewRange, Terrain terrain, int updateRate) {
@@ -106,16 +106,12 @@ public class Animal {
       update++;
     }
   
-    if (foodLevel < 5 && (terrain.biome == 6 || terrain.biome == 1 || terrain.biome == 5)) {
+    if (foodLevel < 10 && (terrain.biome == 6 || terrain.biome == 1 || terrain.biome == 5)) {
       terrain.getsEaten();
-      foodLevel++;
+      foodLevel += 4;
     }
 
-    if (foodLevelDecreaseRate < 20) {
-      foodLevelDecreaseRate++;
-    } else {
-      foodLevelDecreaseRate = 0;
-    }
+    foodLevel-= foodLevelDecreaseRate;
 
     terrain.colour = 10 + this.foodChainLevel;
   }
