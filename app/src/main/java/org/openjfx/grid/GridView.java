@@ -6,6 +6,7 @@ import org.openjfx.Terrain;
 import org.openjfx.ui.InfoBox;
 import org.openjfx.ui.BiomeInfo;
 import javafx.scene.shape.Rectangle;
+import javafx.animation.TranslateTransition;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -16,6 +17,8 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
+import javafx.animation.TranslateTransition;
+import javafx.util.Duration;
 
 public class GridView {
     private Canvas canvas;
@@ -64,6 +67,13 @@ public class GridView {
         container = new Pane(canvas);
         container.setPrefSize(width, height);
         container.setMinSize(width, height); // Prevents zooming out
+        container.setMaxSize(width, height);
+
+
+        Rectangle clipRect = new Rectangle();
+        clipRect.widthProperty().bind(container.widthProperty());
+        clipRect.heightProperty().bind(container.heightProperty());
+        container.setClip(clipRect);
     
         // Ensure the canvas matches the container size
         canvas.widthProperty().bind(container.widthProperty());
@@ -152,12 +162,25 @@ public class GridView {
         // Convert world coordinates back to new screen coordinates
         double newTranslateX = mouseX - (worldX * zoomLevel); 
         double newTranslateY = mouseY - (worldY * zoomLevel);
-    
-        // Apply new translations
-        translateX = clampTranslateX(newTranslateX);
-        translateY = clampTranslateY(newTranslateY);
-        container.setTranslateX(translateX);
-        container.setTranslateY(translateY);
+
+        // After computing newTranslateX and newTranslateY:
+        if (zoomLevel == 1.0) {
+            // Instead of snapping back immediately, animate the translation back to 0
+            TranslateTransition transition = new TranslateTransition(Duration.millis(20), container);
+            transition.setToX(0);
+            transition.setToY(0);
+            transition.play();
+            
+            // Also update our stored translation values
+            translateX = 0;
+            translateY = 0;
+        } else {
+            // Apply new translations immediately if not resetting to default zoom
+            translateX = clampTranslateX(newTranslateX);
+            translateY = clampTranslateY(newTranslateY);
+            container.setTranslateX(translateX);
+            container.setTranslateY(translateY);
+        }
 
         event.consume();
     }
@@ -165,18 +188,6 @@ public class GridView {
     private Color getPixelColor(int x, int y) {
         return canvas.snapshot(null, null).getPixelReader().getColor(x, y);
     }
-
-    private void resetView() {
-        zoomLevel = 1.0; // Reset zoom
-        translateX = 0;   // Reset X translation
-        translateY = 0;   // Reset Y translation
-    
-        container.setScaleX(zoomLevel);
-        container.setScaleY(zoomLevel);
-        container.setTranslateX(translateX);
-        container.setTranslateY(translateY);
-    }
-       
 
     private double clampTranslateX(double proposedTranslateX) {
         double scaledWidth = width * zoomLevel;
