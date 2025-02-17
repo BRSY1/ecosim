@@ -50,8 +50,8 @@ public class GridView {
         Color.rgb(255, 128, 0),       
         Color.rgb(255, 0, 127),
         Color.rgb(153,204,255),
-        Color.BLUE,
-        Color.rgb(64,64,64),
+        Color.PURPLE,
+        Color.rgb(255,255,255),
         Color.rgb(255,153,204),
         Color.rgb(0,255,0),
         Color.RED,
@@ -124,10 +124,10 @@ public class GridView {
         animalMap.put(Color.rgb(153, 204, 255), new AnimalInfo("Elephant", "A large, majestic, and intelligent animal.\n Prey to Wolf and Lion.",
             getClass().getResource("/org/openjfx/ui/assets/elephant.jpg").toExternalForm()));
     
-        animalMap.put(Color.BLUE, new AnimalInfo("Fox", "A cunning and agile predator.\n Prey to Wolf and Lion.",
+        animalMap.put(Color.PURPLE, new AnimalInfo("Fox", "A cunning and agile predator.\n Prey to Wolf and Lion.",
             getClass().getResource("/org/openjfx/ui/assets/fox.jpg").toExternalForm()));
     
-        animalMap.put(Color.rgb(64, 64, 64), new AnimalInfo("Wolf", "A strong pack animal with a keen sense of loyalty.\n Prey to Lion.",
+        animalMap.put(Color.rgb(255, 255, 255), new AnimalInfo("Wolf", "A strong pack animal with a keen sense of loyalty.\n Prey to Lion.",
             getClass().getResource("/org/openjfx/ui/assets/wolf.jpg").toExternalForm()));
     
         animalMap.put(Color.rgb(255, 153, 204), new AnimalInfo("Jellyfish", "A mesmerizing sea creature with a delicate form.\n Prey to Salmon and Crocodile.",

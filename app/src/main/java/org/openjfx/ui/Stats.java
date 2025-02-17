@@ -11,11 +11,14 @@ import org.openjfx.ui.AnimalEnum; // Adjust import if needed
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class Stats {
     private VBox statsBox; // Holds title + gridPane
     private Map<AnimalEnum, Integer> animalCounts; // Stores animal counts
     private Map<AnimalEnum, Label> animalLabels;   // Maps animals to their UI labels
+    private Map<AnimalEnum, Color> animalColors;
+    
 
     public Stats() {
         // Main container (VBox)
@@ -47,15 +50,33 @@ public class Stats {
         for (AnimalEnum animal : AnimalEnum.values()) {
             animalCounts.put(animal, 0); // Default count is 0
             Label label = new Label(animal.name() + ": 0");
-            label.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
             animalLabels.put(animal, label);
         }
 
         // Use a GridPane to arrange the labels: max 5 per column
         GridPane gridPane = new GridPane();
-        gridPane.setHgap(10); // Horizontal gap between columns
+        gridPane.setHgap(30); // Horizontal gap between columns
         gridPane.setVgap(5); // Vertical gap between labels
         gridPane.setAlignment(Pos.TOP_CENTER);
+        gridPane.setStyle(
+            "-fx-control-inner-background: #303030; " +  // Dark inner background
+            "-fx-text-fill: white; " +                   // White text color
+            "-fx-highlight-fill: #444; " +               // Darker highlight for selection
+            "-fx-highlight-text-fill: white; " +         // Text color when highlighted
+            "-fx-background-color: #303030; " +          // Main background color
+            "-fx-background-insets: 0, 0, 1, 2; " +      // Remove extra insets (fixes dots)
+            "-fx-background-radius: 5px; " +             // Smooth rounded edges
+            "-fx-border-radius: 5px; " +                 // Rounded border
+            "-fx-border-color: #252525; " +          // Hide default border
+            "-fx-border-width: 2px; " +                    // No visible border
+            "-fx-padding: 10px; " +                      // Inner padding
+            "-fx-font-size: 14px; " +                    // Readable font size
+            "-fx-overflow-x: hidden; " +                 // Hide horizontal scroll
+            "-fx-overflow-y: hidden; " +                 // Hide vertical scroll
+            "-fx-cursor: text; " +                       // Proper cursor for text
+            "-fx-focus-color: transparent; " +           // No blue outline when focused
+            "-fx-faint-focus-color: transparent;"        // Remove faint glow effect
+        );
 
         int i = 0;
         for (Label label : animalLabels.values()) {
@@ -66,7 +87,23 @@ public class Stats {
         }
 
         // Add title and gridPane to the statsBox
+        initialiseAnimalText();
         statsBox.getChildren().addAll(title, gridPane);
+    }
+
+    private void initialiseAnimalText() {
+        animalColors = new HashMap<>();
+
+        animalColors.put(AnimalEnum.SQUIRREL, Color.rgb(255, 128, 0));  
+        animalColors.put(AnimalEnum.RABBIT, Color.rgb(255, 0, 127));    
+        animalColors.put(AnimalEnum.ELEPHANT, Color.rgb(153, 204, 255)); 
+        animalColors.put(AnimalEnum.FOX, Color.PURPLE);                    
+        animalColors.put(AnimalEnum.WOLF, Color.rgb(255, 255, 255));    
+        animalColors.put(AnimalEnum.JELLYFISH, Color.rgb(255, 153, 204)); 
+        animalColors.put(AnimalEnum.SALMON, Color.rgb(0, 255, 0));       
+        animalColors.put(AnimalEnum.CROCODILE, Color.RED);               
+        animalColors.put(AnimalEnum.LION, Color.rgb(204, 204, 0));       
+        animalColors.put(AnimalEnum.SHARK, Color.rgb(0, 0, 0));  
     }
 
     /**
@@ -76,13 +113,17 @@ public class Stats {
      * @param count  The increment to add to the current count.
      */
     public void updateStats(AnimalEnum animal, int count) {
+        
         if (animalCounts.containsKey(animal)) {
+            Color color = animalColors.get(animal);
             int oldValue = animalCounts.get(animal);
             int newValue = oldValue + count;
             animalCounts.put(animal, newValue);
 
             Label label = animalLabels.get(animal);
-            label.setText(animal.name() + ": " + newValue);
+            label.setTextFill(color);
+            label.setText("● " + animal.name() + ": " + newValue);
+            
         }
     }
 
