@@ -90,7 +90,7 @@ public class Stats {
 
         // Add title and gridPane to the statsBox
         initialiseAnimalText();
-        statsBox.getChildren().addAll(title, gridPane);
+        statsBox.getChildren().add(gridPane);
     }
 
     private void initialiseAnimalText() {

@@ -14,21 +14,30 @@ public class Animal {
   private GameMap gameMap; // reference to the main map
   private int update = 0;
   private int updateRate;
-  private int foodLevel = 100; 
+  private int foodLevel; 
   private boolean hasBred;
   private int foodLevelDecreaseRate = 1;
   private EventBox eventBox;
   private Stats stats;
+  private App app;
+  private int hungerTicks;
   private List<Integer> invalidMoves;
 
   Animal(GameMap gameMap, int foodChainLevel, int naturalTerrain, int viewRange, Terrain terrain, int updateRate) {
     this.gameMap = gameMap;
+    this.hungerTicks = 0;
     this.dead = false;
     this.foodChainLevel = foodChainLevel;
     this.naturalTerrain = naturalTerrain;
     this.viewRange = viewRange;
     this.terrain = terrain;
     this.updateRate = updateRate;
+    Random rand = new Random();
+    this.foodLevel = rand.nextInt(800) + 200; // Generates between 200 and 2000
+
+
+
+
     ArrayList<Integer> invalidMoves = new ArrayList<Integer>();
     if ((foodChainLevel < 6) || (foodChainLevel == 9)){
       invalidMoves.add(0);
@@ -82,6 +91,7 @@ public class Animal {
   }
 
   public void animalUpdate() {
+    hungerTicks += 1;
     ArrayList<ArrayList<Terrain>> view = gameMap.getView(terrain, viewRange);
 
     if (update >= updateRate - 1) {
@@ -105,11 +115,12 @@ public class Animal {
         if (current.foodChainLevel < occupier.foodChainLevel) {
           killed = current;
           killer = occupier;
-          killer.foodLevel += 40;
+          killer.foodLevel += 200;
           current.dead = true;
           AnimalEnum killerAnimalEnum = AnimalEnum.values()[killer.foodChainLevel - 1];
           AnimalEnum killedAnimalEnum = AnimalEnum.values()[killed.foodChainLevel - 1];
-          
+          current.getCurrentTerrain().removeOccupier(killed);
+          app.animals.remove(killed);
           eventBox.addEvent("A " + killerAnimalEnum + " eats a " + killedAnimalEnum);
           stats.updateStats(killedAnimalEnum, 0,1);
         } else if (current.foodChainLevel == occupier.foodChainLevel) { // reproduction logic
@@ -123,8 +134,10 @@ public class Animal {
         } else {
           killed = occupier;
           killer = current;
-          killer.foodLevel += 40;
+          killer.foodLevel += 200;
           occupier.dead = true;
+          occupier.getCurrentTerrain().removeOccupier(killed);
+          app.animals.remove(killed);
           AnimalEnum killerAnimalEnum = AnimalEnum.values()[killer.foodChainLevel - 1];
           AnimalEnum killedAnimalEnum = AnimalEnum.values()[killed.foodChainLevel - 1];
           
@@ -157,22 +170,28 @@ public class Animal {
   
     if (foodLevel < 70 && (terrain.biome == 6 || terrain.biome == 1 || terrain.biome == 5 || terrain.biome == 7 || terrain.biome == 8)) {
       terrain.getsEaten();
-      foodLevel += 20;
+      foodLevel += 50;
     }
 
-    if (foodLevel > 0) {foodLevel-= foodLevelDecreaseRate; }
+    if (foodLevel > 0 && (hungerTicks % 3 == 0)) {foodLevel-= foodLevelDecreaseRate; }
 
     if (foodLevel<=0){
       this.getCurrentTerrain().colour = this.terrain.underlyingColour;
       AnimalEnum killedAnimalEnum = AnimalEnum.values()[this.foodChainLevel - 1];
       eventBox.addEvent("A " + killedAnimalEnum + " died of hunger.");
       this.dead = true;
+      this.getCurrentTerrain().removeOccupier(this);
+      app.animals.remove(this);
       stats.updateStats(killedAnimalEnum, 0,1);
     }
 
     else{
       terrain.colour = 11 + this.foodChainLevel;
     }
+  }
+
+  public void setApp(App app) {
+    this.app = app;
   }
 
 

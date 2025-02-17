@@ -17,7 +17,7 @@ public class Shrub extends Terrain implements Food{
     @Override
         public void getsEaten() {
         this.isDead = true;
-        this.framesToRegrow = 8;
+        this.framesToRegrow = 4;
         this.colour = 11;
     }
 

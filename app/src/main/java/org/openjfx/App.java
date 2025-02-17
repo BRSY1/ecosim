@@ -41,7 +41,7 @@ public class App extends Application {
     private Label birthsSlashDeaths = new Label();
     private Stats stats = new Stats(this);
     private ArrayList<ArrayList<Terrain>> terrainArray;
-    private ArrayList<Animal> animals = new ArrayList<Animal>();
+    public ArrayList<Animal> animals = new ArrayList<Animal>();
     private SettingsPage settingsPage;
     private double multiplier;
     private int initialBirths;
@@ -214,7 +214,7 @@ public class App extends Application {
             private long lastUpdate = 0;
             @Override
             public void handle(long now) {
-                if (lastUpdate == 0 || now - lastUpdate >= (1_000_000_000 / multiplier)) { // ~60 FPS (16.67ms per frame)
+                if (lastUpdate == 0 || now - lastUpdate >= (10_000_000 / multiplier)) { // ~60 FPS (16.67ms per frame)
                     updateGame();
                     lastUpdate = now;
                 }
@@ -229,20 +229,16 @@ public class App extends Application {
 
     private void updateGame() {
         gameMap.update();
-        ArrayList<Animal> newAnimals = new ArrayList<>();
-        for (Animal animal : animals) {
+        ArrayList<Animal> newAnimals = new ArrayList<>(animals);
+        for (Animal animal : newAnimals) {
+            animal.setApp(this);
             animal.setEventBoxAndStats(eventBox, stats);
-            newAnimals.add(animal);
             if (!animal.dead) {
                 animal.animalUpdate();
             } 
-            else {
-                newAnimals.remove(animal);
-            }
         }
         // Step 2: Get the latest terrain array
         ArrayList<ArrayList<Terrain>> terrainArray = gameMap.getTerrainArray();
-        this.animals = newAnimals;
         // Step 3: Redraw the map with updated terrain
         gridView.drawMap(terrainArray);
 
