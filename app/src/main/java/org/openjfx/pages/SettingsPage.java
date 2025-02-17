@@ -8,22 +8,26 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.Node;
+import org.openjfx.App;
 
 public class SettingsPage {
     private final VBox settingsPanel;
     private final StackPane overlay;
-    private final MFXTextField playerNameField;
-    private final MFXToggleButton darkModeToggle;
-    private final MFXCheckbox enableSounds;
-    private final MFXSlider volumeSlider;
+    private final MFXSlider animalPopulationSlider;
+    private final MFXToggleButton resetGameToggle;
+    private final App app;
 
-    public SettingsPage(StackPane rootPane) {
+    public SettingsPage(StackPane rootPane, App app) {
         this.overlay = rootPane;
+        this.app = app;
         
-        this.playerNameField = new MFXTextField();
-        this.darkModeToggle = new MFXToggleButton();
-        this.enableSounds = new MFXCheckbox("Enable Sounds");
-        this.volumeSlider = new MFXSlider();
+        this.animalPopulationSlider = new MFXSlider();
+        this.animalPopulationSlider.setMin(0);
+        this.animalPopulationSlider.setMax(1000);
+        this.animalPopulationSlider.setValue(100);
+        this.animalPopulationSlider.setPrefWidth(300);
+
+        this.resetGameToggle = new MFXToggleButton("Reset Game");
         
         settingsPanel = createSettingsPanel();
         
@@ -42,30 +46,19 @@ public class SettingsPage {
         panel.setPadding(new Insets(20));
         panel.setStyle("-fx-background-color: #151515; -fx-background-radius: 20px; -fx-border-radius: 20px; -fx-border-color: #151515;");
         panel.setPrefWidth(400);
-        panel.setMaxHeight(450);
+        panel.setMaxHeight(600); // Increased height for new components
         panel.setAlignment(Pos.CENTER);
 
         // Title with white text
         Text title = new Text("Settings");
         title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-fill: white;");
 
-        // Configure components with white text
-        playerNameField.setPromptText("Enter your name");
-        playerNameField.setPrefWidth(300);
-        playerNameField.setStyle("-fx-text-fill: #151515; -fx-prompt-text-fill: #151515;");
+        // Reset Game Checkbox
+        resetGameToggle.setTextFill(Color.WHITE);
 
-        darkModeToggle.setText("Dark Mode");
-        darkModeToggle.setTextFill(Color.WHITE);
-        
-        enableSounds.setTextFill(Color.WHITE);
-        
-        Text volumeText = new Text("Volume");
-        volumeText.setFill(Color.WHITE);
-        
-        volumeSlider.setMin(0);
-        volumeSlider.setMax(100);
-        volumeSlider.setValue(50);
-        volumeSlider.setPrefWidth(300);
+         // Add Animal Population Control
+        Text animalPopulationText = new Text("Animal Population");
+        animalPopulationText.setFill(Color.WHITE);
 
         // Buttons container
         HBox buttonContainer = new HBox(10);
@@ -83,11 +76,9 @@ public class SettingsPage {
 
         panel.getChildren().addAll(
             title,
-            playerNameField,
-            darkModeToggle,
-            enableSounds,
-            volumeText,
-            volumeSlider,
+            animalPopulationText,
+            animalPopulationSlider,
+            resetGameToggle,
             buttonContainer
         );
         
@@ -95,16 +86,14 @@ public class SettingsPage {
     }
 
     private void saveSettings() {
-        String playerName = playerNameField.getText();
-        boolean isDarkMode = darkModeToggle.isSelected();
-        boolean soundsEnabled = enableSounds.isSelected();
-        double volume = volumeSlider.getValue();
-        
-        System.out.println("Settings saved:");
-        System.out.println("Player Name: " + playerName);
-        System.out.println("Dark Mode: " + isDarkMode);
-        System.out.println("Sounds Enabled: " + soundsEnabled);
-        System.out.println("Volume: " + volume);
+        // Handle reset game if checkbox is selected
+        if (resetGameToggle.isSelected()) {
+            app.resetGame();
+            resetGameToggle.setSelected(false);
+        }
+
+        double newPopulation = animalPopulationSlider.getValue();
+        app.updateAnimalPopulation(newPopulation);
         
         hideSettings();
     }

@@ -3,7 +3,7 @@ package org.openjfx;
 import java.util.*;
 
 public class Animal {
-  private int foodChainLevel; // number between 1 and 10
+  public int foodChainLevel; // number between 1 and 10
   private int naturalTerrain;
   private int viewRange;
   private Terrain terrain;
@@ -61,6 +61,10 @@ public class Animal {
     public int getDy() {
         return dy;
     }
+  }
+
+  public Terrain getCurrentTerrain() {
+    return this.terrain;
   }
 
   public void animalUpdate() {

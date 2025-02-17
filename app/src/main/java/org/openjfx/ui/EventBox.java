@@ -54,7 +54,7 @@ public class EventBox {
 
         // EVENT LOG CONTAINER (Title + Log)
         eventBox = new VBox();
-        eventBox.setPadding(new Insets(10, 10, 10, 10)); // Add padding inside
+        eventBox.setPadding(new Insets(0, 10, 10, 10)); // Add padding inside
         eventBox.setAlignment(Pos.TOP_CENTER);
 
         eventBox.getChildren().addAll(eventLogTitle, eventLog);

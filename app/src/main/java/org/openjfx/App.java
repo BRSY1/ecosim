@@ -21,6 +21,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.materialdesign2.MaterialDesignC;
 import org.kordamp.ikonli.materialdesign2.MaterialDesignG;
 import org.kordamp.ikonli.materialdesign2.MaterialDesignIIkonHandler;
+import org.openjfx.ui.AnimalEnum;
 import org.openjfx.ui.EventBox;
 import org.openjfx.ui.InfoBox;
 import org.openjfx.pages.SettingsPage; // Import the new SettingsPage class
@@ -34,16 +35,19 @@ import java.util.*;
  
 public class App extends Application {
     private Grid grid;
+    private Stage stage;
     private GameMap gameMap;
     private GridView gridView;
     private EventBox eventBox;
     private InfoBox infoBox;
+    private Stats stats = new Stats();
     private ArrayList<ArrayList<Terrain>> terrainArray;
     private ArrayList<Animal> animals = new ArrayList<Animal>();
     private SettingsPage settingsPage;
 
     @Override
     public void start(Stage stage) {
+        this.stage = stage;
         this.grid = new Grid(800, 800, 0.0055f);
         this.gameMap = new GameMap(grid);
         terrainArray = gameMap.getTerrainArray();
@@ -87,7 +91,6 @@ public class App extends Application {
         )));
  
         // STATS PANEL (Top of right panel)
-        Stats stats = new Stats();
         VBox statsBox = stats.getStatsBox();
         statsBox.setPrefHeight(150);
         VBox.setMargin(statsBox, new Insets(10,10,10,10));
@@ -99,7 +102,7 @@ public class App extends Application {
         this.eventBox = new EventBox();
         VBox eventBoxContainer = eventBox.getEventBox();
         VBox.setMargin(eventBoxContainer, new Insets(10,10,10,10));
-        eventBoxContainer.setPrefHeight(250);
+        eventBoxContainer.setPrefHeight(200);
 
         // Spacer to push settings icon down
         Region spacer = new Region();
@@ -118,7 +121,7 @@ public class App extends Application {
         
         // Create StackPane for Overlay
         StackPane overlay = new StackPane();
-        settingsPage = new SettingsPage(overlay); // Initialize settings page
+        settingsPage = new SettingsPage(overlay, this); // Initialize settings page
 
         // Make sure overlay takes full screen
         overlay.setPickOnBounds(false); // Allow clicking outside to close settings
@@ -166,7 +169,11 @@ public class App extends Application {
             for (int i = 0; i < 800; i++) {
                 Terrain terrain = this.gameMap.terrainArray.get(j).get(i);
                 if (terrain.biome != 7 && terrain.biome != 8 && Math.random() < probSpawn) {
-                    animals.add(new Animal(gameMap, random.nextInt(10) + 1, 0, 20, gameMap.terrainArray.get(j).get(i), random.nextInt(2) + 1));
+                    Animal animal = new Animal(gameMap, random.nextInt(10) + 1, 0, 20, gameMap.terrainArray.get(j).get(i), random.nextInt(2) + 1);
+                    animals.add(animal);
+                    AnimalEnum animalEnum = AnimalEnum.values()[animal.foodChainLevel - 1];
+                    System.out.println(animalEnum);
+                    stats.updateStats(animalEnum, 1);
                 }
             }
         }
@@ -202,9 +209,50 @@ public class App extends Application {
 
         // Log an event (optional)
         eventBox.addEvent("Game tick updated.");
+    }
 
+    public void resetGame() {
+        // Reset game state
+        animals.clear();
+        
+        // Restart the game using stored stage reference
+        try {
+            start(this.stage);
+            eventBox.addEvent("Game has been reset!");
+        } catch (Exception e) {
+            eventBox.addEvent("Failed to reset game: " + e.getMessage());
+        }
+    }
 
+    public void updateAnimalPopulation(double targetPopulation) {
+        int currentPopulation = animals.size();
+        int targetCount = (int) targetPopulation;
+        
+        while (currentPopulation < targetCount) {
+            // Add more animals
+            spawn((targetCount - currentPopulation + 100) / (800.0f * 800.0f));
+            currentPopulation = animals.size();
+        } 
+        while (currentPopulation > targetCount) {
+            // Remove excess animals
+            Animal animalToRemove = animals.get(currentPopulation - 1);
+            
+            // Clear the animal's position from the map
+            Terrain currentTerrain = animalToRemove.getCurrentTerrain(); 
+            
+            currentTerrain.removeOccupier(animalToRemove);
+            if (currentTerrain.framesToRegrow > 0 && (currentTerrain.biome == 1 || currentTerrain.biome == 5 || currentTerrain.biome == 6)) {
+                currentTerrain.colour = 11;
+            } else {
+                currentTerrain.colour = currentTerrain.underlyingColour;
+            }
 
+            animals.remove(--currentPopulation);
+        }
+
+        // Force a map redraw to clear old animal positions
+        gridView.drawMap(gameMap.getTerrainArray());
+        eventBox.addEvent("Animal population updated to: " + animals.size());
     }
 
     public static void main(String[] args) {
