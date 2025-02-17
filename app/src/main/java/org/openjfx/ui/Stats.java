@@ -8,7 +8,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import org.openjfx.ui.AnimalEnum; // Adjust import if needed
-
+import org.openjfx.App;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -18,10 +18,16 @@ public class Stats {
     private Map<AnimalEnum, Integer> animalCounts; // Stores animal counts
     private Map<AnimalEnum, Label> animalLabels;   // Maps animals to their UI labels
     private Map<AnimalEnum, Color> animalColors;
+    public int births;
+    public int deaths;
+    private App app;
     
 
-    public Stats() {
+    public Stats(App app) {
         // Main container (VBox)
+        this.app = app;
+        this.births = 0;
+        this.deaths = 0;
         statsBox = new VBox();
         statsBox.setPadding(new Insets(10));
         statsBox.setMinWidth(150);
@@ -112,12 +118,15 @@ public class Stats {
      * @param animal The animal type to update.
      * @param count  The increment to add to the current count.
      */
-    public void updateStats(AnimalEnum animal, int count) {
+    public void updateStats(AnimalEnum animal, int birth, int death) {
         
         if (animalCounts.containsKey(animal)) {
+            this.births += birth;
+            this.deaths += death;
+            app.updateBirthDeath();
             Color color = animalColors.get(animal);
             int oldValue = animalCounts.get(animal);
-            int newValue = oldValue + count;
+            int newValue = oldValue + birth - death;
             animalCounts.put(animal, newValue);
 
             Label label = animalLabels.get(animal);

@@ -9,7 +9,7 @@ public class Terrain {
     public int underlyingColour;
     private List<Integer> rgb;
     private boolean occupied = false;
-    private Animal occupiedBy;
+    public Animal occupiedBy;
     protected int biome;
     public int framesToRegrow;
 
