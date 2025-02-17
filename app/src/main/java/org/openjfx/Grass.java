@@ -16,7 +16,7 @@ public class Grass extends Terrain implements Food{
 
     @Override
     public void getsEaten() {
-        this.framesToRegrow = 5;
+        this.framesToRegrow = 3;
         this.colour = 11;
     }
 

@@ -11,7 +11,7 @@ public class Terrain {
     public int framesToRegrow = 1; // so the class is not considered consumable by default
 
     public void getsEaten() {
-
+        
     }
 
     public void addOccupier(Animal Occupier){

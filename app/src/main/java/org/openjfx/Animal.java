@@ -14,27 +14,37 @@ public class Animal {
   private GameMap gameMap; // reference to the main map
   private int update = 0;
   private int updateRate;
-  private int foodLevel = 100; 
+  private int foodLevel; 
   private boolean hasBred;
   private int foodLevelDecreaseRate = 1;
   private EventBox eventBox;
   private Stats stats;
+  private App app;
+  private int hungerTicks;
+  private Terrain safeTerrain;
   private List<Integer> invalidMoves;
 
   // constants
   private static final int foodIncrease = 20;
   private static final int meatFoodIncrease = 20;
-  private static final int maxFood = 20;
+  private static final int maxFood = 1500;
   private static final int mapSize = 800;
 
   Animal(GameMap gameMap, int foodChainLevel, int naturalTerrain, int viewRange, Terrain terrain, int updateRate) {
     this.gameMap = gameMap;
+    this.hungerTicks = 0;
     this.dead = false;
     this.foodChainLevel = foodChainLevel;
     this.naturalTerrain = naturalTerrain;
     this.viewRange = viewRange;
     this.terrain = terrain;
     this.updateRate = updateRate;
+    Random rand = new Random();
+    this.foodLevel = rand.nextInt(800) + 200; // Generates between 200 and 2000
+
+
+
+
     ArrayList<Integer> invalidMoves = new ArrayList<Integer>();
     if ((foodChainLevel < 6) || (foodChainLevel == 9)){
       invalidMoves.add(0);
@@ -88,6 +98,7 @@ public class Animal {
   }
 
   public void animalUpdate() {
+    hungerTicks += 1;
     ArrayList<ArrayList<Terrain>> view = gameMap.getView(terrain, viewRange);
 
     if (update >= updateRate - 1) {
@@ -111,15 +122,19 @@ public class Animal {
         if (current.foodChainLevel < occupier.foodChainLevel) {
           killed = current;
           killer = occupier;
-          killer.foodLevel += 40;
+          killer.foodLevel += 200;
           current.dead = true;
           AnimalEnum killerAnimalEnum = AnimalEnum.values()[killer.foodChainLevel - 1];
           AnimalEnum killedAnimalEnum = AnimalEnum.values()[killed.foodChainLevel - 1];
-          
+          current.getCurrentTerrain().removeOccupier(killed);
+          app.animals.remove(killed);
           eventBox.addEvent("A " + killerAnimalEnum + " eats a " + killedAnimalEnum);
           stats.updateStats(killedAnimalEnum, 0,1);
         } else if (current.foodChainLevel == occupier.foodChainLevel) { // reproduction logic
           if (current.hasBred == false && occupier.hasBred == false) {
+            // findSafeLocation(killer, killed);
+            // Terrain safe = safeTerrain;
+            // Animal child = new Animal(gameMap, newy, newy, newx, safe, newy);
             AnimalEnum animalEnum = AnimalEnum.values()[current.foodChainLevel - 1];
             stats.updateStats(animalEnum, 1,0);
             eventBox.addEvent("A baby " + animalEnum + " was made with ❤️");
@@ -129,8 +144,10 @@ public class Animal {
         } else {
           killed = occupier;
           killer = current;
-          killer.foodLevel += 40;
+          killer.foodLevel += 200;
           occupier.dead = true;
+          occupier.getCurrentTerrain().removeOccupier(killed);
+          app.animals.remove(killed);
           AnimalEnum killerAnimalEnum = AnimalEnum.values()[killer.foodChainLevel - 1];
           AnimalEnum killedAnimalEnum = AnimalEnum.values()[killed.foodChainLevel - 1];
           
@@ -166,13 +183,15 @@ public class Animal {
       foodLevel += foodIncrease;
     }
 
-    if (foodLevel > 0) {foodLevel-= foodLevelDecreaseRate; }
+    if (foodLevel > 0 && (hungerTicks % 3 == 0)) {foodLevel-= foodLevelDecreaseRate; }
 
     if (foodLevel<=0){
       this.getCurrentTerrain().colour = this.terrain.underlyingColour;
       AnimalEnum killedAnimalEnum = AnimalEnum.values()[this.foodChainLevel - 1];
       eventBox.addEvent("A " + killedAnimalEnum + " died of hunger.");
       this.dead = true;
+      this.getCurrentTerrain().removeOccupier(this);
+      app.animals.remove(this);
       stats.updateStats(killedAnimalEnum, 0,1);
     }
 
@@ -181,6 +200,20 @@ public class Animal {
     }
   }
 
+  public void setApp(App app) {
+    this.app = app;
+  }
+
+  public void findSafeLocation(Animal a, Animal b) {
+    for (int x = (a.getCurrentTerrain().x - 1); x < (a.getCurrentTerrain().x + 1); x++) {
+      for (int y = (a.getCurrentTerrain().y - 1); y < (a.getCurrentTerrain().y + 1); y++) {
+        if (!(app.terrainArray.get(x).get(y).isOccupied()) && (a.getCurrentTerrain().colour == app.terrainArray.get(x).get(y).colour)) {
+          this.safeTerrain =  app.terrainArray.get(x).get(y);
+        }
+      }
+    }
+  }
+  
 
   private ArrayList<Animal> getEntities(int numRows, int numCols, ArrayList<ArrayList<Terrain>> view) {
     ArrayList<Animal> animals = new ArrayList<Animal>();

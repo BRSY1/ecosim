@@ -12,6 +12,7 @@ public class SettingsPage {
     private final VBox settingsPanel;
     private final StackPane overlay;
     private final MFXSlider animalPopulationSlider;
+    private final MFXToggleButton updateAnimalPopulationToggle;
     private final MFXSlider animalSpeedSlider;
     private final MFXToggleButton resetGameToggle;
     private final App app;
@@ -23,15 +24,16 @@ public class SettingsPage {
         this.animalPopulationSlider = new MFXSlider();
         this.animalPopulationSlider.setMin(0);
         this.animalPopulationSlider.setMax(1000);
-        this.animalPopulationSlider.setValue(100);
+        this.animalPopulationSlider.setValue(app.getAnimalSize());
         this.animalPopulationSlider.setPrefWidth(300);
+
+        this.updateAnimalPopulationToggle = new MFXToggleButton("Update Animal Population");
 
         this.animalSpeedSlider = new MFXSlider();
         this.animalSpeedSlider.setMin(1);
         this.animalSpeedSlider.setMax(10);
-        this.animalSpeedSlider.setValue(3);
+        this.animalSpeedSlider.setValue(app.getMultiplier());
         this.animalSpeedSlider.setPrefWidth(100);
-        
 
         this.resetGameToggle = new MFXToggleButton("Reset Game");
         
@@ -60,6 +62,7 @@ public class SettingsPage {
         title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-fill: white;");
 
         // Reset Game Checkbox
+        updateAnimalPopulationToggle.setTextFill(Color.WHITE);
         resetGameToggle.setTextFill(Color.WHITE);
 
          // Add Animal Population Control
@@ -87,6 +90,7 @@ public class SettingsPage {
             title,
             animalPopulationText,
             animalPopulationSlider,
+            updateAnimalPopulationToggle,
             animalSpeedText,
             animalSpeedSlider,
             resetGameToggle,
@@ -103,8 +107,10 @@ public class SettingsPage {
             resetGameToggle.setSelected(false);
         }
 
-        double newPopulation = animalPopulationSlider.getValue();
-        app.updateAnimalPopulation(newPopulation);
+        if (updateAnimalPopulationToggle.isSelected()) {
+            app.updateAnimalPopulation(animalPopulationSlider.getValue());
+            updateAnimalPopulationToggle.setSelected(false);
+        }
 
         double newSpeed = animalSpeedSlider.getValue();
         app.updateGameSpeed(newSpeed);
@@ -112,8 +118,13 @@ public class SettingsPage {
         hideSettings();
     }
 
+    public void setAnimalPopulationSlider(double value) {
+        animalPopulationSlider.setValue(value);
+    }
+
     public void showSettings() {
         overlay.getChildren().forEach(node -> node.setVisible(true));
+        this.animalSpeedSlider.setValue(app.getMultiplier());
         settingsPanel.setVisible(true);
         settingsPanel.setManaged(true);
         StackPane.setAlignment(settingsPanel, Pos.CENTER);

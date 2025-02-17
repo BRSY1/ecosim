@@ -40,8 +40,8 @@ public class App extends Application {
     private InfoBox infoBox;
     private Label birthsSlashDeaths = new Label();
     private Stats stats = new Stats(this);
-    private ArrayList<ArrayList<Terrain>> terrainArray;
-    private ArrayList<Animal> animals = new ArrayList<Animal>();
+    public ArrayList<ArrayList<Terrain>> terrainArray;
+    public ArrayList<Animal> animals = new ArrayList<Animal>();
     private SettingsPage settingsPage;
     private double multiplier;
     private int initialBirths;
@@ -175,6 +175,14 @@ public class App extends Application {
         birthsSlashDeaths.setText("Births: " + (stats.births - initialBirths) + " / " + "Deaths: " + stats.deaths);
     }
 
+    public double getMultiplier() {
+        return multiplier;
+    }
+
+    public int getAnimalSize() {
+        return animals.size();
+    }
+
     private void spawn(float probSpawn) {
         Random random = new Random();
         for (int j = 0; j < 800; j++) {
@@ -214,7 +222,7 @@ public class App extends Application {
             private long lastUpdate = 0;
             @Override
             public void handle(long now) {
-                if (lastUpdate == 0 || now - lastUpdate >= (1_000_000_000 / multiplier)) { // ~60 FPS (16.67ms per frame)
+                if (lastUpdate == 0 || now - lastUpdate >= (250_000_000 / multiplier)) { // ~60 FPS (16.67ms per frame)
                     updateGame();
                     lastUpdate = now;
                 }
@@ -229,32 +237,29 @@ public class App extends Application {
 
     private void updateGame() {
         gameMap.update();
-        ArrayList<Animal> newAnimals = new ArrayList<>();
-        for (Animal animal : animals) {
+        ArrayList<Animal> newAnimals = new ArrayList<>(animals);
+        for (Animal animal : newAnimals) {
+            animal.setApp(this);
             animal.setEventBoxAndStats(eventBox, stats);
-            newAnimals.add(animal);
             if (!animal.dead) {
                 animal.animalUpdate();
             } 
-            else {
-                newAnimals.remove(animal);
-            }
         }
         // Step 2: Get the latest terrain array
         ArrayList<ArrayList<Terrain>> terrainArray = gameMap.getTerrainArray();
-        this.animals = newAnimals;
         // Step 3: Redraw the map with updated terrain
         gridView.drawMap(terrainArray);
 
     }
 
     public void resetGame() {
-        // Reset game state
-        animals.clear();
-        
         // Restart the game using stored stage reference
         try {
+            // Reset game state
+            animals.clear();
+            stats = new Stats(this);
             start(this.stage);
+            stats.deaths = 0;
             eventBox.addEvent("Game has been reset!");
         } catch (Exception e) {
             eventBox.addEvent("Failed to reset game: " + e.getMessage());
@@ -264,6 +269,7 @@ public class App extends Application {
     public void updateAnimalPopulation(double targetPopulation) {
         int currentPopulation = animals.size();
         int targetCount = (int) targetPopulation;
+        Random rand = new Random();
         
         while (currentPopulation < targetCount) {
             // Add more animals
@@ -271,13 +277,18 @@ public class App extends Application {
             currentPopulation = animals.size();
         } 
         while (currentPopulation > targetCount) {
-            // Remove excess animals
-            Animal animalToRemove = animals.get(currentPopulation - 1);
+            // Select a random index
+            int randomIndex = rand.nextInt(currentPopulation);
+
+            // Swap with the last animal
+            Animal animalToRemove = animals.get(randomIndex);
+            animals.set(randomIndex, animals.get(currentPopulation - 1));
+            animals.set(currentPopulation - 1, animalToRemove);
             
             // Clear the animal's position from the map
             Terrain currentTerrain = animalToRemove.getCurrentTerrain(); 
-            
             currentTerrain.removeOccupier(animalToRemove);
+
             if (currentTerrain.framesToRegrow > 0 && (currentTerrain.biome == 1 || currentTerrain.biome == 5 || currentTerrain.biome == 6)) {
                 currentTerrain.colour = 11;
             } else {

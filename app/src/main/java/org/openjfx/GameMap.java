@@ -17,13 +17,13 @@ public class GameMap {
             for (int x=0; x<myGrid.getWidth(); x++){
                 if ((myGrid.grid[y][x] <= 1.0) && (myGrid.grid[y])[x] > 0.4){innerList.add(new Rock(x, y));}
 
-                if ((myGrid.grid[y][x] <= 0.4) && (myGrid.grid[y])[x] > 0.37){innerList.add(new UneatableTree(x,y));}
-                if ((myGrid.grid[y][x] <= 0.37) && (myGrid.grid[y])[x] > 0.33){innerList.add(new Tree(x,y));}
-                if ((myGrid.grid[y][x] <= 0.33) && (myGrid.grid[y])[x] > 0.3){innerList.add(new UneatableTree(x,y));}
+                if ((myGrid.grid[y][x] <= 0.4) && (myGrid.grid[y])[x] > 0.385){innerList.add(new UneatableTree(x,y));}
+                if ((myGrid.grid[y][x] <= 0.385) && (myGrid.grid[y])[x] > 0.32){innerList.add(new Tree(x,y));}
+                if ((myGrid.grid[y][x] <= 0.32) && (myGrid.grid[y])[x] > 0.3){innerList.add(new UneatableTree(x,y));}
 
-                if ((myGrid.grid[y][x] <= 0.3) && (myGrid.grid[y])[x] > 0.27){innerList.add(new UneatableShrub(x, y));}
-                if ((myGrid.grid[y][x] <= 0.27) && (myGrid.grid[y])[x] > 0.23){innerList.add(new Shrub(x, y));}
-                if ((myGrid.grid[y][x] <= 0.23) && (myGrid.grid[y])[x] > 0.2){innerList.add(new UneatableShrub(x, y));}
+                if ((myGrid.grid[y][x] <= 0.3) && (myGrid.grid[y])[x] > 0.285){innerList.add(new UneatableShrub(x, y));}
+                if ((myGrid.grid[y][x] <= 0.285) && (myGrid.grid[y])[x] > 0.22){innerList.add(new Shrub(x, y));}
+                if ((myGrid.grid[y][x] <= 0.22) && (myGrid.grid[y])[x] > 0.2){innerList.add(new UneatableShrub(x, y));}
 
                 if ((myGrid.grid[y][x] <= 0.2) && (myGrid.grid[y])[x] > 0.125){innerList.add(new Grass(x, y));}
                 if ((myGrid.grid[y][x] <= 0.125) && (myGrid.grid[y])[x] > 0.075){innerList.add(new Grass(x, y));}
