@@ -203,7 +203,7 @@ public class App extends Application {
  
             @Override
             public void handle(long now) {
-                if (lastUpdate == 0 || now - lastUpdate >= 1_000_000_000) { // ~60 FPS (16.67ms per frame)
+                if (lastUpdate == 0 || now - lastUpdate >= 30_000_000) { // ~60 FPS (16.67ms per frame)
                     updateGame();
                     lastUpdate = now;
                 }

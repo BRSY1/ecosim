@@ -68,7 +68,7 @@ public class Animal {
     ArrayList<ArrayList<Terrain>> view = gameMap.getView(terrain, viewRange);
 
     if (update >= updateRate - 1) {
-      Move move = move(view);
+      Move move = moveMCTS(view);
     
       int newx = terrain.x + move.getDx();
       int newy = terrain.y + move.getDy();
@@ -182,5 +182,73 @@ public class Animal {
     } else {
       return Move.LEFT;
     }
+  }
+
+  private ArrayList<Animal> getEntities(int numRows, int numCols, ArrayList<ArrayList<Terrain>> view) {
+    ArrayList<Animal> animals = new ArrayList<Animal>();
+
+    for (int j = 0; j < numRows; j++) {
+      for (int i = 0; i < numCols; i++) {
+        if (true && !this.terrain.equals(view.get(j).get(i))) {
+          if (view.get(j).get(i).isOccupied()) {
+            System.out.println("hihi");
+            animals.add(view.get(j).get(i).getOccupied());
+          }
+        }
+      }
+    }
+    return animals;
+  }
+
+  // error to be fixed - check for illegal moves
+  private int reward(ArrayList<Animal> animals, Animal currAnimal, Move move) {
+    int x = Math.max(0, Math.min(599, currAnimal.terrain.x + move.dx));
+    int y = Math.max(0, Math.min(599, currAnimal.terrain.y + move.dy));
+    int reward = 0;
+    for (Animal animal : animals) {
+      int dist = (int) Math.sqrt(Math.pow(Math.abs(animal.terrain.x - x), 2) + Math.pow(Math.abs(animal.terrain.y - y), 2));
+      if (dist == 0) dist = 1;
+      if (currAnimal.foodChainLevel < animal.foodChainLevel) {
+        reward -= (int) this.viewRange / dist * 2;
+      } else {
+        reward += (int) this.viewRange / dist * 2;
+      }
+    }
+
+    // get change in food level
+    if (gameMap.terrainArray.get(y).get(x).framesToRegrow <= 0) {
+      reward += foodLevel + 4;
+    } else {
+      reward += foodLevel;
+    }
+
+    System.out.println(reward);
+
+    return reward;
+  }
+
+  private Move moveMCTS(ArrayList<ArrayList<Terrain>> view) {
+    int numRows = view.size();
+    int numCols = view.get(0).size();
+
+    ArrayList<Animal> animals = getEntities(numRows, numCols, view);
+
+    int maxReward = -1000;
+    Move bestMove = null;
+
+    List<Move> movesList = Arrays.asList(Move.values());
+    Collections.shuffle(movesList);
+    for (Move move : movesList) {
+      // for each move, simulate the next n (=2) moves m (=5) and average the returns
+      // consider only the grid within the viewable radius
+
+      // pick the move with the highest return
+      int reward = reward(animals, this, move);
+      if (reward > maxReward) {
+        maxReward = reward;
+        bestMove = move;
+      }
+    }
+    return bestMove;
   }
 }
