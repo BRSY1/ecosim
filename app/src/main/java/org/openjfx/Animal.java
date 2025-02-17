@@ -105,6 +105,7 @@ public class Animal {
         if (current.foodChainLevel < occupier.foodChainLevel) {
           killed = current;
           killer = occupier;
+          killer.foodLevel += 40;
           current.dead = true;
           AnimalEnum killerAnimalEnum = AnimalEnum.values()[killer.foodChainLevel - 1];
           AnimalEnum killedAnimalEnum = AnimalEnum.values()[killed.foodChainLevel - 1];
@@ -122,6 +123,7 @@ public class Animal {
         } else {
           killed = occupier;
           killer = current;
+          killer.foodLevel += 40;
           occupier.dead = true;
           AnimalEnum killerAnimalEnum = AnimalEnum.values()[killer.foodChainLevel - 1];
           AnimalEnum killedAnimalEnum = AnimalEnum.values()[killed.foodChainLevel - 1];
@@ -161,10 +163,10 @@ public class Animal {
     if (foodLevel > 0) {foodLevel-= foodLevelDecreaseRate; }
 
     if (foodLevel<=0){
-      this.dead = true;
       this.getCurrentTerrain().colour = this.terrain.underlyingColour;
       AnimalEnum killedAnimalEnum = AnimalEnum.values()[this.foodChainLevel - 1];
       eventBox.addEvent("A " + killedAnimalEnum + " died of hunger.");
+      this.dead = true;
       stats.updateStats(killedAnimalEnum, 0,1);
     }
 

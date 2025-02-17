@@ -123,8 +123,13 @@ public class Stats {
             Color color = animalColors.get(animal);
             int oldValue = animalCounts.get(animal);
             int newValue = oldValue + birth - death;
+            if (newValue < 0){ newValue = 0;}
             animalCounts.put(animal, newValue);
-
+            
+            if (newValue ==0 && oldValue>0){
+                this.app.eventBox.addEvent(animal + " has gone extinct.");
+                
+            }
             Label label = animalLabels.get(animal);
             label.setTextFill(color);
             label.setText("● " + animal.name() + ": " + newValue);

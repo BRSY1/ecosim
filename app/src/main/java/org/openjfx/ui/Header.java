@@ -26,7 +26,7 @@ public class Header {
             new Stop(1, Color.web("#004d00"))   // Deep dark green
         );
 
-        Label title = new Label("🌿 Ecosim 🌿");
+        Label title = new Label("🌿 EcoSim 🌿");
         title.setFont(Font.font("Arial", FontWeight.BOLD, 36));
         title.setTextFill(gradient);
 

@@ -36,7 +36,7 @@ public class App extends Application {
     private Stage stage;
     private GameMap gameMap;
     private GridView gridView;
-    private EventBox eventBox;
+    public EventBox eventBox;
     private InfoBox infoBox;
     private Label birthsSlashDeaths = new Label();
     private Stats stats = new Stats(this);
@@ -222,17 +222,21 @@ public class App extends Application {
     }
 
     private void updateGame() {
-        gameMap.update();  // Assuming GameMap has an update method
+        gameMap.update();
+        ArrayList<Animal> newAnimals = new ArrayList<>();
         for (Animal animal : animals) {
             animal.setEventBoxAndStats(eventBox, stats);
+            newAnimals.add(animal);
             if (!animal.dead) {
                 animal.animalUpdate();
+            } 
+            else {
+                newAnimals.remove(animal);
             }
         }
- 
         // Step 2: Get the latest terrain array
         ArrayList<ArrayList<Terrain>> terrainArray = gameMap.getTerrainArray();
-
+        this.animals = newAnimals;
         // Step 3: Redraw the map with updated terrain
         gridView.drawMap(terrainArray);
 
