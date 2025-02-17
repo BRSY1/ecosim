@@ -3,11 +3,9 @@ package org.openjfx.pages;
 import io.github.palexdev.materialfx.controls.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.scene.Node;
 import org.openjfx.App;
 
 public class SettingsPage {

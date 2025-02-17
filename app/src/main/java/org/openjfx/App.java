@@ -4,7 +4,6 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
-import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -23,17 +22,13 @@ import java.net.URI;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.materialdesign2.MaterialDesignC;
 import org.kordamp.ikonli.materialdesign2.MaterialDesignG;
-import org.kordamp.ikonli.materialdesign2.MaterialDesignIIkonHandler;
 import org.openjfx.ui.AnimalEnum;
 import org.openjfx.ui.EventBox;
 import org.openjfx.ui.InfoBox;
-import org.openjfx.pages.SettingsPage; // Import the new SettingsPage class
 
 
-import org.openjfx.ui.EventBox;
 import org.openjfx.grid.GridView;
 
-import java.net.URI;
 import java.util.*;
  
 public class App extends Application {
@@ -178,7 +173,6 @@ public class App extends Application {
     }
 
     private void spawn(float probSpawn) {
-        probSpawn = probSpawn;
         Random random = new Random();
         for (int j = 0; j < 800; j++) {
             for (int i = 0; i < 800; i++) {

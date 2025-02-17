@@ -9,9 +9,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.Stop;
-import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Paint;
-import javafx.scene.text.Text;
 
 public class Header {
     public static VBox createHeader() {

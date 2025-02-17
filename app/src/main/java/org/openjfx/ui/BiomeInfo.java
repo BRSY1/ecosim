@@ -1,6 +1,5 @@
 package org.openjfx.ui;
 
-import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 
 

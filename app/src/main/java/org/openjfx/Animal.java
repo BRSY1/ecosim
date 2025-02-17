@@ -3,7 +3,6 @@ package org.openjfx;
 import org.openjfx.ui.AnimalEnum;
 import org.openjfx.ui.EventBox;
 import org.openjfx.ui.Stats;
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class Animal {
@@ -164,76 +163,6 @@ public class Animal {
     terrain.colour = 11 + this.foodChainLevel;
   }
 
-  private Move move(ArrayList<ArrayList<Terrain>> view) {
-    Terrain closest = null;
-    int distance = 100;
-
-    // find closest occupied tile with an animal on
-    int numRows = view.size();
-    int numCols = view.get(0).size();
-
-    // j is inverse y co-ord, i is the x co-ord
-    for (int j = 0; j < numRows; j++) {
-      for (int i = 0; i < numCols; i++) {
-        if (true && Math.max(Math.abs(j - (int) numRows / 2), Math.abs(i - (int) numCols / 2)) < distance && !this.terrain.equals(view.get(j).get(i))) {
-          if (view.get(j).get(i).isOccupied()) {
-            closest = view.get(j).get(i);
-            distance = Math.max(Math.abs(j - (int) numRows / 2), Math.abs(i - (int) numCols / 2));
-          }
-        }
-      }
-    }
-
-    if (closest != null) {
-      // vector in direction of this to animal
-      int dx = this.terrain.x - closest.x;
-      int dy = this.terrain.y - closest.y;
-
-      // if this is the prey
-      if (this.foodChainLevel <= closest.getOccupied().foodChainLevel) {
-        if (dx >= 0) {
-          if (dy <= 0) {
-            return Move.UP_RIGHT;
-          } else {
-            return Move.DOWN_RIGHT;
-          }
-        } else {
-          if (dy <= 0) {
-            return Move.UP_LEFT;
-          } else {
-            return Move.DOWN_LEFT;
-          }
-        }
-      // if this is the predator
-      } else {
-        if (dx >= 0) {
-          if (dy <= 0) {
-            return Move.DOWN_LEFT;
-          } else {
-            return Move.UP_LEFT;
-          }
-        } else {
-          if (dy <= 0) {
-            return Move.DOWN_RIGHT;
-          } else {
-            return Move.UP_RIGHT;
-          }
-        }
-      }
-
-    }
-
-    double num = Math.random();
-    if (num < 0.25) {
-      return Move.UP;
-    } else if (num < 0.5) {
-      return Move.RIGHT;
-    } else if (num < 0.75) {
-      return Move.DOWN;
-    } else {
-      return Move.LEFT;
-    }
-  }
 
   private ArrayList<Animal> getEntities(int numRows, int numCols, ArrayList<ArrayList<Terrain>> view) {
     ArrayList<Animal> animals = new ArrayList<Animal>();

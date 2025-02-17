@@ -1,26 +1,14 @@
 package org.openjfx.ui;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.StackPane;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 
-import org.openjfx.Animal;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;

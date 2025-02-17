@@ -8,7 +8,6 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 
 import java.util.HashMap;
-import org.openjfx.ui.AnimalEnum;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;

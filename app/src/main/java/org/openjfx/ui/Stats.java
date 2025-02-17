@@ -5,13 +5,9 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import org.openjfx.ui.AnimalEnum; // Adjust import if needed
 import org.openjfx.App;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class Stats {
     private VBox statsBox; // Holds title + gridPane

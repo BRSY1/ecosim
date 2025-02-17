@@ -1,6 +1,4 @@
 package org.openjfx;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Tree extends Terrain implements Food{
     boolean isDead;
