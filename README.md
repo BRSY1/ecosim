@@ -9,7 +9,7 @@ EcoSim is a Java-based simulation developed during BrisHack 2025. It models the 
 ## Features
 
 - **Procedural Terrain Generation**: Uses **Perlin noise** to create realistic and dynamic terrain landscapes.
-- **Animal AI with Monte Carlo Tree Search (MCTS)**: Animals use **MCTS-based decision-making** to move intelligently, avoiding predators, seeking food, and reproducing.
+- **Animal AI with Decision-Time Planning**: Animals use **Pure Monte Carlo Game Search** to move intelligently, avoiding predators, seeking food, and reproducing.
 - **Predator-Prey Dynamics**: Implements a food chain where animals interact based on hierarchical levels, engaging in hunting, fleeing, and breeding behaviors.
 - **Environmental Factors**: Includes terrain types that influence movement and survival.
 - **Graphical Interface**: Built using **JavaFX**, allowing users to visualize the ecosystem in real time.
